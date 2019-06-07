@@ -7,8 +7,8 @@
 build/
 bin/
 
-# Gradle auxiliar folder
-.gradle/
+# Hidden files
+.*
 
 # Package Files #
 *.jar
