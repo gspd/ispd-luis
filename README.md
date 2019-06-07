@@ -19,7 +19,7 @@ This project uses Gradle, if you are going to develop it in a common code editor
 
 Anyway, in order to build this project, make sure you have Java and Gradle correctly intalled on your system, go to project root directory and execute `./gradlew build`.
 
-To run the compiled program, execute `./gradlew run`, or you can extract the archive from 'build/distribution' and execute 'bin/ispd'.
+To run the compiled program, execute `./gradlew run`
 
 Issues reports are welcome!
 
