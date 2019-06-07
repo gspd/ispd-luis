@@ -26,8 +26,8 @@ public class IspdProperties {
         try {
             properties = new Properties();
             properties.load(Main.class.getResourceAsStream(propertiesName));
-            locale = new Locale(properties.getProperty("locale.language"), properties.getProperty("locale.country"));
-            setWorkingDirectory(properties.getProperty("directories.default"));
+            locale = new Locale(properties.getProperty("locale.language", "en"), properties.getProperty("locale.country", "US"));
+            setWorkingDirectory(properties.getProperty("directories.default", "."));
         } catch (IOException e) {
             System.err.println("Failed to open iSPD properties: " + e);
         }

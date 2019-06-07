@@ -66,7 +66,7 @@ public class Main {
                 PrintStream psErr = new PrintStream(fosErr);
                 PrintStream psOut = new PrintStream(fosOut);
                 // *** (need atention) ****
-                // redefine os fluxos na classe System
+                // redefine os fluxos de erro na classe System
                 // System.setErr(psErr);
                 // System.setOut(psOut);
                 UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
