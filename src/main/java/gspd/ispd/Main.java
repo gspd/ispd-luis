@@ -35,12 +35,10 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            // iSPD properties
-            Properties ispdProperties = new Properties();
-            // NOTE: 'ispd.properties' is located at resources/ directory
-            ispdProperties.load(Main.class.getResourceAsStream("/ispd.properties"));
+            // Load iSPD configurations
+            IspdProperties.load();
             // Set locale for running program
-            Locale.setDefault(new Locale(ispdProperties.getProperty("locale.language", "en"), ispdProperties.getProperty("locale.country", "US")));
+            Locale.setDefault(IspdProperties.getLocale());
             if (args.length > 0) {
                 Terminal tel = new Terminal(args);
                 tel.executar();
@@ -59,8 +57,8 @@ public class Main {
                 // Get the error file paths
                 // TODO: if a directory does not exists, then create it
                 // NOTE: Currently, it assumes that path described in ispd.properties(directories.default) exists
-                File simulatorErrorFilePath = new File(ispdProperties.getProperty("directories.default", "."), "Erros_Simulador");
-                File outputSimulatorErrorFilePath = new File(ispdProperties.getProperty("directories.default", "."), "Saida_Simulador");
+                File simulatorErrorFilePath = new File(IspdProperties.getWorkingDirectory(), "Erros_Simulador");
+                File outputSimulatorErrorFilePath = new File(IspdProperties.getWorkingDirectory(), "Saida_Simulador");
                 // Error files
                 FileOutputStream fosErr = new FileOutputStream(simulatorErrorFilePath);
                 FileOutputStream fosOut = new FileOutputStream(outputSimulatorErrorFilePath);

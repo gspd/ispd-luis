@@ -17,7 +17,7 @@ public class IspdPropertiesTest {
         IspdProperties.load();
         Locale loc = IspdProperties.getLocale();
         assertFalse("locale is not NULL", loc == null);
-        assertEquals("locale is rigth", loc, new Locale("en-us"));
+        assertEquals("locale is rigth", loc, new Locale("en","US"));
     }
 
     @Test
