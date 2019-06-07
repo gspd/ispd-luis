@@ -11,7 +11,8 @@ bin/
 .*
 
 # Package Files #
-*.jar
+# Until coding iSPD.jav as regular Java
+# *.jar
 *.war
 *.ear
 
