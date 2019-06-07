@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 public class IspdProperties {
 
-    private static final String propertiesName = "ispd.properties";
+    private static final String propertiesName = "/ispd.properties";
     
     private static Properties properties;
     private static Locale locale;
