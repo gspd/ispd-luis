@@ -7,7 +7,7 @@
 build/
 bin/
 
-# Gradle aux folder
+# Gradle auxiliar folder
 .gradle/
 
 # Package Files #
