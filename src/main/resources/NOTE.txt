@@ -1,0 +1,1 @@
+1. iSPD does not use JSON so far. Prefer using ispd.properties for now, with 'KEY = VALUE' notation

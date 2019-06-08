@@ -1,0 +1,23 @@
+{
+    "directories.default" : "IspdProjects",
+    "directories.errors" : "IspdProjects/errors",
+    "directories.ispd.home" : "/not/used/yet",
+    "locale.supported" : [
+        {
+            "language" : "en",
+            "country" : [
+                "US"
+            ]
+        },
+        {
+            "language" : "pt",
+            "country" : [
+                "BR"
+            ]
+        }
+    ],
+    "locale.default" : {
+        "language" : "en",
+        "country" : "US"
+    }
+}
