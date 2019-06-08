@@ -1,5 +1,6 @@
 package gspd.ispd;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,7 +28,7 @@ public class IspdProperties {
             properties = new Properties();
             properties.load(Main.class.getResourceAsStream(propertiesName));
             locale = new Locale(properties.getProperty("locale.language", "en"), properties.getProperty("locale.country", "US"));
-            setWorkingDirectory(properties.getProperty("directories.default", "."));
+            setWorkingDirectory(System.getProperty("user.home") + File.separator +  properties.getProperty("directories.default", "."));
         } catch (IOException e) {
             System.err.println("Failed to open iSPD properties: " + e);
         }

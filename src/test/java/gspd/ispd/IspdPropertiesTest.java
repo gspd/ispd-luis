@@ -3,8 +3,11 @@ package gspd.ispd;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Locale;
+
+
 
 
 /**
@@ -22,9 +25,15 @@ public class IspdPropertiesTest {
 
     @Test
     public void testWorkingDirectory() {
-        IspdProperties.load();
-        String wd = IspdProperties.getWorkingDirectory();
-        assertFalse("working directory is not NULL", wd == null);
-        assertEquals("working directory is right", Paths.get(wd), Paths.get("/home/luis/IspdProjects"));
+        try {
+            IspdProperties.load();
+            String wd = IspdProperties.getWorkingDirectory();
+            assertFalse("working directory is not NULL", wd == null);
+            File file = new File(wd, ".test.temp");
+            assertTrue("created new file", file.createNewFile());
+            assertTrue("created new file", file.delete());
+        } catch (Exception e) {
+            fail("Exception has occured: " + e);
+        }
     }
 }
