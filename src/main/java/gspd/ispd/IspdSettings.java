@@ -15,7 +15,7 @@ import java.util.Properties;
  * @version 0.5
  * @author luisbaldissera
  */
-public class IspdProperties {
+public class IspdSettings {
 
     private static final String PROPERTIES_FILE_NAME = "ispd.properties";
     
@@ -35,8 +35,13 @@ public class IspdProperties {
             locale = new Locale(properties.getProperty("locale.language", "en"), properties.getProperty("locale.country", "US"));
             Locale.setDefault(locale);
             setWorkingDirectory(getUserHome() + File.separator +  properties.getProperty("directories.default", "."));
+            if (properties.getProperty("threads.max") == null) {
+                setMaxThreads(getHardwareConcurrency());
+            }
+            // If the directory doesn't exist, create it
             File wdFile = workingDirectory.toFile();
             if (!wdFile.exists()) {
+                // TODO: Log/Warning about operation
                 wdFile.mkdir();
             }
         } catch (IOException e) {
@@ -57,7 +62,7 @@ public class IspdProperties {
      * @param workingDirectory the working directory to set
      */
     public static void setWorkingDirectory(String workingDirectory) {
-        IspdProperties.workingDirectory = Paths.get(workingDirectory).normalize().toAbsolutePath();
+        IspdSettings.workingDirectory = Paths.get(workingDirectory).normalize().toAbsolutePath();
     }
 
     /**
@@ -72,5 +77,26 @@ public class IspdProperties {
      */
     public static String getUserHome() {
         return System.getProperty("user.home");
+    }
+
+    /**
+     * @param number the maximum number of threads
+     */
+    public static void setMaxThreads(int number) {
+        properties.setProperty("threads.max", String.valueOf(number));
+    }
+
+    /**
+     * @return the maximum number of threads
+     */
+    public static int getMaxThreads() {
+        return Integer.parseInt(properties.getProperty("threads.max"));
+    }
+
+    /**
+     * @return the number of processors available to execute iSPD
+     */
+    public static int getHardwareConcurrency() {
+        return Runtime.getRuntime().availableProcessors();
     }
 }

@@ -3,11 +3,11 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Build results and binaries
+# Build results and binaries from Gradle
 build/
 bin/
 
-# Hidden files
+# Other Hidden files
 .*
 
 # Package Files #

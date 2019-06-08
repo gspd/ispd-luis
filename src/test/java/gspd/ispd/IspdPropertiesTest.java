@@ -17,17 +17,17 @@ public class IspdPropertiesTest {
     
     @Test
     public void testLocale() {
-        IspdProperties.load();
-        Locale loc = IspdProperties.getLocale();
+        IspdSettings.load();
+        Locale loc = IspdSettings.getLocale();
         assertFalse("locale is not NULL", loc == null);
-        assertEquals("locale is rigth", loc, new Locale("en","US"));
+        assertEquals("locale is right", loc, new Locale("en","US"));
     }
 
     @Test
     public void testWorkingDirectory() {
         try {
-            IspdProperties.load();
-            String wd = IspdProperties.getWorkingDirectory();
+            IspdSettings.load();
+            String wd = IspdSettings.getWorkingDirectory();
             assertFalse("working directory is not NULL", wd == null);
             File file = new File(wd, ".test.temp");
             assertTrue("created new file", file.createNewFile());
