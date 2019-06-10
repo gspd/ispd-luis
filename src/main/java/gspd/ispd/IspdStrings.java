@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 /**
  * Manage strings in Ispd in the default locale set by {@link IspdSettings IspdSettings}
+ * 
+ * @author luisbaldissera
  */
 public class IspdStrings {
 

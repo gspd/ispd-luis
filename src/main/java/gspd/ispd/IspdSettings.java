@@ -26,7 +26,9 @@ public class IspdSettings {
     /**
      * Load the configuration file of iSPD, ispd.properties ans control access and
      * availability of its informations, as well as a simple way to store their
-     * possibly changes
+     * possibly changes.
+     * 
+     * @author luisbaldissera
      */
     public static void load() {
         try {
