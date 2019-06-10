@@ -17,14 +17,14 @@ import java.util.Properties;
  */
 public class IspdSettings {
 
-    private static final String PROPERTIES_FILE_NAME = "ispd.properties";
+    private static final String PROPERTIES_FILE_NAME = "settings.properties";
     
     private static Properties properties;
     private static Locale locale;
     private static Path workingDirectory;
 
     /**
-     * Load the configuration file of iSPD, ispd.properties ans control access and
+     * Load the configuration file of iSPD, settings.properties ans control access and
      * availability of its informations, as well as a simple way to store their
      * possibly changes.
      * 

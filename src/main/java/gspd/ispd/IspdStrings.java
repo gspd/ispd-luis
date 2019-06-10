@@ -52,7 +52,7 @@ public class IspdStrings {
      *   <b>Notes:</b></p>
      *   <ul>
      *    <li>If the string has $i multiple times, then all them should be replaced.
-     *    Example: other.key=Hi $1, you are a $1, called as {@code IspdStringd.get("other.key", "friend")},
+     *    Example: {@code other.key=Hi $1, you are a $1}, called as {@code IspdStringd.get("other.key", "friend")},
      *    would be replaced as {@code "Hi friend, you are a friend"}.
      *    </li>
      *    <li>Currently, it just supports {@code $1 ... $9}.</li>
