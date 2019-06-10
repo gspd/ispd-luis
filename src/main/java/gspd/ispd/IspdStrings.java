@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * IspdStrings
+ * Manage strings in Ispd in the default locale set by {@link IspdSettings IspdSettings}
  */
 public class IspdStrings {
 
