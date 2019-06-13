@@ -10,7 +10,7 @@
 <!ELEMENT task EMPTY>
 <!ATTLIST task id CDATA "task1">
 <!ATTLIST task arr CDATA "0.0">
-<!-- The deﬁned states are the same used by SWF and GWF
+<!-- The deﬁned states are the same used by SWF (Amazon Simple Workflow) and GWF
         0 : job crash
         1 : job successful conclusion
         2 : job preemption
@@ -21,6 +21,7 @@
 <!ATTLIST task sts CDATA "1">
 <!ATTLIST task cpsz CDATA "-1">
 <!ATTLIST task cmsz CDATA "-1">
+<!-- The owner task user id -->
 <!ATTLIST task usr CDATA "user1">
 
 <!ELEMENT dag_task (dag_character,thread)>

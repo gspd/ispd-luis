@@ -7,12 +7,12 @@ package gspd.ispd.core;
  * All properties are leave in public attributes, to reduce memory in the simulation motor,
  * once this data can have a lot of instances in simulation motor.
  * 
- * @author Luís Vinícius Omar Baldissera
+ * @author luisbaldissera
  */
 public class TaskResource {
 
     /**
-     * The amount of memory required for the task, <mesure unit>
+     * The amount of primary memory required for the task, <mesure unit>
      */
     public int memory;
     /**
@@ -23,4 +23,8 @@ public class TaskResource {
      * The memory size of output task file, <mesure unit>
      */
     public int outSize;
+    /**
+     * The number of floating points operations
+     */
+    public int flop;
 }

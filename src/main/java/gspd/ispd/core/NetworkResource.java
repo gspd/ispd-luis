@@ -7,7 +7,7 @@ package gspd.ispd.core;
  * All properties are leave in public attributes, to reduce memory in the simulation motor,
  * once this data can have a lot of instances in simulation motor.
  * 
- * @author Luís Vinícius Omar Baldissera
+ * @author luisbaldissera
  */
 public class NetworkResource {
 

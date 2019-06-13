@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT ispd (hardware,virtualmachines,users,workload)>
+
+    <!ELEMENT hardware (machine+,network)>
+
+        <!ELEMENT machine>
+
+        <!ELEMENT network (net|switch)*>
+
+            <!ELEMENT net>
+
+    <!ELEMENT virtualmachines>
+
+    <!ELEMENT users (user+)>
+
+        <!ELEMENT user>
+
+    <!ELEMENT workload (workflow+)>
