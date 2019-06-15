@@ -1,19 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT ispd (hardware,virtualmachines,users,workload)>
+<!--
+NOTATION:
+element [attributes...]
+    child1 [attr...]
+    child2 [attr...]
+    ...
+    childN [attr...]
 
-    <!ELEMENT hardware (machine+,network)>
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-        <!ELEMENT machine>
+ispd []
+    model []
+        hardware []
+            machines []
+                machine [processing, memory, storage]
+                cluster [processing, memory, storage]
+            network []
+                net [bandwidth, latency, from, to]
+                switch [nports, switching]
+        virtualmachines []
+                vm []
+        users []
+            user [name]
+        workload []
+            workflow []
+                task []
+                    process []
+                        thread []
+            resources []
+                resource []
+    graphical []
+-->
 
-        <!ELEMENT network (net|switch)*>
-
-            <!ELEMENT net>
-
-    <!ELEMENT virtualmachines>
-
-    <!ELEMENT users (user+)>
-
-        <!ELEMENT user>
-
-    <!ELEMENT workload (workflow+)>
+<!ELEMENT ispd (model,graphical)>
+<!ELEMENT model (hardware,virtualmachines,users,workload)>
+<!ELEMENT hardware ((machine|cluster)+,network)>
+<!ELEMENT machine EMPTY>
+<!ELEMENT cluster EMPTY>
+<!ELEMENT network (net|switch)* >
+<!ELEMENT net EMPTY>
+<!ELEMENT switch EMPTY>
+<!ELEMENT virtualmachines (vm+)>
+<!ELEMENT vm EMPTY>
+<!ELEMENT users (user+)>
+<!ELEMENT user EMPTY>
+<!ELEMENT workload (workflow+, resources?)>
+<!ELEMENT workflow (task+)>
+<!ELEMENT task (process+)>
+<!ELEMENT process (thread+)>
+<!ELEMENT thread EMPTY>
+<!ELEMENT resources (resource*)>
+<!ELEMENT resource EMPTY>
+<!ELEMENT graphical EMPTY>
