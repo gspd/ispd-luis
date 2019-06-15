@@ -7,18 +7,14 @@ package gspd.ispd.core;
  * All properties are leave in public attributes, to reduce memory in the simulation motor,
  * once this data can have a lot of instances in simulation motor.
  * 
- * @author Luís Vinícius Omar Baldissera
+ * @author luisbaldissera
  */
 public class ComputingResource {
 
     /**
-     * The number of processing cores
+     * The computing power, in <mesure unit>
      */
-    public int ncores;
-    /**
-     * The processing power of each core
-     */
-    public int corePower;
+    public int computingPower;
     /**
      * The primary memory
      */
