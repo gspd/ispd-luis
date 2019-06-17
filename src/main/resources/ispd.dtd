@@ -22,7 +22,7 @@ ispd []
         virtualmachines []
                 vm []
         users []
-            user [name]
+            user [uid, name]
         workload []
             workflow []
                 task []
@@ -31,9 +31,13 @@ ispd []
             resources []
                 resource []
     graphical []
+        icon [x,y,size,ref,type]
+        arrow [x0,y0,x1,y2,ref]
+        text [x,y,width,height,fontsize,background,foreground]
 -->
 
 <!ELEMENT ispd (model,graphical)>
+<!-- The pure simulation data model -->
 <!ELEMENT model (hardware,virtualmachines,users,workload)>
 <!ELEMENT hardware ((machine|cluster)+,network)>
 <!ELEMENT machine EMPTY>
@@ -52,4 +56,8 @@ ispd []
 <!ELEMENT thread EMPTY>
 <!ELEMENT resources (resource*)>
 <!ELEMENT resource EMPTY>
-<!ELEMENT graphical EMPTY>
+<!-- The graphical interface data associated with data model  -->
+<!ELEMENT graphical (icon|arrow|text)*>
+<!ELEMENT icon EMPTY>
+<!ELEMENT arrow EMPTY>
+<!ELEMENT text EMPTY>
