@@ -1,4 +1,4 @@
-package gspd.ispd.architecture;
+package gspd.ispd.dependencies;
 
 import static org.junit.Assert.*;
 

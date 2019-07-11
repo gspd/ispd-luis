@@ -1,4 +1,4 @@
-package gspd.ispd.architecture;
+package gspd.ispd.dependencies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,10 @@ public class Dependency {
      * The number of dependencies this depends on
      */
     protected int dependenciesCount;
+    /**
+     * The objects that this dependency refer to
+     */
+    private Object reference;
 
     /**
      * Dependency constructor
@@ -36,8 +40,9 @@ public class Dependency {
     }
 
     /**
-     * Adds a dependency that this depends on
+     * Adds a dependency that this depends on.
      * @param dependency the dependency to add
+     * @return always true
      */
     public boolean addDependency(Dependency dependency) {
         dependency.addDependent(this);
@@ -47,10 +52,12 @@ public class Dependency {
     /**
      * Adds a dependency that depends on this
      * @param dependency the dependent
+     * @return always true
      */
-    public void addDependent(Dependency dependent) {
+    public boolean addDependent(Dependency dependent) {
         dependents.add(dependent);
         dependent.dependenciesCount++;
+        return true;
     }
 
     /**

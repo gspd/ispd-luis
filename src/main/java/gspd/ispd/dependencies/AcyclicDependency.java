@@ -1,4 +1,4 @@
-package gspd.ispd.architecture;
+package gspd.ispd.dependencies;
 
 public class AcyclicDependency extends SimpleDependency {
 
@@ -12,8 +12,8 @@ public class AcyclicDependency extends SimpleDependency {
     }
 
     @Override
-    protected boolean validateDependency(Dependency dependency) {
-        if (super.validateDependency(dependency)) {
+    protected boolean validateNewDependency(Dependency dependency) {
+        if (super.validateNewDependency(dependency)) {
             return !hasCycle();
         } else {
             return false;
