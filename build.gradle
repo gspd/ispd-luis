@@ -40,9 +40,9 @@ dependencies {
 
     // Use JGraphT to make Graphs operations
     // WEBSITE: https://jgrapht.org/
-    implementation 'org.jgrapht:jgrapht-core:1.3.0'
+    // implementation 'org.jgrapht:jgrapht-architecture:1.3.0'
 
-    // Use iSPD core
+    // Use iSPD architecture
     // NOTE: if you change the JAR for any reason, please change this to the new path
     compile files('src/libs/iSPD.jar')
 }

@@ -1,4 +1,4 @@
-package gspd.ispd.core;
+package gspd.ispd.architecture;
 
 /**
  * Description of a processor and some operations with it.

@@ -1,4 +1,4 @@
-package gspd.ispd.core;
+package gspd.ispd.architecture.resources;
 
 /**
  * NetworkResource
@@ -12,11 +12,11 @@ package gspd.ispd.core;
 public class NetworkResource {
 
     /**
-     * The bandwidth, <mesure unit>
+     * The bandwidth, <measure unit>
      */
     public int bandwidth;
     /**
-     * The buffer size, <mesure unit>
+     * The buffer size, <measure unit>
      */
     public int buffer;
 }

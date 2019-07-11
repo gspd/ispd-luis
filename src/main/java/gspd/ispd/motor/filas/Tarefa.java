@@ -32,6 +32,15 @@ public class Tarefa implements Cliente {
     private List<CS_Processamento> historicoProcessamento = new ArrayList<CS_Processamento>();
 
     /**
+     * The list of tasks that depends on this task
+     */
+    private List<Tarefa> dependencyTriggerTasks;
+    /**
+     * The number of tasks this task depends on
+     */
+    private int dependenciesCounter;
+
+    /**
      * Indica a quantidade de mflops já processados no momento de um bloqueio
      */
     private double mflopsProcessado;
@@ -86,6 +95,8 @@ public class Tarefa implements Cliente {
         this.mflopsProcessado = 0;
         this.tempoInicial = new ArrayList<Double>();
         this.tempoFinal = new ArrayList<Double>();
+        this.dependenciesCounter = 0;
+        this.dependencyTriggerTasks = new ArrayList<>();
     }
 
     public Tarefa(int id, String proprietario, String aplicacao, CentroServico origem, double arquivoEnvio, double arquivoRecebimento, double tamProcessamento, double tempoCriacao) {
@@ -190,9 +201,19 @@ public class Tarefa implements Cliente {
         this.tempoInicial.add(tempo);
         this.historicoProcessamento.add((CS_Processamento) localProcessamento);
     }
-    
+
+    /**
+     * Notify all tasks those depends on this one, that they are free
+     */
+    private void triggerDependentsTasks() {
+        for (Tarefa task : dependencyTriggerTasks) {
+            task.dependenciesCounter -= 1;
+        }
+    }
+
     public void finalizarAtendimentoProcessamento(double tempo) {
         this.estado = CONCLUIDO;
+        triggerDependentsTasks();
         this.metricas.incTempoProcessamento(tempo - inicioEspera);
         if (this.tempoFinal.size() < this.tempoInicial.size()) {
             this.tempoFinal.add(tempo);

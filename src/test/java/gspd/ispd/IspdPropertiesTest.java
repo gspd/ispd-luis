@@ -4,11 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Locale;
-
-
-
 
 /**
  * IspdPropertiesTest
