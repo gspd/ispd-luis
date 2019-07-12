@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class DepedencyTest {
+public class DependencyTest {
 
     @Test
     public void testDepedency() {
