@@ -20,16 +20,26 @@ public class Dependency {
      */
     protected int dependenciesCount;
     /**
-     * The objects that this dependency refer to
+     * The objects that this dependency refers to
      */
     private Object reference;
 
     /**
      * Dependency constructor
+     * @param reference the object this dependency node refer to
      */
-    public Dependency() {
+    public Dependency(Object reference) {
         dependents = new ArrayList<>();
         dependenciesCount = 0;
+        this.reference = reference;
+    }
+
+    /**
+     * Dependency contructor, with no reference
+     * object
+     */
+    public Dependency() {
+        this(null);
     }
 
     /**
@@ -115,5 +125,12 @@ public class Dependency {
      */
     public boolean isDependencyOf(Dependency dependency) {
         return dependents.contains(dependency);
+    }
+
+    /**
+     * @return the reference object of the dependency node
+     */
+    public Object getReference() {
+        return reference;
     }
 }

@@ -10,7 +10,7 @@ public class Processor {
     /**
      * The number of processor cores
      */
-    private int ncores;
+    private int numberOfCores;
     /**
      * The average frequency of the processor, in Hertz
      */
@@ -30,7 +30,7 @@ public class Processor {
      * instruction cycle of the processor
      */
     public Processor(int ncores, long frequency, int flopPerCycle) {
-        this.ncores = ncores;
+        this.numberOfCores = ncores;
         this.frequency = frequency;
         this.flopPerCycle = flopPerCycle;
     }
@@ -46,7 +46,7 @@ public class Processor {
      * @return the number of CPU cores of the processor
      */
     public int getNumberOfCores() {
-        return ncores;
+        return numberOfCores;
     }
 
     /**
@@ -57,9 +57,9 @@ public class Processor {
     }
 
     /**
-     * @return the computing power of the processor, in <mesure_unit>
+     * @return the core power, in <measure_unit>
      */
-    public long getComputingPower() {
-        return ncores * frequency * flopPerCycle;
+    public long getCorePower() {
+        return frequency * flopPerCycle;
     }
 }

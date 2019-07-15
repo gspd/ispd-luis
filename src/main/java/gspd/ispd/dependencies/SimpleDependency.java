@@ -2,9 +2,26 @@ package gspd.ispd.dependencies;
 
 /**
  * Subclass of dependency that not allow adding direct redundant dependency, or
- * self-dependencies. That is, it mantains the dependency graph simple
+ * self-dependencies. That is, it mantains the dependency graph simple.
+ * 
+ * @author luisbaldissera
  */
 public class SimpleDependency extends Dependency {
+
+    /**
+     * Simple dependency node constructor
+     * @param reference the object the node refers to
+     */
+    public SimpleDependency(Object reference) {
+        super(reference);
+    }
+
+    /**
+     * Acyclic dependency node constructor without object reference
+     */
+    public SimpleDependency() {
+        this(null);
+    }
 
     /**
      * Adds a dependency that this depends on.

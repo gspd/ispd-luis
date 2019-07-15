@@ -42,4 +42,21 @@ public class DependencyTest {
         assertFalse(a.isDependencyOf(b));
 
     }
+
+    @Test
+    public void testReferencing() {
+        Dependency d1 = new Dependency("T1");
+        Dependency d2 = new Dependency("T2");
+        Dependency d3 = new Dependency("T3");
+
+        assertTrue(d1.addDependency(d2));
+        assertTrue(d2.addDependency(d3));
+        assertTrue(d3.addDependency(d1));
+        assertTrue(d1.addDependency(d1));
+
+        assertEquals("T1", d1.getReference());
+        assertEquals("T2", d2.getReference());
+        assertEquals("T3", d3.getReference());
+
+    }
 }

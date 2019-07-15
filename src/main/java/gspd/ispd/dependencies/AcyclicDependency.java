@@ -1,5 +1,12 @@
 package gspd.ispd.dependencies;
 
+/**
+ * Subclass of simple dependency. This class, besides garantees
+ * that the dependency graph is simples, it also always check
+ * for acyclicness to validate additions
+ * 
+ * @author luisbaldissera
+ */
 public class AcyclicDependency extends SimpleDependency {
 
     /**
@@ -13,10 +20,21 @@ public class AcyclicDependency extends SimpleDependency {
      */
     private int counter;
 
-    public AcyclicDependency() {
-        super();
+    /**
+     * Acyclic dependency node constructor
+     * @param reference the object the node refers to
+     */
+    public AcyclicDependency(Object reference) {
+        super(reference);
         flag = false;
         counter = 0;
+    }
+
+    /**
+     * Acyclic dependency node constructor without object reference
+     */
+    public AcyclicDependency() {
+        this(null);
     }
 
     @Override
@@ -84,9 +102,10 @@ public class AcyclicDependency extends SimpleDependency {
                 // *** LIE DETECTED ***
                 // lie detected, there was a cycle here
                 cycleDetected = true;
+            } else {
+                incrementCounter();
             }
             flagDown();
-            incrementCounter();
         }
         return cycleDetected;
     }
