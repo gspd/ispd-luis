@@ -1,0 +1,37 @@
+package gspd.ispd.externo;
+import gspd.ispd.escalonador.Escalonador;
+import gspd.ispd.motor.filas.Tarefa;
+import gspd.ispd.motor.filas.servidores.CS_Processamento;
+import gspd.ispd.motor.filas.servidores.CentroServico;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ${scheduler.name} extends Escalonador {
+
+    @Override
+    public void iniciar() {
+        // TODO: 
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Tarefa escalonarTarefa() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public CS_Processamento escalonarRecurso() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<CentroServico> escalonarRota(CentroServico destino) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void escalonar() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+}

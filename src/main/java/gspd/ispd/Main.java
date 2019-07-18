@@ -7,6 +7,8 @@ package gspd.ispd;
 import gspd.ispd.gui.JPrincipal;
 import gspd.ispd.gui.LogExceptions;
 import gspd.ispd.gui.SplashWindow;
+import gspd.ispd.settings.IspdSettings;
+import gspd.ispd.settings.IspdStrings;
 
 import java.io.File;
 import java.io.FileNotFoundException;

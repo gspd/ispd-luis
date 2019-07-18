@@ -1,4 +1,4 @@
-package gspd.ispd;
+package gspd.ispd.settings;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Properties;
+
+import gspd.ispd.Main;
 
 /**
  * This class has just static methods to access common properties of the iSPD.
