@@ -20,7 +20,7 @@ public class StringPropertiesTest {
             Properties prop = new Properties();
             prop.load(Main.class.getResourceAsStream("/settings.properties"));
             StringProperties sp = new StringProperties(prop);
-            String str = sp.resolveProperties("The motor has ${motor.buffer.size} bytes in the buffer");
+            String str = sp.resolveProperties("The motor has ${test.setting} bytes in the buffer");
             assertEquals("The motor has 1024 bytes in the buffer", str);
         } catch (Exception e) {
             fail(e.toString());

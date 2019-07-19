@@ -31,9 +31,5 @@ public class StringProperties {
         }
         return text;
     }
-
-    private String substituteProperty(String text, String key) {
-        return text.replaceAll("\\$\\{" + key + "\\}", properties.getProperty(key));
-    }
     
 }
