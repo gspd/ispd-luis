@@ -7,6 +7,8 @@ element [attributes...]
     child2 [attr...]
     ...
     childN [attr...]
+    
+elementThatHasNoChild [attr...] {content}
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -22,7 +24,7 @@ ispd []
         virtualmachines []
                 vm []
         users []
-            user [uid, name]
+            user [uid] {name}
         workload []
             workflow []
                 task []
@@ -32,6 +34,8 @@ ispd []
         icon [x,y,size,ref,type]
         arrow [x0,y0,x1,y2,ref]
         text [x,y,width,height,fontsize,background,foreground]
+    properties []
+        entry [key] {value}
 
 
 -->
@@ -59,3 +63,6 @@ ispd []
 <!ELEMENT icon EMPTY>
 <!ELEMENT arrow EMPTY>
 <!ELEMENT text EMPTY>
+<!-- The specific local file settings -->
+<!ELEMENT properties (entry)*>
+<!ELEMENT entry EMPTY>
