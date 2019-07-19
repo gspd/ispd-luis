@@ -18,7 +18,7 @@ public class StringPropertiesTest {
     public void testStringProperties() {
         try {
             Properties prop = new Properties();
-            prop.load(Main.class.getResourceAsStream("/ispd.properties"));
+            prop.load(Main.class.getResourceAsStream("/settings.properties"));
             StringProperties sp = new StringProperties(prop);
             String str = sp.resolveProperties("The motor has ${motor.buffer.size} bytes in the buffer");
             assertEquals("The motor has 1024 bytes in the buffer", str);

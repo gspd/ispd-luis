@@ -25,7 +25,7 @@ public class StringProperties {
             // the value of the specified key
             String value = properties.getProperty(key);
             // substitute in string
-            String before = text.substring(0, matcher.start() - 1);
+            String before = text.substring(0, matcher.start());
             String after = text.substring(matcher.end());
             text = before.concat(value).concat(after);
         }
