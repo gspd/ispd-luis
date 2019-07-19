@@ -28,7 +28,7 @@ public class IspdStrings {
      */
     public static void load() {
         try {
-            locale = IspdSettings.getLocale();
+            locale = new Locale("en", "US");
             stringsBundle = ResourceBundle.getBundle(STRINGS_BUNDLE_NAME, locale);
         } catch (Exception e) {
             System.err.println("An error occurred while loading strings: " + e);

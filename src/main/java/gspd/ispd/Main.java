@@ -33,9 +33,11 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Load iSPD configurations
-            IspdSettings.load();
+            IspdSettings settings = new IspdSettings();
+            settings.load("settings.properties");
             // Load iSPD strings
-            IspdStrings.load();
+            IspdStrings strings = new IspdStrings();
+            strings.load();
             if (args.length > 0) {
                 Terminal tel = new Terminal(args);
                 tel.executar();
@@ -52,8 +54,8 @@ public class Main {
                 Thread.setDefaultUncaughtExceptionHandler(logExceptions);
                 // Errors files for simulator
                 // Get the error file paths
-                File simulatorErrorFilePath = new File(IspdSettings.getWorkingDirectory(), "Erros_Simulador");
-                File outputSimulatorErrorFilePath = new File(IspdSettings.getWorkingDirectory(), "Saida_Simulador");
+                File simulatorErrorFilePath = new File(settings.getWorkingDirectory(), "Erros_Simulador");
+                File outputSimulatorErrorFilePath = new File(settings.getWorkingDirectory(), "Saida_Simulador");
                 // Error files
                 FileOutputStream fosErr = new FileOutputStream(simulatorErrorFilePath);
                 FileOutputStream fosOut = new FileOutputStream(outputSimulatorErrorFilePath);

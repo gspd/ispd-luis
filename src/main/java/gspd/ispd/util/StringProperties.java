@@ -15,7 +15,7 @@ public class StringProperties {
     }
 
     public String resolveProperties(String text) {
-        Pattern pattern = Pattern.compile("\\$\\{(\\c+)\\}");
+        Pattern pattern = Pattern.compile("\\$\\{(\\w|\\.|\\:)+\\}");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             // the hole string matched

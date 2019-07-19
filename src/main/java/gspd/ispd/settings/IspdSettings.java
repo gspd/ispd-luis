@@ -31,12 +31,12 @@ public class IspdSettings extends Properties {
      */
     public void load(String filename) {
         try {
-            
+            this.filename = filename;
             super.load(Main.class.getResourceAsStream("/" + filename));
-            locale = new Locale(properties.getProperty("locale.language", "en"), properties.getProperty("locale.country", "US"));
+            locale = new Locale(getProperty("locale.language", "en"), getProperty("locale.country", "US"));
             Locale.setDefault(locale);
-            setWorkingDirectory(getUserHome() + File.separator +  properties.getProperty("directories.default", "."));
-            if (properties.getProperty("threads.max") == null) {
+            setWorkingDirectory(getUserHome() + File.separator +  getProperty("directories.default", "."));
+            if (getProperty("threads.max") == null) {
                 setMaxThreads(getHardwareConcurrency());
             }
             // If the directory doesn't exist, create it
@@ -63,7 +63,7 @@ public class IspdSettings extends Properties {
      * @param workingDirectory the working directory to set
      */
     public void setWorkingDirectory(String workingDirectory) {
-        IspdSettings.workingDirectory = Paths.get(workingDirectory).normalize().toAbsolutePath();
+        this.workingDirectory = Paths.get(workingDirectory).normalize().toAbsolutePath();
     }
 
     /**
@@ -84,14 +84,14 @@ public class IspdSettings extends Properties {
      * @param number the maximum number of threads
      */
     public void setMaxThreads(int number) {
-        properties.setProperty("threads.max", String.valueOf(number));
+        setProperty("threads.max", String.valueOf(number));
     }
 
     /**
      * @return the maximum number of threads
      */
     public int getMaxThreads() {
-        return Integer.parseInt(properties.getProperty("threads.max"));
+        return Integer.parseInt(getProperty("threads.max"));
     }
 
     /**
