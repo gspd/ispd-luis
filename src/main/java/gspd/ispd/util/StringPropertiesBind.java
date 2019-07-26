@@ -7,14 +7,9 @@ import java.util.regex.Pattern;
 /**
  * PropertiesBundle
  */
-public class StringProperties {
-    private Properties properties;
+public class StringPropertiesBind {
 
-    public StringProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public String resolveProperties(String text) {
+    public static String resolveProperties(String text, Properties properties) {
         Pattern pattern = Pattern.compile("\\$\\{(\\w|\\.|\\:)+\\}");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {

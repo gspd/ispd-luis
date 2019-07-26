@@ -6,10 +6,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * StringBundle
+ * <p>
+ * StringBundle is a wrapper and helper class to access the
+ * resource bundle properties using pattern to replace strings
+ * </p>
+ * <p>
+ * Suppose a bundle {@code string.properties} as below
+ * </p>
+ *  
  */
 public class StringBundle {
 
+    /**
+     * The resource bundle
+     */
     private ResourceBundle stringsBundle;
 
     public StringBundle(String baseName, Locale locale) {
