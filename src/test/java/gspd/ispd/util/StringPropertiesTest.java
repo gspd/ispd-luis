@@ -19,7 +19,8 @@ public class StringPropertiesTest {
         try {
             Properties prop = new Properties();
             prop.load(Main.class.getResourceAsStream("/settings.properties"));
-            String str = StringPropertiesBind.resolveProperties("The motor has ${test.setting} bytes in the buffer", prop);
+            StringPropertiesBind spb = new StringPropertiesBind(prop);
+            String str = spb.resolveProperties("The motor has ${test.setting} bytes in the buffer");
             assertEquals("The motor has 1024 bytes in the buffer", str);
         } catch (Exception e) {
             fail(e.toString());

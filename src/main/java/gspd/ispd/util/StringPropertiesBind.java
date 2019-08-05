@@ -9,7 +9,13 @@ import java.util.regex.Pattern;
  */
 public class StringPropertiesBind {
 
-    public static String resolveProperties(String text, Properties properties) {
+    Properties properties;
+
+    StringPropertiesBind(Properties properties)  {
+        this.properties = properties;
+    }
+
+    public String resolveProperties(String text) {
         Pattern pattern = Pattern.compile("\\$\\{(\\w|\\.|\\:)+\\}");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
@@ -26,5 +32,4 @@ public class StringPropertiesBind {
         }
         return text;
     }
-    
 }
