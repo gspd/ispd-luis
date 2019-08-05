@@ -16,11 +16,4 @@ public class StringBundleTest {
         String str = sb.getString("string.for.test", "Luis", "Baldissera");
         assertEquals("Meu nome eh Luis e meu sobrenome Baldissera", str);
     }
-
-    @Test
-    public void testResolveString() {
-        StringBundle sb = new StringBundle("strings", new Locale("pt", "BR"));
-        String str = sb.resolveString("2^10 = ${string.for.test}");
-        assertEquals("2^10 = 1024", str);
-    }
 }

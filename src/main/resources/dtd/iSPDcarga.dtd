@@ -34,7 +34,9 @@ system
         5 : job canceled
 -->
 <!ATTLIST task sts CDATA "1">
+<!-- Computing size -->
 <!ATTLIST task cpsz CDATA "-1">
+<!-- Communication size -->
 <!ATTLIST task cmsz CDATA "-1">
 <!-- The task owner -->
 <!ATTLIST task usr CDATA "user1">

@@ -1,4 +1,4 @@
-package gspd.ispd.escalonador;
+package gspd.ispd.schedulers;
 
 import java.util.Map;
 import java.util.Queue;
