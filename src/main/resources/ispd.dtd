@@ -27,9 +27,7 @@ ispd []
             user [uid] {name}
         workload []
             workflow []
-                task []
-            resources []
-                resource []
+                task [dep, type]
     graphical []
         icon [x,y,size,ref,type]
         arrow [x0,y0,x1,y2,ref]
@@ -56,8 +54,6 @@ ispd []
 <!ELEMENT workload (workflow+, resources?)>
 <!ELEMENT workflow (task+)>
 <!ELEMENT task EMPTY>
-<!ELEMENT resources (resource*)>
-<!ELEMENT resource EMPTY>
 <!-- The graphical interface data associated with data model  -->
 <!ELEMENT graphical (icon|arrow|text)*>
 <!ELEMENT icon EMPTY>
