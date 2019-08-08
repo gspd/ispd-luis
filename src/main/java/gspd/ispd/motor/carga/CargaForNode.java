@@ -4,13 +4,15 @@
  */
 package gspd.ispd.motor.carga;
 
-import NumerosAleatorios.GeracaoNumAleatorios;
 import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import NumerosAleatorios.GeracaoNumAleatorios;
 
 /**
  * Descreve como gerar tarefas para um nó escalonador
