@@ -79,7 +79,7 @@ public class ManipuladorXML {
     }
 
     public static boolean escrever(Document documento, File arquivo, String doc_system) {
-        return escrever(documento, arquivo, doc_system);
+        return escrever(documento, arquivo, doc_system, false);
     }
 
     /**
