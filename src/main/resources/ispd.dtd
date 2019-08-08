@@ -12,26 +12,40 @@ elementThatHasNoChild [attr...] {content}
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-ispd []
+ispd [version]
     model []
         hardware []
             machines []
-                machine [processing, memory, storage]
-                cluster [processing, memory, storage]
+                machine []
+                    computing [processing, memory, storage]
+                cluster [nodes, topology]
+                    computing [processing, memory, storage]
+                    networking [bandwidth, latency]
             network []
-                net [bandwidth, latency, from, to]
+                link [from, to]
+                    networking [bandwidth, latency]
                 switch [nports, switching]
+                    networking [bandwidth, latency]
         virtualmachines []
-                vm []
+            vmm [master, childs]
+                vm [vmid, uid]
+                    computing [processing, memory, storage]
         users []
             user [uid] {name}
         workload []
             workflow []
-                task [dep, type]
+                task [tid, dep, type]
+                    computing [processing, memory, storage]
     graphical []
-        icon [x,y,size,ref,type]
-        arrow [x0,y0,x1,y2,ref]
-        text [x,y,width,height,fontsize,background,foreground]
+        icon [ref] 
+            position [x,y]
+            dimension [w,h]
+        arrow [ref]
+            position [x,y]
+            position [x,y]
+        text [fontsize,background,foreground] {text}
+            position [x,y]
+            dimension [w,h]
     properties []
         entry [key] {value}
 
@@ -41,24 +55,33 @@ ispd []
 <!ELEMENT ispd (model,graphical)>
 <!-- The pure simulation data model -->
 <!ELEMENT model (hardware,virtualmachines,users,workload)>
+<!-- Util model elements -->
+<!ELEMENT computing EMPTY>
+<!ELEMENT networking EMPTY>
+<!-- Useful model elements -->
 <!ELEMENT hardware ((machine|cluster)+,network)>
-<!ELEMENT machine EMPTY>
-<!ELEMENT cluster EMPTY>
-<!ELEMENT network (net|switch)* >
-<!ELEMENT net EMPTY>
-<!ELEMENT switch EMPTY>
-<!ELEMENT virtualmachines (vm+)>
-<!ELEMENT vm EMPTY>
+<!ELEMENT machine (computing)>
+<!ELEMENT cluster (computing, networking)>
+<!ELEMENT network (link|switch)* >
+<!ELEMENT link (networking)>
+<!ELEMENT switch (networking)>
+<!ELEMENT virtualmachines (vmm)>
+<!ELEMENT vmm (vm)+ >
+<!ELEMENT vm (computing)>
 <!ELEMENT users (user+)>
 <!ELEMENT user EMPTY>
 <!ELEMENT workload (workflow+, resources?)>
 <!ELEMENT workflow (task+)>
-<!ELEMENT task EMPTY>
+<!ELEMENT task (computing)>
 <!-- The graphical interface data associated with data model  -->
 <!ELEMENT graphical (icon|arrow|text)*>
-<!ELEMENT icon EMPTY>
-<!ELEMENT arrow EMPTY>
-<!ELEMENT text EMPTY>
+<!-- Utils graphical elements -->
+<!ELEMENT position>
+<!ELEMENT dimention>
+<!-- Useful graphical elements -->
+<!ELEMENT icon (position, dimension)>
+<!ELEMENT arrow (position, position)>
+<!ELEMENT text (position, dimension)>
 <!-- The specific local file settings -->
 <!ELEMENT properties (entry)*>
 <!ELEMENT entry EMPTY>

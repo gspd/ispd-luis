@@ -32,6 +32,8 @@ public abstract class CS_Processamento extends CentroServico {
     private double PoderComputacionalDisponivelPorProcessador;
     private MetricasProcessamento metrica;
     private List<ParesOrdenadosUso> lista_pares = new ArrayList<ParesOrdenadosUso>();
+    // denison adicionou energia
+    private Double consumoEnergia;
     
     public CS_Processamento(String id, String proprietario, double PoderComputacional, int numeroProcessadores, double Ocupacao, int numeroMaquina) {
         this.poderComputacional = PoderComputacional;
@@ -42,13 +44,21 @@ public abstract class CS_Processamento extends CentroServico {
                 (this.poderComputacional - (this.poderComputacional * this.Ocupacao))
                 / this.numeroProcessadores;
     }
-    
-    
-    
+
+    // (merged denison) adicionou energia
+    public CS_Processamento(String id, String proprietario, double PoderComputacional, int numeroProcessadores, double Ocupacao, int numeroMaquina, Double energia) {
+        this(id, proprietario, PoderComputacional, numeroProcessadores, Ocupacao, numeroMaquina);
+        this.consumoEnergia = energia;
+    }
+       
     public int getnumeroMaquina(){
         return metrica.getnumeroMaquina();
     }
-    
+
+    // (merged denison) adicionou energia
+    public Double getConsumoEnergia(){
+        return this.consumoEnergia;
+    }    
     
     public double getOcupacao() {
         return Ocupacao;

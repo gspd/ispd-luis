@@ -20,8 +20,11 @@ public class MetricasUsuarios {
     private List<Double> poderComputacional;
     private List<HashSet<Tarefa>> tarefasSubmetidas;
     private List<HashSet<Tarefa>> tarefasConcluidas;
+    // deninson adicionou perfis e limites
+    private HashMap<String, Double> limites;
     
     public MetricasUsuarios(){
+        limites = new HashMap<>();
         usuarios = new HashMap<String, Integer>();
         listaUsuarios = new ArrayList<String>();
         poderComputacional = new ArrayList<Double>();
@@ -35,6 +38,11 @@ public class MetricasUsuarios {
         this.poderComputacional.add(poderComputacional);
         this.tarefasSubmetidas.add(new HashSet<Tarefa>());
         this.tarefasConcluidas.add(new HashSet<Tarefa>());
+    }
+    // merged to denison (added perfil)
+    public void addUsuario(String nome, Double poderComputacional, Double perfil){
+        this.limites.put(nome, perfil);
+        addUsuario(nome, poderComputacional);
     }
     
     public void addAllUsuarios(List<String> nomes, List<Double> poderComputacional){
@@ -53,6 +61,7 @@ public class MetricasUsuarios {
             if(index == null){
                 this.listaUsuarios.add(mtc.listaUsuarios.get(i));
                 this.usuarios.put(mtc.listaUsuarios.get(i), this.listaUsuarios.indexOf(mtc.listaUsuarios.get(i)));
+                this.limites.put(mtc.listaUsuarios.get(i), mtc.limites.get(usuarios.get(this.listaUsuarios.indexOf(mtc.listaUsuarios.get(i)))));
                 this.poderComputacional.add(mtc.poderComputacional.get(i));
                 this.tarefasSubmetidas.add(mtc.tarefasSubmetidas.get(i));
                 this.tarefasConcluidas.add(mtc.tarefasConcluidas.get(i));
@@ -146,6 +155,13 @@ public class MetricasUsuarios {
 
     public List<String> getUsuarios() {
         return listaUsuarios;
+    }
+
+    /**
+     * @return the limites
+     */
+    public HashMap<String, Double> getLimites() {
+        return limites;
     }
     
     public HashMap<String, Integer> getUsuariosMap() {
