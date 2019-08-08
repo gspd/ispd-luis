@@ -13,6 +13,7 @@ package gspd.ispd.gui;
 import gspd.ispd.gui.auxiliar.ParesOrdenadosUso;
 import gspd.ispd.arquivo.SalvarResultadosHTML;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
+import gspd.ispd.arquivo.xml.ConfiguracaoISPD;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
 import gspd.ispd.gui.auxiliar.HtmlPane;
 import gspd.ispd.motor.filas.RedeDeFilas;

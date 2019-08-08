@@ -8,7 +8,7 @@ import java.util.Set;
  * Scheduler provides methods necessary to have a correct scheduler
  * that maps the activity A (task, vm, ...) to the resource R (cpu, host, ...)
  */
-interface Scheduler<A, R> {
+interface Placement<A, R> {
     /**
      * Adds a resource that activity can be scheduled to
      * @param resource
@@ -30,5 +30,5 @@ interface Scheduler<A, R> {
     /**
      * @return the activities mapped to the resources based on the scheduler
      */
-    Map<A, R> schedule();
+    Map<A, R> getPlacement();
 }
