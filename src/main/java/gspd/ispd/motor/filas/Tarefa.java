@@ -45,6 +45,10 @@ public class Tarefa implements Cliente {
      */
     private double mflopsProcessado;
     /**
+     * Indica a quantidade de mflops desperdiçados por uma preempção ou cancelamento
+     */
+    private double mflopsDesperdicados = 0;
+    /**
      * Tamanho do arquivo em Mbits que será enviado para o escravo
      */
     private double arquivoEnvio;
@@ -304,6 +308,18 @@ public class Tarefa implements Cliente {
         return mflopsProcessado;
     }
 
+    /**
+     * @return the mflopsDesperdicados
+     */
+    public double getMflopsDesperdicados() {
+        return mflopsDesperdicados;
+    }
+
+    public void incMflopsDesperdicados(double mflopsDesperdicados) {
+        this.mflopsDesperdicados += mflopsDesperdicados;
+    }
+        
+
     public void setMflopsProcessado(double mflopsProcessado) {
         this.mflopsProcessado = mflopsProcessado;
     }
@@ -319,5 +335,10 @@ public class Tarefa implements Cliente {
 
     public double getArquivoEnvio() {
         return arquivoEnvio;
+    }
+
+    @Override
+    public String toString() {
+        return "Task " + this.getIdentificador();
     }
 }
