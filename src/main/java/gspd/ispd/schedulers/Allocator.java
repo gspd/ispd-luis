@@ -5,17 +5,18 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Scheduler provides methods necessary to have a correct scheduler
- * that maps the activity A (task, vm, ...) to the resource R (cpu, host, ...)
+ * Allocator provides methods necessary to have to allocate
+ * an activity A (task, vm, ...) to a resource R (cpu, host, ...)
+ * managing a Map<A,R>
  */
-interface Placement<A, R> {
+interface Allocator<A, R> {
     /**
-     * Adds a resource that activity can be scheduled to
+     * Adds a resource that activity can be allocated to
      * @param resource
      */
     void addResource(R resource);
     /**
-     * Submit an activity to be scheduled to  a resource
+     * Submit an activity to be allocate to  a resource
      * @param activity
      */
     void submitActivity(A activity);
@@ -28,7 +29,7 @@ interface Placement<A, R> {
      */
     Queue<A> getActivities();
     /**
-     * @return the activities mapped to the resources based on the scheduler
+     * @return the activities mapped to the resources based on the Allocator
      */
-    Map<A, R> getPlacement();
+    Map<A, R> getAllocation();
 }
