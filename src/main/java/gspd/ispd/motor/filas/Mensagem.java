@@ -4,6 +4,7 @@
  */
 package gspd.ispd.motor.filas;
 
+import gspd.ispd.motor.filas.dag.TarefaDAG;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Mensagem implements Cliente {
     
     private int tipo;
     private Tarefa tarefa;
+    private TarefaDAG tarefaOrigem;
     private CentroServico origem;
     private List<CentroServico> caminho;
     private double tamComunicacao;
@@ -42,6 +44,15 @@ public class Mensagem implements Cliente {
         this.tipo = tipo;
         this.tamComunicacao = tamComunicacao; 
     }
+
+    public Mensagem(CS_Processamento origem, double tamComunicacao, TarefaDAG tDestino, TarefaDAG tOrigem, int tipo) {
+        this.origem = origem;
+        this.tipo = tipo;
+        this.tamComunicacao = tamComunicacao;
+        tarefa = tDestino;
+        tarefaOrigem = tOrigem;
+    }
+        
     
     @Override
     public double getTamComunicacao() {
@@ -95,5 +106,12 @@ public class Mensagem implements Cliente {
     @Override
     public double getTimeCriacao() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @return the tarefaOrigem
+     */
+    public TarefaDAG getTarefaOrigem() {
+        return tarefaOrigem;
     }
 }
