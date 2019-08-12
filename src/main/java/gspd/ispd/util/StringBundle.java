@@ -38,19 +38,11 @@ public class StringBundle {
     }
 
     public String resolveString(String text) {
+        // regex for interpret ${...}
         Pattern pattern = Pattern.compile("\\$\\{(\\w|\\.|\\:)+\\}");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
-            // the hole string matched
-            String group = matcher.group();
-            // the key name
-            String key = group.substring(2, group.length() - 1);
-            // the value of the specified key
-            String value = stringsBundle.getString(key);
-            // substitute in string
-            String before = text.substring(0, matcher.start());
-            String after = text.substring(matcher.end());
-            text = before.concat(value).concat(after);
+            text = substituteMatched(text, matcher);
         }
         return text;
     }
@@ -60,6 +52,19 @@ public class StringBundle {
             mainText = mainText.replaceAll("\\$\\{" + (i+1) + "\\}", args[i].toString());
         }
         return mainText;
+    }
+
+    private String substituteMatched(String text, Matcher matcher) {
+        // the hole string ${...} matched
+        String group = matcher.group();
+        // the key name -- remove "${" and "}"
+        String key = group.substring(2, group.length() - 1);
+        // the value of the specified key
+        String value = stringsBundle.getString(key);
+        // substitute in string
+        String before = text.substring(0, matcher.start());
+        String after = text.substring(matcher.end());
+        return before + value + after;
     }
     
 }
