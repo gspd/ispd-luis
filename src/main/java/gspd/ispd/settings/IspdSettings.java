@@ -39,12 +39,7 @@ public class IspdSettings extends Properties {
             if (getProperty("threads.max") == null) {
                 setMaxThreads(getHardwareConcurrency());
             }
-            // If the directory doesn't exist, create it
-            File wdFile = workingDirectory.toFile();
-            if (!wdFile.exists()) {
-                // TODO: Log/Warning about operation
-                wdFile.mkdir();
-            }
+            initFolders();
         } catch (IOException e) {
             System.err.println("Failed to open iSPD properties: " + e);
         } catch (Exception e) {
@@ -99,5 +94,14 @@ public class IspdSettings extends Properties {
      */
     public int getHardwareConcurrency() {
         return Runtime.getRuntime().availableProcessors();
+    }
+
+    private void initFolders() {
+        // If the directory doesn't exist, create it
+        File wdFile = workingDirectory.toFile();
+        if (!wdFile.exists()) {
+            // TODO: Log/Warning about operation
+            wdFile.mkdir();
+        }
     }
 }
