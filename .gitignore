@@ -6,6 +6,9 @@
 # Build results and binaries from Gradle
 build/
 bin/
+Erros/
+gspd.ispd.externo/
+gspd.ispd.externo.cloudSchedulers
 
 # Other Hidden files
 .*
