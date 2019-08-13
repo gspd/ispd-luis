@@ -281,7 +281,8 @@ public class JSimulacaoGrafica extends javax.swing.JDialog implements Runnable {
                 progrSim.println("  Simulation Execution Time = " + ((t2 - t1) / 1000) + "seconds");
                 progrSim.print("Showing results.");
                 progrSim.print(" -> ");
-                janelaResultados = new JResultados(this, metrica, redeDeFilas, tarefas, configuracao);
+                // janelaResultados = new JResultados(this, metrica, redeDeFilas, tarefas, configuracao);
+                janelaResultados = new JResultados(metrica, redeDeFilas, (List<Tarefa>) tarefas);
                 progrSim.println("OK", Color.green);
                 janelaResultados.setLocationRelativeTo(this);
                 jButtonResults.setEnabled(true);
