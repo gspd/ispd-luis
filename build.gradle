@@ -12,6 +12,9 @@ plugins {
 
     // Apply the application plugin to add support for building an application
     id 'application'
+
+    // Apply the JavaFX plugin
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 repositories {
@@ -45,6 +48,14 @@ dependencies {
     // Use iSPD architecture
     // NOTE: if you change the JAR for any reason, please change this to the new path
     compile files('src/libs/iSPD.jar')
+}
+
+javafx {
+    version '11.0.2'
+    modules = [ 
+        'javafx.controls',
+        'javafx.fxml'
+    ]
 }
 
 // Define the main class for the application
