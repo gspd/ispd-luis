@@ -10,6 +10,7 @@
  */
 package gspd.ispd.gui;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.ValidaValores;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
 import gspd.ispd.arquivo.EscalonadoresCloud;
@@ -173,11 +174,11 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         setTitle(palavras.getString("Manage Schedulers")); // NOI18N
         setAlwaysOnTop(true);
         setFocusable(false);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/Logo_iSPD_25.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ISPD.class.getResource("gui/images/Logo_iSPD_25.png")));
 
         jToolBar1.setRollover(true);
 
-        jButtonNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/insert-object.png"))); // NOI18N
+        jButtonNovo.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/insert-object.png"))); // NOI18N
         jButtonNovo.setToolTipText(palavras.getString("Creates a new scheduler")); // NOI18N
         jButtonNovo.setFocusable(false);
         jButtonNovo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -190,7 +191,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jToolBar1.add(jButtonNovo);
         jButtonNovo.getAccessibleContext().setAccessibleDescription(palavras.getString("Creates a new scheduler")); // NOI18N
 
-        jButtonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-save.png"))); // NOI18N
+        jButtonSalvar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-save.png"))); // NOI18N
         jButtonSalvar.setToolTipText(palavras.getString("Save the open file")); // NOI18N
         jButtonSalvar.setFocusable(false);
         jButtonSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -202,7 +203,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         });
         jToolBar1.add(jButtonSalvar);
 
-        jButtonCompilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/system-run.png"))); // NOI18N
+        jButtonCompilar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/system-run.png"))); // NOI18N
         jButtonCompilar.setToolTipText(palavras.getString("Compile")); // NOI18N
         jButtonCompilar.setFocusable(false);
         jButtonCompilar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -267,7 +268,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         });
 
         jMenuItemNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/insert-object_1.png"))); // NOI18N
+        jMenuItemNovo.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/insert-object_1.png"))); // NOI18N
         jMenuItemNovo.setText(palavras.getString("New")); // NOI18N
         jMenuItemNovo.setToolTipText(palavras.getString("Creates a new scheduler")); // NOI18N
         jMenuItemNovo.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +279,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuArquivo.add(jMenuItemNovo);
 
         jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-open.png"))); // NOI18N
+        jMenuItemAbrir.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-open.png"))); // NOI18N
         jMenuItemAbrir.setText(palavras.getString("Open")); // NOI18N
         jMenuItemAbrir.setToolTipText(palavras.getString("Opens an existing scheduler")); // NOI18N
         jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
@@ -289,7 +290,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuArquivo.add(jMenuItemAbrir);
 
         jMenuItemSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-save_1.png"))); // NOI18N
+        jMenuItemSalvar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-save_1.png"))); // NOI18N
         jMenuItemSalvar.setText(palavras.getString("Save")); // NOI18N
         jMenuItemSalvar.setToolTipText(palavras.getString("Save the open file")); // NOI18N
         jMenuItemSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +301,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuArquivo.add(jMenuItemSalvar);
 
         jMenuItemImportar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemImportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-import.png"))); // NOI18N
+        jMenuItemImportar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-import.png"))); // NOI18N
         jMenuItemImportar.setText(palavras.getString("Import")); // NOI18N
         jMenuItemImportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -314,7 +315,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.setText(palavras.getString("Edit")); // NOI18N
 
         jMenuItemDesfazer.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemDesfazer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-undo.png"))); // NOI18N
+        jMenuItemDesfazer.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-undo.png"))); // NOI18N
         jMenuItemDesfazer.setText(palavras.getString("Undo")); // NOI18N
         jMenuItemDesfazer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -324,7 +325,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.add(jMenuItemDesfazer);
 
         jMenuItemRefazer.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemRefazer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-redo.png"))); // NOI18N
+        jMenuItemRefazer.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-redo.png"))); // NOI18N
         jMenuItemRefazer.setText(palavras.getString("Redo")); // NOI18N
         jMenuItemRefazer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -335,7 +336,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.add(jSeparator1);
 
         jMenuItemCut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemCut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-cut.png"))); // NOI18N
+        jMenuItemCut.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-cut.png"))); // NOI18N
         jMenuItemCut.setText(palavras.getString("Cut")); // NOI18N
         jMenuItemCut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,7 +346,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.add(jMenuItemCut);
 
         jMenuItemCopy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-copy.png"))); // NOI18N
+        jMenuItemCopy.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-copy.png"))); // NOI18N
         jMenuItemCopy.setText(palavras.getString("Copy")); // NOI18N
         jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,7 +356,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.add(jMenuItemCopy);
 
         jMenuItemPaste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemPaste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-paste.png"))); // NOI18N
+        jMenuItemPaste.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-paste.png"))); // NOI18N
         jMenuItemPaste.setText(palavras.getString("Paste")); // NOI18N
         jMenuItemPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -365,7 +366,7 @@ public class GerenciarEscalonadorCloud extends javax.swing.JFrame {
         jMenuEditar.add(jMenuItemPaste);
         jMenuEditar.add(jSeparator2);
 
-        jMenuItemDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-delete.png"))); // NOI18N
+        jMenuItemDelete.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-delete.png"))); // NOI18N
         jMenuItemDelete.setText(palavras.getString("Delete")); // NOI18N
         jMenuItemDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

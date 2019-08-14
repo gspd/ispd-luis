@@ -10,6 +10,7 @@
  */
 package gspd.ispd.gui;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.ValidaValores;
 import gspd.ispd.arquivo.interpretador.gerador.InterpretadorGerador;
 import gspd.ispd.arquivo.Alocadores;
@@ -1298,7 +1299,7 @@ public class GerarEscalonador extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(palavras.getString("New Scheduler")); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/Logo_iSPD_25.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ISPD.class.getResource("gui/images/Logo_iSPD_25.png")));
 
         jPanelPassos.setBackground(new java.awt.Color(255, 255, 255));
         jPanelPassos.setBorder(new javax.swing.border.MatteBorder(null));
