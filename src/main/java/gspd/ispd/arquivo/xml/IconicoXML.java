@@ -966,7 +966,7 @@ public class IconicoXML {
         //Indicar local do arquivo .dtd
         for (int i = 0; i < number; i++) {
             builder.setEntityResolver(new EntityResolver() {
-                InputSource substitute = new InputSource(IconicoXML.class.getResourceAsStream("iSPD.dtd"));
+                InputSource substitute = new InputSource(getClass().getResourceAsStream("iSPD.dtd"));
 
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     return substitute;

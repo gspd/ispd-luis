@@ -39,7 +39,7 @@ public class ManipuladorXML {
         final String dtdT = dtd;
         //Indicar local do arquivo .dtd
         builder.setEntityResolver(new EntityResolver() {
-            InputSource substitute = new InputSource(ManipuladorXML.class.getResourceAsStream("/dtd/"+dtdT));
+            InputSource substitute = new InputSource(getClass().getResourceAsStream(dtdT));
 
             @Override
             public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {

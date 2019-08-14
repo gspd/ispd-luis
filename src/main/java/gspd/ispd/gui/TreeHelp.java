@@ -51,6 +51,8 @@ import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
+import gspd.ispd.ISPD;
+
 public class TreeHelp extends JFrame implements TreeSelectionListener {
     private JEditorPane htmlPane;
     private JTree tree;
@@ -68,7 +70,7 @@ public class TreeHelp extends JFrame implements TreeSelectionListener {
     public TreeHelp() {
         setTitle("Help");
 	setMinimumSize(new java.awt.Dimension(700, 400));
-	Image imagem = Toolkit.getDefaultToolkit().getImage( getClass().getResource("/images/Logo_iSPD_25.png"));
+	Image imagem = Toolkit.getDefaultToolkit().getImage(ISPD.class.getResource("gui/images/Logo_iSPD_25.png"));
 	setIconImage(imagem);
 
         //super(new GridLayout(1,0));

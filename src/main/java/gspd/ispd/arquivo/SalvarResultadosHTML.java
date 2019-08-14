@@ -1,5 +1,6 @@
 package gspd.ispd.arquivo;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.motor.metricas.Metricas;
 import gspd.ispd.motor.metricas.MetricasGlobais;
 import java.awt.image.BufferedImage;
@@ -212,15 +213,15 @@ public class SalvarResultadosHTML {
         }
         arquivo = new File(diretorio, "fundo_html.jpg");
         if (!arquivo.exists()) {
-            ImageIO.write(ImageIO.read(gspd.ispd.gui.JPrincipal.class.getResource("/images/fundo_html.jpg")), "jpg", arquivo);
+            ImageIO.write(ImageIO.read(ISPD.class.getResource("gui/images/fundo_html.jpg")), "jpg", arquivo);
         }
         arquivo = new File(diretorio, "Logo_iSPD_128.png");
         if (!arquivo.exists()) {
-            ImageIO.write(ImageIO.read(gspd.ispd.gui.JPrincipal.class.getResource("/images/Logo_iSPD_128.png")), "png", arquivo);
+            ImageIO.write(ImageIO.read(ISPD.class.getResource("gui/images/Logo_iSPD_128.png")), "png", arquivo);
         }
         arquivo = new File(diretorio, "Logo_UNESP.png");
         if (!arquivo.exists()) {
-            ImageIO.write(ImageIO.read(gspd.ispd.gui.JPrincipal.class.getResource("/images/Logo_UNESP.png")), "png", arquivo);
+            ImageIO.write(ImageIO.read(ISPD.class.getResource("gui/images/Logo_UNESP.png")), "png", arquivo);
         }
     }
 }

@@ -44,7 +44,7 @@ public class Main {
                 System.exit(0);
             } else {
                 // Configure loading program window
-                ImageIcon image = new ImageIcon(Main.class.getResource("/images/Splash.gif"));
+                ImageIcon image = new ImageIcon(ISPD.class.getResource("gui/images/Splash.gif"));
                 SplashWindow window = new SplashWindow(image);
                 window.setText("Copyright (c) 2010 - 2014 GSPD.  All rights reserved.");
                 // Show loading program window

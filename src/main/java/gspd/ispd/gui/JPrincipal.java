@@ -11,6 +11,7 @@
 package gspd.ispd.gui;
 
 import DescreveSistema.DescreveSistema;
+import gspd.ispd.ISPD;
 import gspd.ispd.arquivo.exportador.Exportador;
 import gspd.ispd.arquivo.xml.IconicoXML;
 import gspd.ispd.arquivo.interpretador.gridsim.InterpretadorGridSim;
@@ -208,7 +209,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                 }
                 if (ext != null) {
                     if (ext.equals("ims") || ext.equals("imsx")) {
-                        java.net.URL imgURL = JPrincipal.class.getResource("/images/Logo_iSPD_25.png");
+                        java.net.URL imgURL = ISPD.class.getResource("gui/images/Logo_iSPD_25.png");
                         if (imgURL != null) {
                             return new ImageIcon(imgURL);
                         }
@@ -219,7 +220,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
             setTitle(palavras.getString("nomePrograma")); // NOI18N
-            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/Logo_iSPD_25.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(ISPD.class.getResource("gui/images/Logo_iSPD_25.png")));
             addWindowListener(new java.awt.event.WindowAdapter() {
                 public void windowClosing(java.awt.event.WindowEvent evt) {
                     formWindowClosing(evt);
@@ -238,7 +239,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
             jToolBar.setFloatable(false);
 
-            jToggleButtonMaquina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/botao_no.gif"))); // NOI18N
+            jToggleButtonMaquina.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/botao_no.gif"))); // NOI18N
             jToggleButtonMaquina.setToolTipText(palavras.getString("Selects machine icon for add to the model")); // NOI18N
             jToggleButtonMaquina.setEnabled(false);
             jToggleButtonMaquina.setFocusable(false);
@@ -251,7 +252,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jToggleButtonMaquina);
 
-            jToggleButtonRede.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/botao_rede.gif"))); // NOI18N
+            jToggleButtonRede.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/botao_rede.gif"))); // NOI18N
             jToggleButtonRede.setToolTipText(palavras.getString("Selects network icon for add to the model")); // NOI18N
             jToggleButtonRede.setEnabled(false);
             jToggleButtonRede.setFocusable(false);
@@ -264,7 +265,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jToggleButtonRede);
 
-            jToggleButtonCluster.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/botao_cluster.gif"))); // NOI18N
+            jToggleButtonCluster.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/botao_cluster.gif"))); // NOI18N
             jToggleButtonCluster.setToolTipText(palavras.getString("Selects cluster icon for add to the model")); // NOI18N
             jToggleButtonCluster.setEnabled(false);
             jToggleButtonCluster.setFocusable(false);
@@ -277,7 +278,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jToggleButtonCluster);
 
-            jToggleButtonInternet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/botao_internet.gif"))); // NOI18N
+            jToggleButtonInternet.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/botao_internet.gif"))); // NOI18N
             jToggleButtonInternet.setToolTipText(palavras.getString("Selects internet icon for add to the model")); // NOI18N
             jToggleButtonInternet.setEnabled(false);
             jToggleButtonInternet.setFocusable(false);
@@ -291,7 +292,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jToolBar.add(jToggleButtonInternet);
             jToolBar.add(jSeparator4);
 
-            jButtonTarefas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/botao_tarefas.gif"))); // NOI18N
+            jButtonTarefas.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/botao_tarefas.gif"))); // NOI18N
             jButtonTarefas.setToolTipText(palavras.getString("Selects insertion model of tasks")); // NOI18N
             jButtonTarefas.setEnabled(false);
             jButtonTarefas.setFocusable(false);
@@ -304,7 +305,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jButtonTarefas);
 
-            jButtonConfigVM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vm_icon.png"))); // NOI18N
+            jButtonConfigVM.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/vm_icon.png"))); // NOI18N
             jButtonConfigVM.setToolTipText("Add and remove the virtual machines");
             jButtonConfigVM.setEnabled(false);
             jButtonConfigVM.setFocusable(false);
@@ -317,7 +318,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jButtonConfigVM);
 
-            jButtonUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/system-users.png"))); // NOI18N
+            jButtonUsuarios.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/system-users.png"))); // NOI18N
             jButtonUsuarios.setToolTipText(palavras.getString("Add and remove users to the model")); // NOI18N
             jButtonUsuarios.setEnabled(false);
             jButtonUsuarios.setFocusable(false);
@@ -330,7 +331,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jToolBar.add(jButtonUsuarios);
 
-            jButtonSimular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/system-run.png"))); // NOI18N
+            jButtonSimular.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/system-run.png"))); // NOI18N
             jButtonSimular.setText(palavras.getString("Simulate")); // NOI18N
             jButtonSimular.setToolTipText(palavras.getString("Starts the simulation")); // NOI18N
             jButtonSimular.setEnabled(false);
@@ -355,7 +356,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
 
             jMenuItemNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/insert-object_1.png"))); // NOI18N
+            jMenuItemNovo.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/insert-object_1.png"))); // NOI18N
             jMenuItemNovo.setText(palavras.getString("New")); // NOI18N
             jMenuItemNovo.setToolTipText(palavras.getString("Starts a new model")); // NOI18N
             jMenuItemNovo.addActionListener(new java.awt.event.ActionListener() {
@@ -366,7 +367,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuArquivo.add(jMenuItemNovo);
 
             jMenuItemAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-open.png"))); // NOI18N
+            jMenuItemAbrir.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-open.png"))); // NOI18N
             jMenuItemAbrir.setText(palavras.getString("Open")); // NOI18N
             jMenuItemAbrir.setToolTipText(palavras.getString("Opens an existing model")); // NOI18N
             jMenuItemAbrir.addActionListener(new java.awt.event.ActionListener() {
@@ -377,7 +378,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuArquivo.add(jMenuItemAbrir);
 
             jMenuItemSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-save_1.png"))); // NOI18N
+            jMenuItemSalvar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-save_1.png"))); // NOI18N
             jMenuItemSalvar.setText(palavras.getString("Save")); // NOI18N
             jMenuItemSalvar.setToolTipText(palavras.getString("Save the open model")); // NOI18N
             jMenuItemSalvar.setEnabled(false);
@@ -398,7 +399,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jMenuArquivo.add(jMenuItemSalvarComo);
 
-            jMenuItemAbrirResult.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-open.png"))); // NOI18N
+            jMenuItemAbrirResult.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-open.png"))); // NOI18N
             jMenuItemAbrirResult.setText("Open Results");
             jMenuItemAbrirResult.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -407,7 +408,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jMenuArquivo.add(jMenuItemAbrirResult);
 
-            jMenuImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-import.png"))); // NOI18N
+            jMenuImport.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-import.png"))); // NOI18N
             jMenuImport.setText(palavras.getString("Import")); // NOI18N
 
             jMenuItemSimGrid.setText(palavras.getString("SimGrid model")); // NOI18N
@@ -430,7 +431,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
             jMenuArquivo.add(jMenuImport);
 
-            jMenuExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-export.png"))); // NOI18N
+            jMenuExport.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-export.png"))); // NOI18N
             jMenuExport.setText(palavras.getString("Export")); // NOI18N
 
             jMenuItemToJPG.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_J, java.awt.event.InputEvent.CTRL_MASK));
@@ -498,7 +499,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuArquivo.add(jSeparator2);
 
             jMenuItemFechar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemFechar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-close.png"))); // NOI18N
+            jMenuItemFechar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-close.png"))); // NOI18N
             jMenuItemFechar.setText(palavras.getString("Close")); // NOI18N
             jMenuItemFechar.setToolTipText(palavras.getString("Closes the currently open model")); // NOI18N
             jMenuItemFechar.setEnabled(false);
@@ -510,7 +511,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuArquivo.add(jMenuItemFechar);
 
             jMenuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-            jMenuItemSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/window-close.png"))); // NOI18N
+            jMenuItemSair.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/window-close.png"))); // NOI18N
             jMenuItemSair.setText(palavras.getString("Exit")); // NOI18N
             jMenuItemSair.setToolTipText(palavras.getString("Closes the program")); // NOI18N
             jMenuItemSair.addActionListener(new java.awt.event.ActionListener() {
@@ -525,7 +526,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuEditar.setText(palavras.getString("Edit")); // NOI18N
 
             jMenuItemCopy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-copy.png"))); // NOI18N
+            jMenuItemCopy.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-copy.png"))); // NOI18N
             jMenuItemCopy.setText(palavras.getString("Copy")); // NOI18N
             jMenuItemCopy.setEnabled(false);
             jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
@@ -536,7 +537,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuEditar.add(jMenuItemCopy);
 
             jMenuItemPaste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
-            jMenuItemPaste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-paste.png"))); // NOI18N
+            jMenuItemPaste.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-paste.png"))); // NOI18N
             jMenuItemPaste.setText(palavras.getString("Paste")); // NOI18N
             jMenuItemPaste.setEnabled(false);
             jMenuItemPaste.addActionListener(new java.awt.event.ActionListener() {
@@ -546,7 +547,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             });
             jMenuEditar.add(jMenuItemPaste);
 
-            jMenuItemDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit-delete.png"))); // NOI18N
+            jMenuItemDelete.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/edit-delete.png"))); // NOI18N
             jMenuItemDelete.setText(palavras.getString("Delete")); // NOI18N
             jMenuItemDelete.setEnabled(false);
             jMenuItemDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -678,7 +679,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
             jMenuAjuda.setText(palavras.getString("Help")); // NOI18N
 
-            jMenuItemAjuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help-faq.png"))); // NOI18N
+            jMenuItemAjuda.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/help-faq.png"))); // NOI18N
             jMenuItemAjuda.setText(palavras.getString("Help")); // NOI18N
             jMenuItemAjuda.setToolTipText(palavras.getString("Help")); // NOI18N
             jMenuItemAjuda.addActionListener(new java.awt.event.ActionListener() {
@@ -689,7 +690,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
             jMenuAjuda.add(jMenuItemAjuda);
             jMenuAjuda.add(jSeparator3);
 
-            jMenuItemSobre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/help-about.png"))); // NOI18N
+            jMenuItemSobre.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/help-about.png"))); // NOI18N
             jMenuItemSobre.setText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
             jMenuItemSobre.setToolTipText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
             jMenuItemSobre.addActionListener(new java.awt.event.ActionListener() {
@@ -749,7 +750,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
     private void jMenuItemSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSobreActionPerformed
         // TODO add your handling code here:
-        Icon icone = new ImageIcon(getClass().getResource("/images/Logo_iSPD_128.png"));
+        Icon icone = new ImageIcon(ISPD.class.getResource("gui/images/Logo_iSPD_128.png"));
         String sobre = "\n" + palavras.getString("InicioSobre") + "\n"
                 + "\"Instituto de Biociências, Letras e Ciências Exatas\", UNESP - Univ Estadual\n"
                 + "Paulista, campus de São José do Rio Preto, Departamento de Ciências de\n"
@@ -1336,7 +1337,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         int returnVal = jFileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             /*JWindow window = new JWindow(this);
-             //window.add(new JLabel(new ImageIcon(getClass().getResource("/images/simbolo_t.gif"))));
+             //window.add(new JLabel(new ImageIcon(ISPD.class.getResource("gui/images/simbolo_t.gif"))));
              window.add(new JLabel("Carregando..."));
              window.setSize(200, 100);
              JPanel panel = new JPanel();

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Properties;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.Main;
 
 /**
@@ -32,7 +33,7 @@ public class IspdSettings extends Properties {
     public void load(String filename) {
         try {
             this.filename = filename;
-            super.load(Main.class.getResourceAsStream("/" + filename));
+            super.load(ISPD.class.getResourceAsStream("settings/" + filename));
             locale = new Locale(getProperty("locale.language", "en"), getProperty("locale.country", "US"));
             Locale.setDefault(locale);
             setWorkingDirectory(getUserHome() + File.separator +  getProperty("directories.default", "."));

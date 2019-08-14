@@ -11,6 +11,7 @@
 package gspd.ispd.gui;
 
 import gspd.ispd.gui.auxiliar.ParesOrdenadosUso;
+import gspd.ispd.ISPD;
 import gspd.ispd.arquivo.SalvarResultadosHTML;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
 import gspd.ispd.arquivo.xml.ConfiguracaoISPD;
@@ -243,11 +244,11 @@ public class JResultados extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Simulation Results");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/Logo_iSPD_25.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ISPD.class.getResource("gui/images/Logo_iSPD_25.png")));
 
         jToolBar1.setRollover(true);
 
-        jButtonSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/document-save_1.png"))); // NOI18N
+        jButtonSalvar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/document-save_1.png"))); // NOI18N
         jButtonSalvar.setToolTipText("Save results as HTML");
         jButtonSalvar.setFocusable(false);
         jButtonSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
