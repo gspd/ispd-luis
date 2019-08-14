@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.Main;
 
 /**
@@ -18,7 +19,7 @@ public class StringPropertiesTest {
     public void testStringProperties() {
         try {
             Properties prop = new Properties();
-            prop.load(Main.class.getResourceAsStream("/settings.properties"));
+            prop.load(ISPD.class.getResourceAsStream("settings/settings.properties"));
             StringPropertiesBind spb = new StringPropertiesBind(prop);
             String str = spb.resolveString("The motor has ${test.setting} bytes in the buffer");
             assertEquals("The motor has 1024 bytes in the buffer", str);
