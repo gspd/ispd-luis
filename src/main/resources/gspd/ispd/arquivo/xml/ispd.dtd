@@ -16,36 +16,72 @@ ispd [version]
     model []
         hardware []
             machines []
-                machine []
-                    computing [processing, memory, storage]
+                machine [mid]
+                    computing
+                        processing
+                        memory
+                        storage
                 cluster [nodes, topology]
-                    computing [processing, memory, storage]
-                    networking [bandwidth, latency]
+                    computing
+                        processing
+                        memory
+                        storage
+                    networking
+                        bandwidth
+                        latency
             network []
                 link [from, to]
-                    networking [bandwidth, latency]
+                    networking
+                        bandwidth
+                        latency
                 switch [nports, switching]
-                    networking [bandwidth, latency]
+                    networking
+                        bandwidth
+                        latency
         virtualmachines []
-            vmm [master, childs]
+            vmm
+                master
+                    slave
                 vm [vmid, uid]
-                    computing [processing, memory, storage]
+                    computing
+                        processing
+                        memory
+                        storage
         users []
             user [uid] {name}
         workload []
             workflow []
-                task [tid, dep, type]
-                    computing [processing, memory, storage]
+                task [tid, type]
+                    dependencies
+                        dependency
+                            from
+                            to
+                    computing
+                        processing
+                        memory
+                        storage
     graphical []
         icon [ref] 
-            position [x,y]
-            dimension [w,h]
+            position
+                x
+                y
+            dimension
+                width
+                height
         arrow [ref]
-            position [x,y]
-            position [x,y]
+            position
+                x
+                y
+            position
+                x
+                y
         text [fontsize,background,foreground] {text}
-            position [x,y]
-            dimension [w,h]
+            position
+                x
+                y
+            dimension
+                width
+                height
     properties []
         entry [key] {value}
 
@@ -56,8 +92,13 @@ ispd [version]
 <!-- The pure simulation data model -->
 <!ELEMENT model (hardware,virtualmachines,users,workload)>
 <!-- Util model elements -->
-<!ELEMENT computing EMPTY>
-<!ELEMENT networking EMPTY>
+<!ELEMENT computing (processing, memory, storage)>
+<!ELEMENT processing EMPTY>
+<!ELEMENT memory EMPTY>
+<!ELEMENT storage EMPTY>
+<!ELEMENT networking (bandwidth, latency)>
+<!ELEMENT bandwidth EMPTY>
+<!ELEMENT latency EMPTY>
 <!-- Useful model elements -->
 <!ELEMENT hardware ((machine|cluster)+,network)>
 <!ELEMENT machine (computing)>
@@ -66,18 +107,26 @@ ispd [version]
 <!ELEMENT link (networking)>
 <!ELEMENT switch (networking)>
 <!ELEMENT virtualmachines (vmm)>
-<!ELEMENT vmm (vm)+ >
+<!ELEMENT vmm (master,vm+)>
+<!ELEMENT master (slave+)>
+<!ELEMENT slave EMPTY>
 <!ELEMENT vm (computing)>
 <!ELEMENT users (user+)>
 <!ELEMENT user EMPTY>
-<!ELEMENT workload (workflow+, resources?)>
+<!ELEMENT workload (workflow+)>
 <!ELEMENT workflow (task+)>
-<!ELEMENT task (computing)>
+<!ELEMENT task (computing, dependencies?)>
+<!ELEMENT dependencies (dependency)>
+<!ELEMENT dependency (from, to)>
+<!ELEMENT from EMPTY>
+<!ELEMENT to EMPTY>
 <!-- The graphical interface data associated with data model  -->
 <!ELEMENT graphical (icon|arrow|text)*>
 <!-- Utils graphical elements -->
-<!ELEMENT position>
-<!ELEMENT dimention>
+<!ELEMENT position EMPTY>
+<!ELEMENT dimension (width, height)>
+<!ELEMENT width EMPTY>
+<!ELEMENT height EMPTY>
 <!-- Useful graphical elements -->
 <!ELEMENT icon (position, dimension)>
 <!ELEMENT arrow (position, position)>
