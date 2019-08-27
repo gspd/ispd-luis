@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
@@ -121,6 +122,16 @@
                                              <children>
                                                 <ToolBar prefHeight="39.0" prefWidth="587.0">
                                                    <items>
+                                                      <Hyperlink fx:id="hardwareMousePointerIcon">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/mouse_pointer.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                                                       <Hyperlink fx:id="machineIcon" text="%main.hardware.machine">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -173,6 +184,16 @@
                                              <children>
                                                 <ToolBar prefHeight="50.0" prefWidth="587.0">
                                                    <items>
+                                                      <Hyperlink fx:id="workloadMousePointerIcon">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/mouse_pointer.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                                                       <Hyperlink fx:id="taskIcon" text="%main.workload.task">
                                                          <graphic>
                                                             <ImageView fitHeight="83.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -273,7 +294,7 @@
                         <VBox>
                            <children>
                               <TextArea fx:id="terminalOutputArea" editable="false" prefHeight="62.0" prefWidth="536.0" VBox.vgrow="ALWAYS" />
-                              <TextField promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
+                              <TextField fx:id="terminalInputField" promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
                            </children>
                         </VBox>
                     </items>

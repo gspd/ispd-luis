@@ -1,4 +1,4 @@
-package gspd.ispd.architecture.resources;
+package gspd.ispd.model.properties;
 
 /**
  * TaskResource
@@ -9,7 +9,7 @@ package gspd.ispd.architecture.resources;
  * 
  * @author luisbaldissera
  */
-public class TaskResource {
+public class TaskProperties {
 
     /**
      * The amount of primary memory required for the task, <mesure unit>
@@ -41,7 +41,7 @@ public class TaskResource {
      * @param flop The number of floating points operations
      * @param comunicationSize The communication size used by the task. <mesure unit>
      */
-    public TaskResource(int memory, int inSize, int outSize, int flop, int comunicationSize) {
+    public TaskProperties(int memory, int inSize, int outSize, int flop, int comunicationSize) {
         this.memory = memory;
         this.inputFileSize = inSize;
         this.outputFileSize = outSize;
@@ -92,6 +92,6 @@ public class TaskResource {
      */
     @Override
     protected Object clone() {
-        return (Object) new TaskResource(getMemory(), getInputFileSize(), getOutputFileSize(), getFlop(), getComunicationSize());
+        return (Object) new TaskProperties(getMemory(), getInputFileSize(), getOutputFileSize(), getFlop(), getComunicationSize());
     }
 }

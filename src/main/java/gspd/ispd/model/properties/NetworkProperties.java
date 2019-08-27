@@ -1,4 +1,4 @@
-package gspd.ispd.architecture.resources;
+package gspd.ispd.model.properties;
 
 /**
  * NetworkResource
@@ -9,14 +9,14 @@ package gspd.ispd.architecture.resources;
  * 
  * @author luisbaldissera
  */
-public class NetworkResource {
+public class NetworkProperties {
 
     /**
      * The bandwidth, <measure unit>
      */
-    public int bandwidth;
+    private int bandwidth;
     /**
      * The buffer size, <measure unit>
      */
-    public int buffer;
+    private int buffer;
 }

@@ -55,4 +55,4 @@ javafx {
 }
 
 // Define the main class for the application
-mainClassName = 'gspd.ispd.Main'
+mainClassName = 'gspd.ispd.MainApp'
