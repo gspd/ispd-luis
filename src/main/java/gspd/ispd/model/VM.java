@@ -2,9 +2,9 @@ package gspd.ispd.model;
 
 public class VM {
 
-    private IAASUser owner;
+    private User owner;
 
-    public IAASUser getOwner() {
+    public User getOwner() {
         return owner;
     }
 }

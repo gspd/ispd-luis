@@ -194,7 +194,7 @@
                                                          </graphic>
                                                       </Hyperlink>
                                                       <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-                                                      <Hyperlink fx:id="taskIcon" text="%main.workload.task">
+                                                      <Hyperlink fx:id="taskIcon" text="%main.workload.taskModel">
                                                          <graphic>
                                                             <ImageView fitHeight="83.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>

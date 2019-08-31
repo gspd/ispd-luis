@@ -10,6 +10,9 @@ plugins {
     // Apply the java plugin to add support for Java
     id 'java'
 
+    // Apply idea plugin for Gradle
+    id 'idea'
+
     // Apply the application plugin to add support for building an application
     id 'application'
 
@@ -40,6 +43,10 @@ dependencies {
     // Use Apache Math to numerical calculations and statical/probability distributions
     // WEBSITE: https://commons.apache.org/proper/commons-math/
     implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    // Measure Unit API used to define BIT, BYTE, METRE, ...
+    // https://mvnrepository.com/artifact/javax.measure/unit-api
+    implementation 'javax.measure:unit-api:2.0'
 
     // Use iSPD architecture
     // NOTE: if you change the JAR for any reason, please change this to the new path

@@ -31,12 +31,12 @@ public class MainApp extends Application {
     public Parent createContent() {
         try {
 //            MAIN_PAGE
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("fxgui/MainPage.fxml"));
-//            loader.setResources(ISPD.getStrings());
-//            Parent root = loader.load();
-//            MainPage controller = loader.getController();
-//            controller.init();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("fxgui/MainPage.fxml"));
+            loader.setResources(ISPD.getStrings());
+            Parent root = loader.load();
+            MainPage controller = loader.getController();
+            controller.init();
 //            SETTINGS_PAGE
 //            FXMLLoader loader = new FXMLLoader();
 //            loader.setLocation(getClass().getResource("fxgui/SettingsPage.fxml"));
@@ -45,12 +45,12 @@ public class MainApp extends Application {
 //            SettingsPage controller = loader.getController();
 //            controller.init();
 //            WELCOME_PAGE
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("fxgui/WelcomePage.fxml"));
-            loader.setResources(ISPD.getStrings());
-            Parent root = loader.load();
-            WelcomePage controller = loader.getController();
-            controller.init();
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("fxgui/WelcomePage.fxml"));
+//            loader.setResources(ISPD.getStrings());
+//            Parent root = loader.load();
+//            WelcomePage controller = loader.getController();
+//            controller.init();
             return root;
         } catch (IOException e) {
             e.printStackTrace();

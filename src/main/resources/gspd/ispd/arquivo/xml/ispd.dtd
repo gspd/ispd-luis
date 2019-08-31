@@ -51,7 +51,7 @@ ispd [version]
             user [uid] {name}
         workload []
             workflow []
-                task [tid, type]
+                taskModel [tid, type]
                     dependencies
                         dependency
                             from
@@ -114,8 +114,8 @@ ispd [version]
 <!ELEMENT users (user+)>
 <!ELEMENT user EMPTY>
 <!ELEMENT workload (workflow+)>
-<!ELEMENT workflow (task+)>
-<!ELEMENT task (computing, dependencies?)>
+<!ELEMENT workflow (taskModel+)>
+<!ELEMENT taskModel (computing, dependencies?)>
 <!ELEMENT dependencies (dependency)>
 <!ELEMENT dependency (from, to)>
 <!ELEMENT from EMPTY>

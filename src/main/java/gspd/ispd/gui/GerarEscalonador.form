@@ -1233,7 +1233,7 @@
                   <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Task computational size" replaceFormat="palavras.getString(&quot;{key}&quot;) + &quot; - TCT&quot;"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Computational size of the submitted task" replaceFormat="palavras.getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Computational size of the submitted taskModel" replaceFormat="palavras.getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -1259,7 +1259,7 @@
                   <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Task communication size" replaceFormat="palavras.getString(&quot;{key}&quot;) + &quot; - TCMT&quot;"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Commnication size of the submmited task" replaceFormat="palavras.getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="ispd/idioma/Idioma_en_US.properties" key="Commnication size of the submmited taskModel" replaceFormat="palavras.getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
