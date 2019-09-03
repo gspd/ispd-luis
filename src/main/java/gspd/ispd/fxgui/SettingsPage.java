@@ -1,14 +1,17 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.ISPD;
+import gspd.ispd.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 public class SettingsPage {
     @FXML
@@ -28,8 +31,31 @@ public class SettingsPage {
     @FXML
     private CheckBox resourcesChartCheckBox;
 
+    private MainApp mainApp;
+    private Stage settingsStage;
+    private Properties settings;
+    private boolean okClicked;
+
     public void init() {
+        settings = new Properties();
         initLanguages();
+        okClicked = false;
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    public void setSettingsStage(Stage settingsStage) {
+        this.settingsStage = settingsStage;
+    }
+
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+
+    public Properties getSettings() {
+        return settings;
     }
 
     private void initLanguages() {
@@ -53,18 +79,19 @@ public class SettingsPage {
 
     @FXML
     private void handleCancel() {
-        ///////
+        okClicked = false;
+        settingsStage.close();
     }
 
     @FXML
     private void handleOK() {
-        handleApply();
+        okClicked = true;
+        updateSettings();
+        settingsStage.close();
     }
 
-    @FXML
-    private void handleApply() {
-        Locale locale = localeChoiceBox.getValue().getValue();
-        ISPD.setLocale(locale);
-        // fire an event to update strings
+    private void updateSettings() {
+        // set locale property
+        mainApp.setLocale(localeChoiceBox.getValue().getValue());
     }
 }

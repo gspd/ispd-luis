@@ -1,24 +1,11 @@
 package gspd.ispd.model.workload;
 
-public class IterativeExpansion implements Expansion {
+import gspd.ispd.model.Task;
 
-    private WorkloadModel wrappedModel;
-
-    public IterativeExpansion(WorkloadModel wrappedModel) {
-        this.wrappedModel = wrappedModel;
-    }
-
-    public IterativeExpansion() {
-        this(null);
-    }
+public class IterativeExpansion extends Expansion {
 
     public int getNumberOfIterations() {
         return 0;
-    }
-
-    @Override
-    public void wrapModel(WorkloadModel model) {
-        this.wrappedModel = model;
     }
 
     @Override
@@ -29,19 +16,24 @@ public class IterativeExpansion implements Expansion {
 
             @Override
             public void rewind() {
-                wrappedModel.rewind();
+                inside().rewind();
                 i = 1;
             }
 
             @Override
             public Task getNextTask() {
-                Task task = wrappedModel.getNextTask();
-                if (task ==  null && i < iterations) {
-                    i++;
-                    wrappedModel.rewind();
-                    task = wrappedModel.getNextTask();
+                try {
+                    Task task = inside().getNextTask();
+                    if (task == null && i < iterations) {
+                        i++;
+                        inside().rewind();
+                        task = inside().getNextTask();
+                    }
+                    return task;
+                } catch (NullPointerException e) {
+                    // TODO: error, NULL POINTER EXCEPTION OCCURRED
+                    return null;
                 }
-                return task;
             }
         };
     }

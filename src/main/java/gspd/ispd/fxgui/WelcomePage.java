@@ -1,6 +1,8 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.ISPD;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.util.Pair;
@@ -17,9 +19,6 @@ public class WelcomePage {
     }
 
     private void initRecentList() {
-        List<Pair<String, URL>> recent = ISPD.getRecentFiles();
-        if (recent != null) {
-            recentList.getItems().setAll(recent);
-        }
+        //
     }
 }

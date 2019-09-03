@@ -1,15 +1,13 @@
 package gspd.ispd.model.properties;
 
 /**
- * TaskResource
- * 
  * Encapsulates the properties to be considered for task resources in the simulator.
  * All properties are leave in public attributes, to reduce memory in the simulation motor,
  * once this data can have a lot of instances in simulation motor.
  * 
  * @author luisbaldissera
  */
-public class TaskProperties {
+public class TaskProperty {
 
     /**
      * The amount of primary memory required for the task, <mesure unit>
@@ -41,7 +39,7 @@ public class TaskProperties {
      * @param flop The number of floating points operations
      * @param comunicationSize The communication size used by the task. <mesure unit>
      */
-    public TaskProperties(int memory, int inSize, int outSize, int flop, int comunicationSize) {
+    public TaskProperty(int memory, int inSize, int outSize, int flop, int comunicationSize) {
         this.memory = memory;
         this.inputFileSize = inSize;
         this.outputFileSize = outSize;
@@ -92,6 +90,6 @@ public class TaskProperties {
      */
     @Override
     protected Object clone() {
-        return (Object) new TaskProperties(getMemory(), getInputFileSize(), getOutputFileSize(), getFlop(), getComunicationSize());
+        return (Object) new TaskProperty(getMemory(), getInputFileSize(), getOutputFileSize(), getFlop(), getComunicationSize());
     }
 }

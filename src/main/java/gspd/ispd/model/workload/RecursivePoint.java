@@ -1,4 +1,4 @@
 package gspd.ispd.model.workload;
 
-public class Task {
+public class RecursivePoint {
 }

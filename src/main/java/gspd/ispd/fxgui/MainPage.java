@@ -1,15 +1,15 @@
 package gspd.ispd.fxgui;
 
+import gspd.ispd.MainApp;
+import gspd.ispd.model.User;
+import gspd.ispd.model.VM;
 import javafx.fxml.FXML;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import gspd.ispd.ISPD;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MainPage {
     @FXML
@@ -44,10 +44,55 @@ public class MainPage {
     private Hyperlink hardwareMousePointerIcon;
     @FXML
     private Hyperlink workloadMousePointerIcon;
+    @FXML
+    private TableView<VM> vmTableView;
+    @FXML
+    private TableView<User> userTableView;
+    @FXML
+    private TableColumn<User, Integer> idUserTableColumn;
+    @FXML
+    private TableColumn<User, String> nameUserTableColumn;
+    @FXML
+    private Button addUserButton;
+    @FXML
+    private Button removeUserButton;
+    @FXML
+    private Button addVMButton;
+    @FXML
+    private Button duplicateVMButton;
+    @FXML
+    private Button removeVMButton;
+
+    private MainApp mainApp;
 
     public void init() {
         setCompactView();
-        setTooltips();
+        initTooltips();
+        initButtons();
+        initUsers();
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    @FXML
+    private void handleEditSettings() {
+        mainApp.openSettingsPage();
+    }
+
+    private void initUsers() {
+        userTableView.itemsProperty().bind(mainApp.getModel().usersProperty());
+        idUserTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameUserTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+    }
+
+    private void initButtons() {
+        // disable remove button oly if there is no selected item in user table
+        removeUserButton.disableProperty().bind(userTableView.getSelectionModel().selectedItemProperty().isNull());
+        // disable {remote,duplicate} button only if there is no selected item in the VM table
+        removeVMButton.disableProperty().bind(vmTableView.getSelectionModel().selectedItemProperty().isNull());
+        duplicateVMButton.disableProperty().bind(vmTableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     public void setCompactView() {
@@ -58,7 +103,7 @@ public class MainPage {
         setIconsTypeAsFull();
     }
 
-    public void setTooltips() {
+    public void initTooltips() {
         setHardwareIconsTooltip();
         setWorkloadIconsTooltip();
         setMousePointerTooltip();

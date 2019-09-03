@@ -1,11 +1,11 @@
 package gspd.ispd.model;
 
-import gspd.ispd.model.properties.ComputingProperties;
+import gspd.ispd.model.properties.ComputingProperty;
 
 public class Machine {
 
     private User owner;
-    private ComputingProperties properties;
+    private ComputingProperty properties;
 
     public User getOwner() {
         return owner;

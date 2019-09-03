@@ -131,8 +131,7 @@
       <HBox alignment="CENTER_RIGHT" spacing="5.0">
          <children>
             <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="%button.ok" />
-            <Button mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
-            <Button mnemonicParsing="false" onAction="#handleApply" text="%button.apply" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
          </children>
          <VBox.margin>
             <Insets />

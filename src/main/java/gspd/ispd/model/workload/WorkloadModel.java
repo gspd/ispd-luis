@@ -1,15 +1,12 @@
 package gspd.ispd.model.workload;
 
+import gspd.ispd.model.Task;
+
+import java.util.List;
+
 public abstract class WorkloadModel {
-    private WorkloadModel parent;
 
-    public WorkloadModel(WorkloadModel parent) {
-        this.parent = parent;
-    }
-
-    public WorkloadModel() {
-        this(null);
-    }
+    public List<RecursivePoint> getRecursivePoints() { return null; }
 
     public abstract Task getNextTask();
     public abstract void rewind();

@@ -2,6 +2,9 @@ package gspd.ispd;
 
 
 import gspd.ispd.model.ISPDModel;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.net.MalformedURLException;
@@ -18,6 +21,7 @@ public class ISPD {
 
     private static final String STRINGS_BASE_NAME = "strings";
     private static Locale locale = new Locale("en", "US");
+    private static ISPDModel model = new ISPDModel();
 
     public static ResourceBundle getStrings() {
         return ResourceBundle.getBundle(STRINGS_BASE_NAME, getLocale());
@@ -35,13 +39,21 @@ public class ISPD {
         ISPD.setLocale(new Locale(language, country));
     }
 
+    public static ISPDModel getModel() {
+        return model;
+    }
+
+    public static void setModel(ISPDModel model) {
+        ISPD.model = model;
+    }
+
     // TODO: get recents
-    public static List<Pair<String, URL>> getRecentFiles() {
+    public static List<URL> getRecentFiles() {
         try {
-            List<Pair<String, URL>> list = new ArrayList<>();
-            list.add(new Pair<>("file1", new URL("file:/path/to/file1")));
-            list.add(new Pair<>("file2", new URL("file:/path/to/file2")));
-            list.add(new Pair<>("file3", new URL("file:/path/to/file3")));
+            List<URL> list = new ArrayList<>();
+            list.add(new URL("file:/path/to/file1"));
+            list.add(new URL("file:/path/to/file2"));
+            list.add(new URL("file:/path/to/file3"));
             return list;
         } catch (MalformedURLException e) {
             e.printStackTrace();

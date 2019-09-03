@@ -40,7 +40,13 @@
                             <MenuItem mnemonicParsing="false" text="Action 1" />
                           </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" text="%menu.file.save" />
+                        <MenuItem mnemonicParsing="false" text="%menu.file.save">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/save.png" />
+                                 </image></ImageView>
+                           </graphic></MenuItem>
                         <MenuItem mnemonicParsing="false" text="%menu.file.saveas" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <Menu mnemonicParsing="false" text="%menu.file.import">
@@ -49,6 +55,13 @@
                               <MenuItem mnemonicParsing="false" text="CloudSim" />
                               <MenuItem mnemonicParsing="false" text="SimGrid" />
                            </items>
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/import.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </Menu>
                         <Menu mnemonicParsing="false" text="%menu.file.export">
                            <items>
@@ -56,30 +69,91 @@
                               <MenuItem mnemonicParsing="false" text="CloudSim" />
                               <MenuItem mnemonicParsing="false" text="SimGrid" />
                            </items>
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/export.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="%menu.file.close" />
-                        <MenuItem mnemonicParsing="false" text="%menu.file.exit" />
+                        <MenuItem mnemonicParsing="false" text="%menu.file.close">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/close.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%menu.file.exit">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/exit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                      </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="%menu.project">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.project.simulate" />
+                        <MenuItem mnemonicParsing="false" text="%menu.project.simulate">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/simulate.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="%menu.edit">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="%menu.edit.settings" />
+                        <MenuItem mnemonicParsing="false" text="%menu.edit.undo">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/undo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%menu.edit.redo">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/redo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#handleEditSettings" text="%menu.edit.settings">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/settings.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%menu.help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="%menu.help.about" />
+                    <MenuItem mnemonicParsing="false" text="%menu.help.about">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/about.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
-            <SplitPane dividerPositions="0.1708378672470076, 0.7627856365614799" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.17845484221980412, 0.7627856365614799" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <items>
                   <SplitPane dividerPositions="0.45375722543352603" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                     <items>
@@ -89,18 +163,18 @@
                               <Label text="%main.users" VBox.vgrow="NEVER" />
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="139.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <TableView prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="userTableView" prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn prefWidth="42.0" text="UID" />
-                                        <TableColumn prefWidth="119.0" text="%main.users.name" />
+                                        <TableColumn fx:id="idUserTableColumn" prefWidth="42.0" text="UID" />
+                                        <TableColumn fx:id="nameUserTableColumn" prefWidth="119.0" text="%main.users.name" />
                                       </columns>
                                     </TableView>
                                  </children>
                               </AnchorPane>
                               <ButtonBar buttonMinWidth="20.0" VBox.vgrow="NEVER">
                                  <buttons>
-                                    <Button mnemonicParsing="false" text="+" />
-                                    <Button mnemonicParsing="false" text="-" />
+                                    <Button fx:id="addUserButton" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="removeUserButton" mnemonicParsing="false" text="-" />
                                  </buttons>
                               </ButtonBar>
                            </children>
@@ -265,7 +339,7 @@
                                              <children>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                    <children>
-                                                      <TableView prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <TableView fx:id="vmTableView" prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <columns>
                                                           <TableColumn editable="false" prefWidth="52.0" text="VM#" />
                                                           <TableColumn prefWidth="74.0" text="User" />
@@ -280,8 +354,9 @@
                                                 </AnchorPane>
                                                 <HBox alignment="CENTER_RIGHT" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
-                                                      <Button mnemonicParsing="false" text="%button.add" />
-                                                      <Button mnemonicParsing="false" text="%button.remove" />
+                                                      <Button fx:id="addVMButton" mnemonicParsing="false" text="%button.add" />
+                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" text="%button.duplicate" />
+                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" text="%button.remove" />
                                                    </children>
                                                 </HBox>
                                              </children>
