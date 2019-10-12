@@ -8,7 +8,7 @@ import gspd.ispd.motor.filas.servidores.CentroServico;
 import java.util.List;
 
 /**
- *
+ * Elemento 'cliente' do modelo de filas
  * @author denison_usuario
  */
 public interface Cliente {

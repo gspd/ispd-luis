@@ -13,6 +13,7 @@ import gspd.ispd.motor.filas.servidores.CentroServico;
  */
 public class EventoFuturo implements Comparable<EventoFuturo> {
 
+    // Possíveis eventos
     public static final int CHEGADA = 1;
     public static final int ATENDIMENTO = 2;
     public static final int SAÍDA = 3;
