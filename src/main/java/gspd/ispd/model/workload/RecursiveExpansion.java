@@ -1,6 +1,6 @@
 package gspd.ispd.model.workload;
 
-import gspd.ispd.model.Task;
+import gspd.ispd.model.Job;
 
 public class RecursiveExpansion extends Expansion {
 
@@ -12,7 +12,7 @@ public class RecursiveExpansion extends Expansion {
     public WorkloadModel expandModel() {
         return new WorkloadModel() {
             @Override
-            public Task getNextTask() {
+            public Job getNextTask() {
                 return null;
             }
 

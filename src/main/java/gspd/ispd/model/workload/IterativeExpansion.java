@@ -1,6 +1,6 @@
 package gspd.ispd.model.workload;
 
-import gspd.ispd.model.Task;
+import gspd.ispd.model.Job;
 
 public class IterativeExpansion extends Expansion {
 
@@ -21,15 +21,15 @@ public class IterativeExpansion extends Expansion {
             }
 
             @Override
-            public Task getNextTask() {
+            public Job getNextTask() {
                 try {
-                    Task task = inside().getNextTask();
-                    if (task == null && i < iterations) {
+                    Job job = inside().getNextTask();
+                    if (job == null && i < iterations) {
                         i++;
                         inside().rewind();
-                        task = inside().getNextTask();
+                        job = inside().getNextTask();
                     }
-                    return task;
+                    return job;
                 } catch (NullPointerException e) {
                     // TODO: error, NULL POINTER EXCEPTION OCCURRED
                     return null;

@@ -1,6 +1,6 @@
 package gspd.ispd.model.workload;
 
-import gspd.ispd.model.Task;
+import gspd.ispd.model.Job;
 
 public class ParallelExpansion extends Expansion {
 
@@ -14,17 +14,17 @@ public class ParallelExpansion extends Expansion {
 
             private final int parallels = getNumberOfParallel();
             private int j = 0;
-            private Task task;
+            private Job job;
 
             @Override
-            public Task getNextTask() {
+            public Job getNextTask() {
                 try {
                     if (j == 0) {
-                        task = inside().getNextTask();
+                        job = inside().getNextTask();
                     } else {
                         j = (j + 1) % parallels;
                     }
-                    return task;
+                    return job;
                 } catch (NullPointerException e) {
 
                     return null;

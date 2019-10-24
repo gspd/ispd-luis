@@ -1,12 +1,11 @@
 package gspd.ispd.model;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.List;
 
-public class Task {
+public class Job {
 
     // Process states (bib: Tanembaum, Operating Systems)
     public static final int BLOCKED = 0;
@@ -18,5 +17,5 @@ public class Task {
     private IntegerProperty state = new SimpleIntegerProperty();
 
     private IntegerProperty dependencies = new SimpleIntegerProperty();
-    private List<Task> triggers;
+    private List<Job> triggers;
 }

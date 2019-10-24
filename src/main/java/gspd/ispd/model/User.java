@@ -13,7 +13,7 @@ public class User {
     private IntegerProperty id = new SimpleIntegerProperty();
     private List<Machine> machines;
     private List<VM> vms;
-    private List<Task> tasks;
+    private List<Job> jobs;
 
     public User(String name) {
         this.name.set(name);

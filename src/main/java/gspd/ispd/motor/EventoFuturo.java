@@ -21,6 +21,14 @@ public class EventoFuturo implements Comparable<EventoFuturo> {
     public static final int MENSAGEM = 5;
     public static final int SAIDA_MENSAGEM = 6;
     public static final int ALOCAR_VMS = 7;
+
+    public enum EventType {
+        CLIENT_ARRIVE,
+        CLIENT_EXIT,
+        CLIENT_ATTENDANCE
+    }
+
+    private EventType eventType;
     
     
     private Double tempoOcorrencia;
