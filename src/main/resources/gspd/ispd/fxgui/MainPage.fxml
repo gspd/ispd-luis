@@ -257,7 +257,14 @@
                                                       </Hyperlink>
                                                    </items>
                                                 </ToolBar>
-                                                <ScrollPane hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                   <children>
+                                                      <Label fx:id="dragme" layoutX="113.0" layoutY="93.0" text="Drag me!" />
+                                                   </children>
+                                                </AnchorPane>
                                              </children>
                                           </VBox>
                                        </children></AnchorPane>

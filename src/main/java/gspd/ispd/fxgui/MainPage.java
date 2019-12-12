@@ -1,15 +1,19 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.MainApp;
+import gspd.ispd.fxgui.util.FXUtil;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import java.util.ResourceBundle;
 
 import gspd.ispd.ISPD;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 public class MainPage {
     @FXML
@@ -62,12 +66,15 @@ public class MainPage {
     private Button duplicateVMButton;
     @FXML
     private Button removeVMButton;
+    @FXML
+    private Label dragme;
 
     private MainApp mainApp;
 
     public void init() {
         initButtons();
         initUsers();
+        FXUtil.makeDraggable(dragme);
     }
 
     public void setMainApp(MainApp mainApp) {

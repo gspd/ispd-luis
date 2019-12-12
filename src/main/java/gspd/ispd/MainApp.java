@@ -2,24 +2,16 @@ package gspd.ispd;
 
 import gspd.ispd.fxgui.MainPage;
 import gspd.ispd.fxgui.SettingsPage;
-import gspd.ispd.fxgui.WelcomePage;
 import gspd.ispd.model.ISPDModel;
-import gspd.ispd.model.User;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.LoadListener;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Properties;
 

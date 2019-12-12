@@ -51,6 +51,7 @@ ispd
 <!-- the users -->
 <!ELEMENT user EMPTY >
 <!ATTLIST user id ID #REQUIRED >
+<!ATTLIST user name CDATA #IMPLIED >
 <!-- END USERS -->
 
 <!-- SECTION HARDWARE -->
