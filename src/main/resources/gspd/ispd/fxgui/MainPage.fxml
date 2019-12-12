@@ -19,6 +19,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -206,7 +207,7 @@
                                                          </graphic>
                                                       </Hyperlink>
                                                       <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-                                                      <Hyperlink fx:id="machineIcon" text="%main.hardware.machine">
+                                                      <Hyperlink fx:id="machineIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -214,8 +215,11 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
+                                                         <tooltip>
+                                                            <Tooltip text="%tooltip.main.hardware.machine" />
+                                                         </tooltip>
                                                       </Hyperlink>
-                                                      <Hyperlink fx:id="linkIcon" layoutX="10.0" layoutY="10.0" text="%main.hardware.link">
+                                                      <Hyperlink fx:id="linkIcon" layoutX="10.0" layoutY="10.0">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -223,8 +227,11 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
+                                                         <tooltip>
+                                                            <Tooltip text="%tooltip.main.hardware.link" />
+                                                         </tooltip>
                                                       </Hyperlink>
-                                                      <Hyperlink fx:id="clusterIcon" layoutX="113.0" layoutY="10.0" text="%main.hardware.cluster">
+                                                      <Hyperlink fx:id="clusterIcon" layoutX="113.0" layoutY="10.0">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -232,8 +239,11 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
+                                                         <tooltip>
+                                                            <Tooltip text="%tooltip.main.hardware.cluster" />
+                                                         </tooltip>
                                                       </Hyperlink>
-                                                      <Hyperlink fx:id="switchIcon" layoutX="216.0" layoutY="10.0" text="%main.hardware.switch">
+                                                      <Hyperlink fx:id="switchIcon" layoutX="216.0" layoutY="10.0">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -241,6 +251,9 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
+                                                         <tooltip>
+                                                            <Tooltip text="%tooltip.main.hardware.switch" />
+                                                         </tooltip>
                                                       </Hyperlink>
                                                    </items>
                                                 </ToolBar>
@@ -268,7 +281,7 @@
                                                          </graphic>
                                                       </Hyperlink>
                                                       <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-                                                      <Hyperlink fx:id="taskIcon" text="%main.workload.taskModel">
+                                                      <Hyperlink fx:id="taskIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="83.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -276,7 +289,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="dependencyIcon" text="%main.workload.dependency">
+                                                      <Hyperlink fx:id="dependencyIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="73.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -284,7 +297,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="messageIcon" text="%main.workload.message">
+                                                      <Hyperlink fx:id="messageIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="76.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -292,7 +305,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="synchronizationIcon" text="%main.workload.synchronization">
+                                                      <Hyperlink fx:id="synchronizationIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -300,7 +313,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="dataIcon" text="%main.workload.data">
+                                                      <Hyperlink fx:id="dataIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -308,7 +321,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="iterationIcon" text="%main.workload.iterations">
+                                                      <Hyperlink fx:id="iterationIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -316,7 +329,7 @@
                                                                </image>
                                                             </ImageView>
                                                          </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="parallelIcon" text="%main.workload.parallel">
+                                                      <Hyperlink fx:id="parallelIcon">
                                                          <graphic>
                                                             <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>

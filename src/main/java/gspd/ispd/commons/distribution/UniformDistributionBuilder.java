@@ -1,4 +1,4 @@
-package gspd.ispd.util.distribution;
+package gspd.ispd.commons.distribution;
 
 public class UniformDistributionBuilder extends AbstractDistributionBuilder {
     private AbstractDistributionBuilder minBuilder;

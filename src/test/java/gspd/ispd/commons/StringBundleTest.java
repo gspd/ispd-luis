@@ -1,4 +1,4 @@
-package gspd.ispd.util;
+package gspd.ispd.commons;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

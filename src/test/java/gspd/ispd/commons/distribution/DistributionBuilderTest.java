@@ -1,4 +1,4 @@
-package gspd.ispd.util.distribution;
+package gspd.ispd.commons.distribution;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package gspd.ispd.util;
+package gspd.ispd.commons;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

@@ -1,4 +1,4 @@
-package gspd.ispd.util.distribution;
+package gspd.ispd.commons.distribution;
 
 public class PoissonDistributionBuilder extends AbstractDistributionBuilder {
     private AbstractDistributionBuilder lambdaBuilder;
