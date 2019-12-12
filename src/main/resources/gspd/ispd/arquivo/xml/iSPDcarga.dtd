@@ -3,7 +3,7 @@
 system
     trace
         format [kind]
-        task [id, arr, sts, cpsz, cmsz, usr]
+        taskModel [id, arr, sts, cpsz, cmsz, usr]
     dag_task [id]
         dag_character
             element_id
@@ -18,13 +18,13 @@ system
 <!-- TODO define your own vocabulary/syntax. Example follows:  -->
 <!ELEMENT system (trace|dag_task+)>
 
-<!ELEMENT trace (format,task+)>
+<!ELEMENT trace (format,taskModel+)>
 <!ELEMENT format EMPTY>
 <!ATTLIST format kind CDATA "iSPD" >
 
-<!ELEMENT task EMPTY>
-<!ATTLIST task id CDATA "task1">
-<!ATTLIST task arr CDATA "0.0">
+<!ELEMENT taskModel EMPTY>
+<!ATTLIST taskModel id CDATA "task1">
+<!ATTLIST taskModel arr CDATA "0.0">
 <!-- The deﬁned states are the same used by SWF (Amazon Simple Workflow) and GWF
         0 : job crash
         1 : job successful conclusion
@@ -33,13 +33,13 @@ system
         4 : crash of preempted job
         5 : job canceled
 -->
-<!ATTLIST task sts CDATA "1">
+<!ATTLIST taskModel sts CDATA "1">
 <!-- Computing size -->
-<!ATTLIST task cpsz CDATA "-1">
+<!ATTLIST taskModel cpsz CDATA "-1">
 <!-- Communication size -->
-<!ATTLIST task cmsz CDATA "-1">
-<!-- The task owner -->
-<!ATTLIST task usr CDATA "user1">
+<!ATTLIST taskModel cmsz CDATA "-1">
+<!-- The taskModel owner -->
+<!ATTLIST taskModel usr CDATA "user1">
 
 <!ELEMENT dag_task (dag_character,thread)>
 <!ATTLIST dag_task id ID #REQUIRED>
@@ -56,7 +56,7 @@ system
 <!ATTLIST processing size_min CDATA #REQUIRED>
 <!ATTLIST processing size_max CDATA #REQUIRED>
 
-<!-- send: task -->
+<!-- send: taskModel -->
 <!ELEMENT send (element_id)>
 <!ATTLIST send port CDATA #REQUIRED>
 <!ATTLIST send size_min CDATA #REQUIRED>

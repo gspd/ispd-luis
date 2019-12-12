@@ -4,12 +4,14 @@
  */
 package gspd.ispd.motor;
 
+import gspd.ispd.escalonador.Mestre;
 import gspd.ispd.motor.filas.Cliente;
 import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.RedeDeFilasCloud;
 import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
+import gspd.ispd.motor.filas.servidores.implementacao.CS_Maquina;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_Mestre;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_VMM;
 import gspd.ispd.motor.metricas.Metricas;
@@ -118,5 +120,23 @@ public abstract class Simulation {
         janela.incProgresso(5);
         janela.println("OK", Color.green);
         return metrica;
+    }
+
+    public void criarRoteamento() {
+        for (CS_Processamento mst : redeDeFilas.getMestres()) {
+            Mestre temp = (Mestre) mst;
+            //Cede acesso ao mestre a fila de eventos futuros
+            temp.setSimulacao(this);
+            //Encontra menor caminho entre o mestre e seus escravos
+            mst.determinarCaminhos();
+        }
+        if (redeDeFilas.getMaquinas() == null || redeDeFilas.getMaquinas().isEmpty()) {
+            janela.println("The model has no processing slaves.", Color.orange);
+        } else {
+            for (CS_Maquina maq : redeDeFilas.getMaquinas()) {
+                //Encontra menor caminho entre o escravo e seu mestre
+                maq.determinarCaminhos();
+            }
+        }       
     }
 }

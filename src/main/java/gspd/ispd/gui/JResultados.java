@@ -14,6 +14,7 @@ import gspd.ispd.gui.auxiliar.ParesOrdenadosUso;
 import gspd.ispd.ISPD;
 import gspd.ispd.arquivo.SalvarResultadosHTML;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
+import gspd.ispd.arquivo.xml.ConfiguracaoISPD;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
 import gspd.ispd.gui.auxiliar.HtmlPane;
 import gspd.ispd.motor.filas.RedeDeFilas;
@@ -86,6 +87,14 @@ public class JResultados extends javax.swing.JDialog {
         JFreeChart temp[] = gerarGraficoProcessamentoTempoUser(tarefas, rdf);
         graficoProcessamentoTempoUser1 = new ChartPanel(temp[0]);
         graficoProcessamentoTempoUser2 = new ChartPanel(temp[1]);
+        // merging DAG
+        // charts = new Graficos();
+        // charts.criarProcessamento(metricas.getMetricasProcessamento());
+        // charts.criarComunicacao(metricas.getMetricasComunicacao());
+        // charts.criarProcessamentoTempoMaquina(rdf);
+        // charts.criarProcessamentoTempoTarefa(tarefas);
+        // charts.criarProcessamentoTempoUser(tarefas, rdf);
+        // charts.rede = rdf;
     }
 
     /**
@@ -99,6 +108,10 @@ public class JResultados extends javax.swing.JDialog {
         html.setMetricasTarefas(metricas);
         gerarGraficosProcessamento(metricas.getMetricasProcessamento());
         gerarGraficosComunicacao(metricas.getMetricasComunicacao());
+        // merging DAG
+        // charts = new Graficos();
+        // charts.criarProcessamento(metricas.getMetricasProcessamento());
+        // charts.criarComunicacao(metricas.getMetricasComunicacao());
     }
 
     /**
@@ -151,6 +164,42 @@ public class JResultados extends javax.swing.JDialog {
         //this.jScrollPaneProcessamento.setViewportView(this.graficoEstadoTarefa);
         //this.jScrollPaneComunicacao.setViewportView(this.graficoEstadoTarefa2);
     }
+
+    // public JResultados(java.awt.Window parent, Metricas metricas, RedeDeFilas rdf, List<Tarefa> tarefas, ConfiguracaoISPD config) {
+    //     super(parent, ModalityType.APPLICATION_MODAL);
+    //     this.tarefas = tarefas;
+    //     charts = new Graficos();
+    //     if (config.getCreateProcessingChart()) {
+    //         charts.criarProcessamento(metricas.getMetricasProcessamento());
+    //     }
+    //     if (config.getCreateCommunicationChart()) {
+    //         charts.criarComunicacao(metricas.getMetricasComunicacao());
+    //     }
+    //     tabelaRecurso = setTabelaRecurso(metricas);
+    //     initComponents();
+    //     setButtons(config);
+    //     this.jTextAreaGlobal.setText(getResultadosGlobais(metricas.getMetricasGlobais()));
+    //     html.setMetricasGlobais(metricas.getMetricasGlobais());
+    //     this.jTextAreaTarefa.setText(getResultadosTarefas(metricas));
+    //     html.setMetricasTarefas(metricas);
+    //     CS_Mestre mestre = (CS_Mestre) rdf.getMestres().get(0);
+    //     setResultadosUsuario(mestre.getEscalonador().getMetricaUsuarios(), metricas);
+    //     if (config.getCreateMachineThroughTimeChart()) {
+    //         charts.criarProcessamentoTempoMaquina(rdf);
+    //     } else {
+    //         charts.calculaPoderTotal(rdf);
+    //     }
+    //     if (config.getCreateTaskThroughTimeChart()) {
+    //         charts.criarProcessamentoTempoTarefa(tarefas);
+    //     }
+    //     if (config.getCreateUserThroughTimeChart()) {
+    //         charts.criarProcessamentoTempoUser(tarefas, rdf);
+    //     }
+    //     charts.criarGraficoPreempcao(rdf, tarefas);
+    //     this.jScrollPaneCharts.setViewportView(charts.getProcessingBarChart());
+    //     jButtonExperimental.setVisible(false);
+    //     charts.rede = rdf;
+    // }
 
     /**
      * This method is called from within the constructor to initialize the form.

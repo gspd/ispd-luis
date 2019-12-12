@@ -5,7 +5,7 @@ import gspd.ispd.motor.filas.Mensagem;
 import gspd.ispd.motor.filas.Tarefa;
 
 /**
- * Elemento servidor do modelo de fila. Podendo representar:
+ * Elemento 'servidor' do modelo de fila. Podendo representar:
  * Recursos de processamento: Maquina, cluster
  * Recurso de comunicação: Link, internet
  * Esta classe abstrata indica todos os eventos que um servidor pode realizar no modelo de fila desenvolvido

@@ -414,7 +414,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonProcessamentoTarefa">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Per task"/>
+                    <Property name="text" type="java.lang.String" value="Per taskModel"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>

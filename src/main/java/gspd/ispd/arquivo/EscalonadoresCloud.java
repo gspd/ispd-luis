@@ -45,7 +45,7 @@ public class EscalonadoresCloud implements ManipularArquivosCloud {
      * guarda a lista de escalonadores implementados no iSPD, e que já estão
      * disponiveis para o usuario por padrão
      */
-    public final static String[] ESCALONADORES = {"---", "RoundRobin"};
+    public final static String[] ESCALONADORES = {"---", "RoundRobin", "Workqueue", "WQR", "DynamicFPLTF", "M_OSEP", "OSEP", "HOSEP", "EHOSEP"};
     /**
      * guarda a lista de escalonadores disponiveis
      */

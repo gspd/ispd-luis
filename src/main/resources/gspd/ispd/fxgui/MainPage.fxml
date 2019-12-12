@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.MainPage">
+   <children>
+      <VBox layoutX="157.0" layoutY="55.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar VBox.vgrow="NEVER">
+              <menus>
+                <Menu mnemonicParsing="false" text="%menu.file">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="%menu.file.new" />
+                        <MenuItem mnemonicParsing="false" text="%menu.file.open" />
+                        <Menu disable="true" mnemonicParsing="false" text="%menu.file.recents">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                          </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" text="%menu.file.save">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/save.png" />
+                                 </image></ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%menu.file.saveas" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <Menu mnemonicParsing="false" text="%menu.file.import">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="GridSim" />
+                              <MenuItem mnemonicParsing="false" text="CloudSim" />
+                              <MenuItem mnemonicParsing="false" text="SimGrid" />
+                           </items>
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/import.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="%menu.file.export">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="GridSim" />
+                              <MenuItem mnemonicParsing="false" text="CloudSim" />
+                              <MenuItem mnemonicParsing="false" text="SimGrid" />
+                           </items>
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/export.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="%menu.file.close">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/close.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%menu.file.exit">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/exit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                     </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="%menu.project">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="%menu.project.simulate">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/simulate.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                    </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="%menu.edit">
+                  <items>
+                        <MenuItem mnemonicParsing="false" text="%menu.edit.undo">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/undo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%menu.edit.redo">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/redo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#handleEditSettings" text="%menu.edit.settings">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/settings.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%menu.help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="%menu.help.about">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/menu/about.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <SplitPane dividerPositions="0.17845484221980412, 0.7627856365614799" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+              <items>
+                  <SplitPane dividerPositions="0.45375722543352603" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+                    <items>
+                        <TextArea fx:id="helpArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Click an icon to get help" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
+                           <children>
+                              <Label text="%main.users" VBox.vgrow="NEVER" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="139.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <TableView fx:id="userTableView" prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="idUserTableColumn" prefWidth="42.0" text="UID" />
+                                        <TableColumn fx:id="nameUserTableColumn" prefWidth="119.0" text="%main.users.name" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                              <ButtonBar buttonMinWidth="20.0" VBox.vgrow="NEVER">
+                                 <buttons>
+                                    <Button fx:id="addUserButton" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="removeUserButton" mnemonicParsing="false" text="-" />
+                                 </buttons>
+                              </ButtonBar>
+                           </children>
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                        </VBox>
+                    </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.8717948717948718" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                    <items>
+                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Hardware">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="14.0" layoutY="14.0" prefHeight="29.0" prefWidth="313.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <ToolBar prefHeight="39.0" prefWidth="587.0">
+                                                   <items>
+                                                      <Hyperlink fx:id="hardwareMousePointerIcon">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/mouse_pointer.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+                                                      <Hyperlink fx:id="machineIcon" text="%main.hardware.machine">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/botao_no.gif" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Hyperlink fx:id="linkIcon" layoutX="10.0" layoutY="10.0" text="%main.hardware.link">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/botao_rede.gif" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Hyperlink fx:id="clusterIcon" layoutX="113.0" layoutY="10.0" text="%main.hardware.cluster">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/botao_cluster.gif" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Hyperlink fx:id="switchIcon" layoutX="216.0" layoutY="10.0" text="%main.hardware.switch">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/botao_internet.gif" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                   </items>
+                                                </ToolBar>
+                                                <ScrollPane hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Workload">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="40.0" layoutY="37.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <ToolBar prefHeight="50.0" prefWidth="587.0">
+                                                   <items>
+                                                      <Hyperlink fx:id="workloadMousePointerIcon">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/mouse_pointer.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Hyperlink>
+                                                      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+                                                      <Hyperlink fx:id="taskIcon" text="%main.workload.taskModel">
+                                                         <graphic>
+                                                            <ImageView fitHeight="83.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/task_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="dependencyIcon" text="%main.workload.dependency">
+                                                         <graphic>
+                                                            <ImageView fitHeight="73.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/dependency_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="messageIcon" text="%main.workload.message">
+                                                         <graphic>
+                                                            <ImageView fitHeight="76.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/message_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="synchronizationIcon" text="%main.workload.synchronization">
+                                                         <graphic>
+                                                            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/sync_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="dataIcon" text="%main.workload.data">
+                                                         <graphic>
+                                                            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/data_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="iterationIcon" text="%main.workload.iterations">
+                                                         <graphic>
+                                                            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/iteration_2.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                      <Hyperlink fx:id="parallelIcon" text="%main.workload.parallel">
+                                                         <graphic>
+                                                            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/parallel_symbol.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic></Hyperlink>
+                                                   </items></ToolBar>
+                                                <ScrollPane hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="VMs">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="40.0" layoutY="14.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                             <children>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                   <children>
+                                                      <TableView fx:id="vmTableView" prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <columns>
+                                                          <TableColumn editable="false" prefWidth="52.0" text="VM#" />
+                                                          <TableColumn prefWidth="74.0" text="User" />
+                                                            <TableColumn prefWidth="108.0" text="Hypervisor" />
+                                                            <TableColumn prefWidth="66.0" text="Cores" />
+                                                            <TableColumn prefWidth="75.0" text="Memory" />
+                                                            <TableColumn prefWidth="75.0" text="Storage" />
+                                                            <TableColumn prefWidth="75.0" text="OS" />
+                                                        </columns>
+                                                      </TableView>
+                                                   </children>
+                                                </AnchorPane>
+                                                <HBox alignment="CENTER_RIGHT" spacing="5.0" VBox.vgrow="NEVER">
+                                                   <children>
+                                                      <Button fx:id="addVMButton" mnemonicParsing="false" text="%button.add" />
+                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" text="%button.duplicate" />
+                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" text="%button.remove" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children></AnchorPane>
+                                </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                        <VBox>
+                           <children>
+                              <TextArea fx:id="terminalOutputArea" editable="false" prefHeight="62.0" prefWidth="536.0" VBox.vgrow="ALWAYS" />
+                              <TextField fx:id="terminalInputField" promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
+                           </children>
+                        </VBox>
+                    </items>
+                  </SplitPane>
+                  <SplitPane dividerPositions="0.5057803468208093" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+                    <items>
+                        <ScrollPane prefHeight="272.0" prefWidth="184.0" vbarPolicy="ALWAYS" />
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" />
+                    </items>
+                  </SplitPane>
+              </items>
+            </SplitPane>
+            <AnchorPane prefHeight="23.0" prefWidth="600.0" VBox.vgrow="NEVER" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
