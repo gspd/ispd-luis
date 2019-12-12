@@ -67,14 +67,14 @@ public class MainPage {
     @FXML
     private Button removeVMButton;
     @FXML
-    private Label dragme;
+    private ProgressBar drag;
 
     private MainApp mainApp;
 
     public void init() {
         initButtons();
         initUsers();
-        FXUtil.makeDraggable(dragme);
+        FXUtil.makeDraggable(drag);
     }
 
     public void setMainApp(MainApp mainApp) {

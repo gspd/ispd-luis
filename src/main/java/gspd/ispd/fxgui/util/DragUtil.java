@@ -3,26 +3,30 @@ package gspd.ispd.fxgui.util;
 import javafx.scene.Node;
 
 public class DragUtil {
-    private double x;
-    private double y;
+    private double x0;
+    private double y0;
     private Node node;
+    private boolean stopped;
 
     public DragUtil() {
-        x = 0;
-        y = 0;
+        x0 = 0;
+        y0 = 0;
+        stopped = true;
     }
 
     public void makeDraggable(Node node) {
         node.setOnMousePressed(event -> {
-            x = event.getX();
-            y = event.getY();
+            x0 = event.getX();
+            y0 = event.getY();
         });
         node.setOnMouseDragged(event -> {
-            double dx, dy;
-            dx = event.getX() - x;
-            dy = event.getY() - y;
-            node.setTranslateY(dx);
-            node.setTranslateY(dy);
+            double dx, dy, x, y;
+            x = node.getLayoutX();
+            y = node.getLayoutY();
+            dx = event.getX() - x0;
+            dy = event.getY() - y0;
+            node.setLayoutX(x + dx);
+            node.setLayoutY(y + dy);
         });
     }
 }
