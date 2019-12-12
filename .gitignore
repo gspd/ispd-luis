@@ -1,4 +1,5 @@
 *.class
+*.uml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -9,6 +10,8 @@ bin/
 Erros/
 gspd.ispd.externo/
 gspd.ispd.externo.cloudSchedulers
+modeloiconico
+modelosimulavel
 
 # Other Hidden files
 .*
