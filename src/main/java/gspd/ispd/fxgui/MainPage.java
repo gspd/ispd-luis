@@ -34,12 +34,6 @@ public class MainPage {
     @FXML
     private Hyperlink synchronizationIcon;
     @FXML
-    private Hyperlink dataIcon;
-    @FXML
-    private Hyperlink iterationIcon;
-    @FXML
-    private Hyperlink parallelIcon;
-    @FXML
     private Hyperlink hardwareMousePointerIcon;
     @FXML
     private Hyperlink workloadMousePointerIcon;
