@@ -5,7 +5,6 @@ import javafx.scene.Node;
 public class DragUtil {
     private double x0;
     private double y0;
-    private Node node;
     private boolean stopped;
 
     public DragUtil() {

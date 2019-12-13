@@ -168,8 +168,8 @@
                                  <children>
                                     <TableView fx:id="userTableView" prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
-                                        <TableColumn fx:id="idUserTableColumn" prefWidth="42.0" text="UID" />
-                                        <TableColumn fx:id="nameUserTableColumn" prefWidth="119.0" text="%main.users.name" />
+                                        <TableColumn fx:id="idUserColumn" prefWidth="42.0" text="UID" />
+                                        <TableColumn fx:id="nameUserColumn" prefWidth="119.0" text="%main.users.name" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -263,7 +263,7 @@
                                                    <content>
                                                       <Pane prefHeight="313.0" prefWidth="386.0">
                                                          <children>
-                                                            <ProgressBar fx:id="drag" layoutX="56.0" layoutY="102.0" prefWidth="200.0" progress="0.0" />
+                                                            <ProgressBar fx:id="drag" layoutX="52.0" layoutY="82.0" prefWidth="200.0" progress="0.0" />
                                                          </children></Pane>
                                                    </content>
                                                 </ScrollPane>
@@ -363,13 +363,13 @@
                                                    <children>
                                                       <TableView fx:id="vmTableView" prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <columns>
-                                                          <TableColumn editable="false" prefWidth="52.0" text="VM#" />
-                                                          <TableColumn prefWidth="74.0" text="User" />
-                                                            <TableColumn prefWidth="108.0" text="Hypervisor" />
-                                                            <TableColumn prefWidth="66.0" text="Cores" />
-                                                            <TableColumn prefWidth="75.0" text="Memory" />
-                                                            <TableColumn prefWidth="75.0" text="Storage" />
-                                                            <TableColumn prefWidth="75.0" text="OS" />
+                                                          <TableColumn fx:id="idVMColumn" editable="false" prefWidth="52.0" text="VM#" />
+                                                          <TableColumn fx:id="userVMColumn" prefWidth="74.0" text="User" />
+                                                            <TableColumn fx:id="hypervisorVMColumn" prefWidth="108.0" text="Hypervisor" />
+                                                            <TableColumn fx:id="coresVMColumn" prefWidth="66.0" text="Cores" />
+                                                            <TableColumn fx:id="memoryVMColumn" prefWidth="75.0" text="Memory" />
+                                                            <TableColumn fx:id="storageVMColumn" prefWidth="75.0" text="Storage" />
+                                                            <TableColumn fx:id="osVMColumn" prefWidth="75.0" text="OS" />
                                                         </columns>
                                                       </TableView>
                                                    </children>

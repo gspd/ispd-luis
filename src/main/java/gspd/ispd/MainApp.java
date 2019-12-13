@@ -59,7 +59,7 @@ public class MainApp extends Application {
             settingsStage.setTitle(ISPD.getStrings().getString("settings.title"));
             // define the settings window as a child of the stage that called it
             settingsStage.initOwner(primaryStage);
-            settingsStage.initModality(Modality.WINDOW_MODAL);
+            settingsStage.initModality(Modality.APPLICATION_MODAL);
             settingsStage.setScene(scene);
             // get the controller of the settings page
             SettingsPage controller = loader.getController();
@@ -84,10 +84,10 @@ public class MainApp extends Application {
             loader.setResources(ISPD.getStrings());
             Scene scene = new Scene(loader.load());
             primaryStage = new Stage();
-            primaryStage.initModality(Modality.WINDOW_MODAL);
+            primaryStage.initModality(Modality.APPLICATION_MODAL);
             primaryStage.setScene(scene);
             MainPage controller = loader.getController();
-            controller.setMainApp(this);
+            controller.setMain(this);
             controller.init();
             primaryStage.show();
         } catch (IOException e) {
