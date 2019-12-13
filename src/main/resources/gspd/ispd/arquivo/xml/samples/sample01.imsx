@@ -1,0 +1,94 @@
+<!DOCTYPE ispd SYSTEM "../ispd.dtd">
+
+<ispd version="2.0">
+    <meta lang="pt_BR" last.window="HARDWARE" mode="IAAS"/>
+    <users>
+        <user id="user01" name="Luis"/>
+        <user id="user02" name="Joao"/>
+    </users>
+    <hardware>
+        <machine id="mac01">
+            <owner rid="user01"/>
+            <master>
+                <scheduler policy="RoundRobin" target="TASKS"/>
+                <scheduler policy="FCFS" target="VMS"/>
+                <slave rid="mac02"/>
+                <slave rid="mac03"/>
+            </master>
+            <computing cores="4" load="0.1" memory="16 GB" os="Linux" power="1500 Mflop" storage="125 GB" />
+            <costs storage="0.50 /GB" memory="0.02 /GB" processing="0.20 /Mflop"/>
+            <position x="2" y="1.5"/>
+        </machine>
+        <machine id="mac02">
+            <owner rid="user02"/>
+            <computing cores="8" memory="8 GB" storage="100 GB" power="1000 Mflop" os="Linux" load="0.01"/>
+            <costs storage="0.03 /GB" memory="0.01 /GB" processing="0.35 /Mflop"/>
+            <position x="1" y="3" />
+        </machine>
+        <machine id="mac03">
+            <owner rid="user01"/>
+            <linked href="mac02"/>
+            <position x="3" y="3" />
+        </machine>
+        <link id="link0001">
+            <owner rid="user01" />
+            <networking load="0.1" bandwidth="100 Mbps" latency="0.02" />
+            <costs bandwidth="0.03 /Mbps"/>
+            <connect destination="mac03" source="mac01"/>
+        </link>
+        <link id="link0002">
+            <owner rid="user01" />
+            <linked href="link0001" />
+            <connect destination="mac02" source="mac01" />
+        </link>
+        <link id="link003">
+            <owner rid="user01" />
+            <linked href="link0001" />
+            <connect source="mac02" destination="mac01" />
+        </link>
+        <link id="link0004">
+            <owner rid="user01" />
+            <linked href="link0001" />
+            <connect source="mac03" destination="mac01" />
+        </link>
+    </hardware>
+    <vms>
+        <vm id="vm01">
+            <owner rid="user01" />
+            <computing memory="1 GB" storage="10GB" cores="1" os="Windows" />
+        </vm>
+        <vm id="vm02">
+            <owner rid="user01" />
+            <linked href="vm01" />
+        </vm>
+        <vm id="vm03">
+            <owner rid="user02"/>
+            <linked href="vm01"/>
+        </vm>
+        <vm id="vm04">
+            <owner rid="user02" />
+            <linked href="vm01" />
+        </vm>
+    </vms>
+    <workload>
+        <random tasks="10000">
+            <app id="app01">
+                <owner rid="user01" />
+                <tasking>
+                    <processing>
+                        <distribution type="normal">
+                            <input>100</input>
+                            <input>5</input>
+                        </distribution>
+                    </processing>
+                    <communication>5Mbit</communication>
+                </tasking>
+            </app>
+            <time>
+                <distribution type="exponential">
+                    <input>2.3</input>
+                </distribution>
+            </time>
+        </random>
+    </workload>
+</ispd>
