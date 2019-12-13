@@ -11,6 +11,25 @@ public class DistributionBuilder {
     public static NormalDistributionBuilder normal(double average, double deviation) {
         return new NormalDistributionBuilder(constant(average), constant(deviation));
     }
+    public static NormalDistributionBuilder gaussian() {
+        return normal();
+    }
+    public static NormalDistributionBuilder gaussian(double average) {
+        return normal(average);
+    }
+    public static NormalDistributionBuilder gaussian(double average, double deviation) {
+        return normal(average, deviation);
+    }
+
+    public static LogNormalDistributionBuilder logNormal(double average, double deviation) {
+        return new LogNormalDistributionBuilder(normal(average, deviation));
+    }
+    public static LogNormalDistributionBuilder logNormal(double average) {
+        return logNormal(average, 0);
+    }
+    public static LogNormalDistributionBuilder logNormal() {
+        return logNormal(0, 0);
+    }
 
     public static ExponentialDistributionBuilder exponential() {
         return exponential(1);

@@ -21,7 +21,7 @@ public class ISPD {
 
     private static final String STRINGS_BASE_NAME = "strings";
     private static Locale locale = new Locale("en", "US");
-    private static ISPDModel model = new ISPDModel();
+    private static ISPDModel model;
 
     public static ResourceBundle getStrings() {
         return ResourceBundle.getBundle(STRINGS_BASE_NAME, getLocale());

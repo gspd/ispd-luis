@@ -36,7 +36,9 @@ ispd
 <!ATTLIST position x CDATA #REQUIRED >
 <!ATTLIST position y CDATA #REQUIRED >
 <!-- the size associated with some elements -->
-<!ELEME.
+<!ELEMENT size EMPTY >
+<!ATTLIST size width CDATA #REQUIRED >
+<!ATTLIST size heigth CDATA #REQUIRED >
 <!-- links with another ispd file (can be used in many elements) -->
 <!ELEMENT linked EMPTY >
 <!ATTLIST linked href CDATA #REQUIRED >
@@ -58,17 +60,17 @@ ispd
 <!-- the entire hardware -->
 <!ELEMENT hardware (linked|(machine|switch|cluster|link)*) >
 <!-- the machine (physical) -->
-<!ELEMENT machine (owner?,master?,(linked|machine:characteristics?,machine:costs?),position) >
+<!ELEMENT machine (owner?,master?,(linked|computing?,costs?),position) >
 <!ATTLIST machine id ID #REQUIRED >
 <!-- the switch (internet icon in older versions of iSPD) -->
-<!ELEMENT switch (owner?,(linked|network:characteristics?,network:costs?),position) >
+<!ELEMENT switch (owner?,(linked|networking?,costs?),position) >
 <!ATTLIST switch id ID #REQUIRED >
 <!-- the cluster -->
-<!ELEMENT cluster (owner?,(linked|machine:characteristics?,network:characteristics?,machine:costs?,network:costs?),position) >
+<!ELEMENT cluster (owner?,(linked|computing?,networking?,costs?),position) >
 <!ATTLIST cluster nodes CDATA #IMPLIED >
 <!ATTLIST cluster topology CDATA #IMPLIED >
 <!-- the link -->
-<!ELEMENT link (owner?,(linked|network:characteristics?,network:costs?),connect) >
+<!ELEMENT link (owner?,(linked|networking?,costs?),connect) >
 <!ATTLIST link id ID #REQUIRED >
 <!-- the master -->
 <!ELEMENT master (scheduler*,slave*) >
@@ -78,28 +80,26 @@ ispd
 <!ATTLIST scheduler target CDATA #IMPLIED >
 <!-- the slave used in master-slave syntax -->
 <!ELEMENT slave EMPTY >
-<!ATTLIST slave rid ENTITY #REQUIRED >
+<!ATTLIST slave rid IDREF #REQUIRED >
 <!-- the machine characteristics -->
-<!ELEMENT machine:characteristics EMPTY >
-<!ATTLIST machine:characteristics cores CDATA #IMPLIED >
-<!ATTLIST machine:characteristics power CDATA #IMPLIED >
-<!ATTLIST machine:characteristics memory CDATA #IMPLIED >
-<!ATTLIST machine:characteristics storage CDATA #IMPLIED >
-<!ATTLIST machine:characteristics load CDATA #IMPLIED >
-<!ATTLIST machine:characteristics os CDATA #IMPLIED >
+<!ELEMENT computing EMPTY >
+<!ATTLIST computing cores CDATA #IMPLIED >
+<!ATTLIST computing power CDATA #IMPLIED >
+<!ATTLIST computing memory CDATA #IMPLIED >
+<!ATTLIST computing storage CDATA #IMPLIED >
+<!ATTLIST computing load CDATA #IMPLIED >
+<!ATTLIST computing os CDATA #IMPLIED >
 <!-- machine costs -->
-<!ELEMENT machine:costs EMPTY >
-<!ATTLIST machine:costs processing CDATA #IMPLIED >
-<!ATTLIST machine:costs memory CDATA #IMPLIED >
-<!ATTLIST machine:costs storage CDATA #IMPLIED >
+<!ELEMENT costs EMPTY >
+<!ATTLIST costs processing CDATA #IMPLIED >
+<!ATTLIST costs memory CDATA #IMPLIED >
+<!ATTLIST costs storage CDATA #IMPLIED >
+<!ATTLIST costs bandwidth CDATA #IMPLIED >
 <!-- network characteristics -->
-<!ELEMENT network:characteristics EMPTY >
-<!ATTLIST network:characteristics bandwidth CDATA #IMPLIED >
-<!ATTLIST network:characteristics latency CDATA #IMPLIED >
-<!ATTLIST network:characteristics load CDATA #IMPLIED >
-<!-- network costs -->
-<!ELEMENT network:costs EMPTY >
-<!ATTLIST network:costs bandwidth CDATA #IMPLIED >
+<!ELEMENT networking EMPTY >
+<!ATTLIST networking bandwidth CDATA #IMPLIED >
+<!ATTLIST networking latency CDATA #IMPLIED >
+<!ATTLIST networking load CDATA #IMPLIED >
 <!-- connection of links -->
 <!ELEMENT connect EMPTY >
 <!ATTLIST connect source IDREF #REQUIRED >
@@ -108,22 +108,21 @@ ispd
 
 <!-- SECTION VIRTUAL MACHINES -->
 <!-- one vm -->
-<!ELEMENT vm (owner?,(linked|machine:characteristics?)) >
-<!ATTLIST id ID #REQUIRED >
+<!ELEMENT vm (owner?,(linked|computing?)) >
+<!ATTLIST vm id ID #REQUIRED >
 <!-- a list of vms -->
 <!ELEMENT vms (linked|vm*) >
 <!-- END VIRTUAL MACHINES -->
 
 <!-- SECTION WORKLOAD -->
 <!ELEMENT workload (random|trace|fornode|workflow) >
-<!ATTLIST workload set IDREF #IMPLIED >
 <!-- COMMONS IN WORKLOAD -->
 <!-- an application is an abstract idea of any job configuration-->
-<!ELEMENT processing (input) >
-<!ELEMENT communication (input) >
-<!ELEMENT time (input) >
-<!ELEMENT app:characteristics (processing|communication) >
-<!ELEMENT app (owner?,app:characteristics?) >
+<!ELEMENT processing (#PCDATA|distribution) >
+<!ELEMENT communication (#PCDATA|distribution) >
+<!ELEMENT time (#PCDATA|distribution) >
+<!ELEMENT tasking (processing|communication) >
+<!ELEMENT app (owner?,tasking?) >
 <!ATTLIST app id ID #REQUIRED >
 <!-- END COMMONS IN WORKLOAD -->
 

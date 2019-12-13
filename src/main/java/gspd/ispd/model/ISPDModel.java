@@ -1,60 +1,64 @@
 package gspd.ispd.model;
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableList;
+import gspd.ispd.annotations.IMSX;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ISPDModel {
 
-    public static final int GRID = 0;
-    public static final int IAAS = 1;
-
-    // the model file name
-    private StringProperty name = new SimpleStringProperty();
-    // the edited file flag
-    private BooleanProperty edited = new SimpleBooleanProperty();
-
-    private Hardware hardware;
+    private Properties metadata;
+    private List<User> users;
+    private List<Hardware> hardware;
+    private List<VM> vms;
     private Workload workload;
-    private ListProperty<Hypervisor> hypervisors = new SimpleListProperty<>();
-    private ListProperty<User> users = new SimpleListProperty<>();
 
-    private static int modelType;
-
-    public StringProperty nameProperty() {
-        return name;
+    public ISPDModel() {
+        metadata = new Properties();
+        users = new ArrayList<>();
+        hardware = new ArrayList<>();
+        vms = new ArrayList<>();
+        workload = new Workload();
     }
 
-    public String getName() {
-        return name.get();
+    public Properties getMetadata() {
+        return metadata;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public void setMetadata(Properties metadata) {
+        this.metadata = metadata;
     }
 
-    public boolean isEdited() {
-        return edited.get();
+    public List<User> getUsers() {
+        return users;
     }
 
-    public BooleanProperty editedProperty() {
-        return edited;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
-    public Hardware getHardware() {
+    public List<Hardware> getHardware() {
         return hardware;
+    }
+
+    public void setHardware(List<Hardware> hardware) {
+        this.hardware = hardware;
+    }
+
+    public List<VM> getVms() {
+        return vms;
+    }
+
+    public void setVms(List<VM> vms) {
+        this.vms = vms;
     }
 
     public Workload getWorkload() {
         return workload;
     }
 
-    public ListProperty<User> usersProperty() {
-        return users;
-    }
-
-    public static int getModelType() {
-        return modelType;
+    public void setWorkload(Workload workload) {
+        this.workload = workload;
     }
 }

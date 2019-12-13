@@ -10,16 +10,13 @@ import java.util.Properties;
  * @author Luís Baldissera
  */
 public class IMSX {
-    private Properties metadata;
-    private List<User> users;
-    private List<Hardware> hardware;
-    private List<VM> vms;
-    private Workload workload;
+    private ISPDModel model;
 
-    public static IMSX load(File file) {
-        return null;
+    public ISPDModel getModel() {
+        return model;
     }
-    public static IMSX load(String filename) {
-        return load(new File(filename));
+
+    public void setModel(ISPDModel model) {
+        this.model = model;
     }
 }
