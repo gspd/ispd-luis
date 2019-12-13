@@ -63,3 +63,4 @@ javafx {
 
 // Define the main class for the application
 mainClassName = 'gspd.ispd.MainApp'
+version = '2.0-SNAPSHOT'
