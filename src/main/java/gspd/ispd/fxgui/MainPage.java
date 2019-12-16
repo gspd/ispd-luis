@@ -4,8 +4,6 @@ import gspd.ispd.MainApp;
 import gspd.ispd.fxgui.util.FXUtil;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -38,7 +36,7 @@ public class MainPage {
     @FXML
     private Hyperlink workloadMousePointerIcon;
     @FXML
-    private TableView<VM> vmTableView;
+    private TableView<VM> vmTable;
     @FXML
     private TableColumn<VM, Integer> idVMColumn;
     @FXML
@@ -54,7 +52,7 @@ public class MainPage {
     @FXML
     private TableColumn<VM, String> osVMColumn;
     @FXML
-    private TableView<User> userTableView;
+    private TableView<User> userTable;
     @FXML
     private TableColumn<User, Integer> idUserColumn;
     @FXML
@@ -69,6 +67,8 @@ public class MainPage {
     private Button duplicateVMButton;
     @FXML
     private Button removeVMButton;
+    @FXML
+    private MenuItem exitMenuItem;
     // TODO: this 'drag' is temporary (don't forget to delete soon)
     @FXML
     private ProgressBar drag;
@@ -91,21 +91,26 @@ public class MainPage {
         main.openSettingsPage();
     }
 
+    @FXML
+    private void handleCloseProgram() {
+        main.close();
+    }
+
     private void initButtons() {
         // disable remove button oly if there is no selected item in user table
-        removeUserButton.disableProperty().bind(userTableView.getSelectionModel().selectedItemProperty().isNull());
+        removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
         // disable {remote,duplicate} button only if there is no selected item in the VM table
-        removeVMButton.disableProperty().bind(vmTableView.getSelectionModel().selectedItemProperty().isNull());
-        duplicateVMButton.disableProperty().bind(vmTableView.getSelectionModel().selectedItemProperty().isNull());
+        removeVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
+        duplicateVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private void initUsers() {
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameUserColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         // TODO: this is just some users tests, remove it when it is no longer needed
-        userTableView.getItems().add(new User("default"));
-        userTableView.getItems().add(new User("Luís"));
-        userTableView.getItems().add(new User("João"));
+        userTable.getItems().add(new User("default"));
+        userTable.getItems().add(new User("Luís"));
+        userTable.getItems().add(new User("João"));
     }
 
     private void initVMTable() {
@@ -117,10 +122,10 @@ public class MainPage {
         storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
         osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
         // TODO: this is just some vm tests, remove it when it is no longer needed
-        User owner = userTableView.getItems().get(0);
-        vmTableView.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
-        vmTableView.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
-        vmTableView.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
-        vmTableView.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
+        User owner = userTable.getItems().get(0);
+        vmTable.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
+        vmTable.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
+        vmTable.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
+        vmTable.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
     }
 }

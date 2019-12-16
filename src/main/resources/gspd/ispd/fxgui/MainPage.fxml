@@ -159,35 +159,12 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <SplitPane dividerPositions="0.17845484221980412, 0.7627856365614799" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <SplitPane dividerPositions="0.17845484221980412, 0.808487486398259" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <items>
-                  <SplitPane dividerPositions="0.45375722543352603" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                     <items>
                         <TextArea fx:id="helpArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Click an icon to get help" />
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
-                           <children>
-                              <Label text="%main.users" VBox.vgrow="NEVER" />
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="139.0" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <TableView fx:id="userTableView" prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <columns>
-                                        <TableColumn fx:id="idUserColumn" prefWidth="42.0" text="UID" />
-                                        <TableColumn fx:id="nameUserColumn" prefWidth="119.0" text="%main.users.name" />
-                                      </columns>
-                                    </TableView>
-                                 </children>
-                              </AnchorPane>
-                              <ButtonBar buttonMinWidth="20.0" VBox.vgrow="NEVER">
-                                 <buttons>
-                                    <Button fx:id="addUserButton" mnemonicParsing="false" text="+" />
-                                    <Button fx:id="removeUserButton" mnemonicParsing="false" text="-" />
-                                 </buttons>
-                              </ButtonBar>
-                           </children>
-                           <padding>
-                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                           </padding>
-                        </VBox>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0" />
                     </items>
                   </SplitPane>
                   <SplitPane dividerPositions="0.8717948717948718" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
@@ -324,7 +301,7 @@
                                              <children>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                    <children>
-                                                      <TableView fx:id="vmTableView" prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <TableView fx:id="vmTable" prefHeight="288.0" prefWidth="524.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <columns>
                                                           <TableColumn fx:id="idVMColumn" editable="false" prefWidth="52.0" text="VM#" />
                                                           <TableColumn fx:id="userVMColumn" prefWidth="74.0" text="User" />
@@ -362,7 +339,30 @@
                   <SplitPane dividerPositions="0.5057803468208093" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                     <items>
                         <ScrollPane prefHeight="272.0" prefWidth="184.0" vbarPolicy="ALWAYS" />
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
+                           <children>
+                              <Label text="%main.users" VBox.vgrow="NEVER" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="341.0" prefWidth="139.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <TableView fx:id="userTable" prefHeight="344.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn fx:id="idUserColumn" prefWidth="42.0" text="UID" />
+                                        <TableColumn fx:id="nameUserColumn" prefWidth="119.0" text="%main.users.name" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                              <ButtonBar buttonMinWidth="20.0" VBox.vgrow="NEVER">
+                                 <buttons>
+                                    <Button fx:id="addUserButton" mnemonicParsing="false" text="+" />
+                                    <Button fx:id="removeUserButton" mnemonicParsing="false" text="-" />
+                                 </buttons>
+                              </ButtonBar>
+                           </children>
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                        </VBox>
                     </items>
                   </SplitPane>
               </items>

@@ -1,7 +1,9 @@
 package gspd.ispd.model;
 
 import gspd.ispd.annotations.IMSX;
+import javafx.collections.ObservableList;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -14,12 +16,15 @@ public class ISPDModel {
     private List<VM> vms;
     private Workload workload;
 
+    private boolean saved;
+
     public ISPDModel() {
         metadata = new Properties();
         users = new ArrayList<>();
         hardware = new ArrayList<>();
         vms = new ArrayList<>();
         workload = new Workload();
+        saved = false;
     }
 
     public Properties getMetadata() {
@@ -60,5 +65,22 @@ public class ISPDModel {
 
     public void setWorkload(Workload workload) {
         this.workload = workload;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public boolean isNotSaved() {
+        return ! isSaved();
+    }
+
+    public void saveToFile(File file) {
+        // save to file routine
+        saved = true;
+    }
+
+    public void saveToFile(String filename) {
+        saveToFile(new File(filename));
     }
 }

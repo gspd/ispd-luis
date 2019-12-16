@@ -2,12 +2,12 @@ package gspd.ispd;
 
 import gspd.ispd.fxgui.MainPage;
 import gspd.ispd.fxgui.SettingsPage;
+import gspd.ispd.fxgui.util.FXUtil;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -18,14 +18,18 @@ import java.util.Properties;
 //    PROTOTYPE VERSION yet
 public class MainApp extends Application {
 
-    private Stage primaryStage;
-    private ObjectProperty<ISPDModel> model = new SimpleObjectProperty<>();
+    private Stage window;
+    private ISPDModel model;
     private Properties settings;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
-        setModel(new ISPDModel());
+        window = primaryStage;
+        window.setOnCloseRequest(event -> {
+            event.consume();
+            this.close();
+        });
+        model = new ISPDModel();
         ISPD.setLocale(new Locale("pt", "BR"));
         openMainPage();
     }
@@ -35,14 +39,10 @@ public class MainApp extends Application {
     }
 
     public void setModel(ISPDModel model) {
-        this.model.set(model);
+        this.model = model;
     }
 
     public ISPDModel getModel() {
-        return model.get();
-    }
-
-    public ObjectProperty<ISPDModel> modelProperty() {
         return model;
     }
 
@@ -58,7 +58,7 @@ public class MainApp extends Application {
             Stage settingsStage = new Stage();
             settingsStage.setTitle(ISPD.getStrings().getString("settings.title"));
             // define the settings window as a child of the stage that called it
-            settingsStage.initOwner(primaryStage);
+            settingsStage.initOwner(window);
             settingsStage.initModality(Modality.APPLICATION_MODAL);
             settingsStage.setScene(scene);
             // get the controller of the settings page
@@ -83,13 +83,17 @@ public class MainApp extends Application {
             loader.setLocation(getClass().getResource("fxgui/MainPage.fxml"));
             loader.setResources(ISPD.getStrings());
             Scene scene = new Scene(loader.load());
-            primaryStage = new Stage();
-            primaryStage.initModality(Modality.APPLICATION_MODAL);
-            primaryStage.setScene(scene);
+            window = new Stage();
+            window.initModality(Modality.APPLICATION_MODAL);
+            window.setScene(scene);
+            window.setOnCloseRequest(event -> {
+                event.consume();
+                close();
+            });
             MainPage controller = loader.getController();
             controller.setMain(this);
             controller.init();
-            primaryStage.show();
+            window.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,6 +112,23 @@ public class MainApp extends Application {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void close() {
+        FXUtil.AnswerType answer;
+        Alert alert;
+        if (model.isNotSaved()) {
+            answer = FXUtil.checkClosingWithoutSaving();
+            if (answer == FXUtil.AnswerType.SAVE_AND_EXIT) {
+                // TODO: check out this file
+                model.saveToFile("test_file.imsx");
+                window.close();
+            } else if (answer == FXUtil.AnswerType.EXIT_WITHOUT_SAVE) {
+                window.close();
+            }
+        } else {
+            window.close();
         }
     }
 }
