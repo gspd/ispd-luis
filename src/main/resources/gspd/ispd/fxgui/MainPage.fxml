@@ -316,7 +316,7 @@
                                                 </AnchorPane>
                                                 <HBox alignment="CENTER_RIGHT" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
-                                                      <Button fx:id="addVMButton" mnemonicParsing="false" text="%button.add" />
+                                                      <Button fx:id="addVMButton" mnemonicParsing="false" onAction="#handleAddVM" text="%button.add" />
                                                       <Button fx:id="duplicateVMButton" mnemonicParsing="false" text="%button.duplicate" />
                                                       <Button fx:id="removeVMButton" mnemonicParsing="false" text="%button.remove" />
                                                    </children>

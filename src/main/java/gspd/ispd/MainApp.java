@@ -1,14 +1,8 @@
 package gspd.ispd;
 
-import gspd.ispd.fxgui.MainPage;
-import gspd.ispd.fxgui.SettingsPage;
 import gspd.ispd.fxgui.GUI;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;

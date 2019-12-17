@@ -1,7 +1,5 @@
 package gspd.ispd.model;
 
-import javafx.beans.property.*;
-
 public class VM {
 
     private static int ID = 1;
@@ -69,7 +67,7 @@ public class VM {
         this.storage = storage;
     }
 
-    public String getOs() {
+    public String getOS() {
         return os;
     }
 

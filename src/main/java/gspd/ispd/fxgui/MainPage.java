@@ -95,6 +95,9 @@ public class MainPage {
         main.close();
     }
 
+    @FXML
+    private void handleAddVM() {}
+
     private void initButtons() {
         // disable remove button oly if there is no selected item in user table
         removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
@@ -106,10 +109,7 @@ public class MainPage {
     private void initUsers() {
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameUserColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        // TODO: this is just some users tests, remove it when it is no longer needed
-        userTable.getItems().add(new User("default"));
-        userTable.getItems().add(new User("Luís"));
-        userTable.getItems().add(new User("João"));
+        updateUsers();
     }
 
     private void initVMTable() {
@@ -120,11 +120,14 @@ public class MainPage {
         memoryVMColumn.setCellValueFactory(new PropertyValueFactory<>("memory"));
         storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
         osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
-        // TODO: this is just some vm tests, remove it when it is no longer needed
-        User owner = userTable.getItems().get(0);
-        vmTable.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
-        vmTable.getItems().add(new VM(owner, "VB", 2, 2.0, 10.0, "Linux"));
-        vmTable.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
-        vmTable.getItems().add(new VM(owner, "VW", 2, 2.0, 10.0, "Linux"));
+        updateVMTable();
+    }
+
+    private void updateVMTable() {
+        vmTable.getItems().setAll(main.getModel().getVms());
+    }
+
+    private void updateUsers() {
+        userTable.getItems().setAll(main.getModel().getUsers());
     }
 }

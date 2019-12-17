@@ -1,13 +1,12 @@
 package gspd.ispd.fxgui;
 
-import com.google.common.io.Resources;
 import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
 import gspd.ispd.fxgui.util.DragUtil;
 import gspd.ispd.fxgui.util.DrawerUtil;
+import gspd.ispd.model.VM;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -109,7 +108,7 @@ public class GUI {
             SettingsPage controller = loader.getController();
             // initialize the settings page
             controller.init();
-            controller.setSettingsStage(window);
+            controller.setWindow(window);
             // finally show the settings page and wait the user
             window.showAndWait();
             // if the OK button was clicked, then apply new settings
@@ -123,7 +122,6 @@ public class GUI {
 
     static public void closeMainWindow(Stage window, MainApp main) {
         AnswerType answer;
-        Alert alert;
         if (main.getModel().isNotSaved()) {
             answer = checkClosingWithoutSaving();
             if (answer == AnswerType.SAVE_AND_EXIT) {
@@ -136,5 +134,24 @@ public class GUI {
         } else {
             window.close();
         }
+    }
+
+    static public VM openVMDialog(Stage owner, Stage window) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUI.class.getResource("VMDialog.fxml"));
+            loader.setResources(ISPD.getStrings());
+            Scene scene = new Scene(loader.load());
+            window.setTitle("VM Edit");
+            window.initOwner(owner);
+            window.initModality(Modality.WINDOW_MODAL);
+            window.setScene(scene);
+            VMDialog controller = loader.getController();
+            controller.init();
+            window.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -26,12 +26,12 @@
    </padding>
    <children>
       <Label />
-      <Label text="%main.vms.user" />
-      <Label text="%main.vms.hypervisor" GridPane.rowIndex="1" />
-      <Label text="%main.vms.cores" GridPane.rowIndex="2" />
-      <Label text="%main.vms.memory" GridPane.rowIndex="3" />
-      <Label text="%main.vms.storage" GridPane.rowIndex="4" />
-      <Label text="%main.vms.os" GridPane.rowIndex="5" />
+      <Label text="%vms.user" />
+      <Label text="%vms.hypervisor" GridPane.rowIndex="1" />
+      <Label text="%vms.cores" GridPane.rowIndex="2" />
+      <Label text="%vms.memory" GridPane.rowIndex="3" />
+      <Label text="%vms.storage" GridPane.rowIndex="4" />
+      <Label text="%vms.os" GridPane.rowIndex="5" />
       <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
       <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Spinner GridPane.columnIndex="1" GridPane.rowIndex="2" />

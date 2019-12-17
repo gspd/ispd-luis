@@ -6,6 +6,7 @@ import java.util.List;
 public class User {
 
     private static int ID = 1;
+    private static User defaultUser = new User("default");
 
     private String name;
     private int id;
@@ -20,6 +21,10 @@ public class User {
         this.machines = new ArrayList<>();
         this.vms = new ArrayList<>();
         this.jobs = new ArrayList<>();
+    }
+
+    public static User getDefault() {
+        return defaultUser;
     }
 
     public List<Machine> getMachines() {

@@ -1,6 +1,5 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -32,7 +31,7 @@ public class SettingsPage {
     private CheckBox resourcesChartCheckBox;
 
     private MainApp mainApp;
-    private Stage settingsStage;
+    private Stage window;
     private Properties settings;
     private boolean okClicked;
 
@@ -46,8 +45,8 @@ public class SettingsPage {
         this.mainApp = mainApp;
     }
 
-    public void setSettingsStage(Stage settingsStage) {
-        this.settingsStage = settingsStage;
+    public void setWindow(Stage window) {
+        this.window = window;
     }
 
     public boolean isOkClicked() {
@@ -84,12 +83,16 @@ public class SettingsPage {
     @FXML
     private void handleCancel() {
         okClicked = false;
-        settingsStage.close();
+        window.close();
     }
 
     @FXML
     private void handleOK() {
         okClicked = true;
-        settingsStage.close();
+        window.close();
+    }
+
+    public Properties showAndWait() {
+        return null;
     }
 }
