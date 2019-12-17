@@ -58,6 +58,10 @@ public class SettingsPage {
         return settings;
     }
 
+    public void setSettings(Properties settings) {
+        this.settings = settings;
+    }
+
     private void initLanguages() {
         List<Pair<String, Locale>> allLocales = new ArrayList<>();
         allLocales.add(new Pair<>("English", new Locale("en", "US")));
@@ -86,12 +90,6 @@ public class SettingsPage {
     @FXML
     private void handleOK() {
         okClicked = true;
-        updateSettings();
         settingsStage.close();
-    }
-
-    private void updateSettings() {
-        // set locale property
-        mainApp.setLocale(localeChoiceBox.getValue().getValue());
     }
 }

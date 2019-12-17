@@ -38,26 +38,4 @@ public class ISPD {
     public static void setLocale(String language, String country) {
         ISPD.setLocale(new Locale(language, country));
     }
-
-    public static ISPDModel getModel() {
-        return model;
-    }
-
-    public static void setModel(ISPDModel model) {
-        ISPD.model = model;
-    }
-
-    // TODO: get recents
-    public static List<URL> getRecentFiles() {
-        try {
-            List<URL> list = new ArrayList<>();
-            list.add(new URL("file:/path/to/file1"));
-            list.add(new URL("file:/path/to/file2"));
-            list.add(new URL("file:/path/to/file3"));
-            return list;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

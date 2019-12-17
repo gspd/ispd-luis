@@ -92,7 +92,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                        <MenuItem mnemonicParsing="false" text="%menu.file.exit">
+                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#handleCloseProgram" text="%menu.file.exit">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

@@ -1,7 +1,6 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.MainApp;
-import gspd.ispd.fxgui.util.FXUtil;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
 import javafx.fxml.FXML;
@@ -79,7 +78,7 @@ public class MainPage {
         initButtons();
         initUsers();
         initVMTable();
-        FXUtil.makeDraggable(drag);
+        GUI.makeDraggable(drag);
     }
 
     public void setMain(MainApp main) {
