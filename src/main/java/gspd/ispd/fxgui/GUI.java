@@ -74,50 +74,14 @@ public class GUI {
         return answer;
     }
 
+    @Deprecated
     static public void setMainWindow(Stage window, MainApp main) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("MainPage.fxml"));
-            loader.setResources(ISPD.getStrings());
-            Scene scene = new Scene(loader.load());
-            window.setScene(scene);
-            MainPage controller = loader.getController();
-            controller.setMain(main);
-            controller.init();
-            window.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        throw new UnsupportedOperationException("[DEPRECATED]");
     }
 
+    @Deprecated
     static public void setSettingsWindow(Stage owner, Stage window, MainApp main) {
-        try {
-            // Loads FXML file (GUI description)
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("SettingsPage.fxml"));
-            loader.setResources(ISPD.getStrings());
-            // starts the content of the main window
-            Scene scene = new Scene(loader.load());
-            // creates the window itself
-            window.setTitle(ISPD.getStrings().getString("settings.title"));
-            // define the settings window as a child of the stage that called it
-            window.initOwner(owner);
-            window.initModality(Modality.WINDOW_MODAL);
-            window.setScene(scene);
-            // get the controller of the settings page
-            SettingsPage controller = loader.getController();
-            // initialize the settings page
-            controller.init();
-            controller.setWindow(window);
-            // finally show the settings page and wait the user
-            window.showAndWait();
-            // if the OK button was clicked, then apply new settings
-            if (controller.isOkClicked()) {
-                // apply new configurations
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        throw new UnsupportedOperationException("DEPRECATED");
     }
 
     static public void closeMainWindow(Stage window, MainApp main) {

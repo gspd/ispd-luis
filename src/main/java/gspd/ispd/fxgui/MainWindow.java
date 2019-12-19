@@ -1,13 +1,19 @@
 package gspd.ispd.fxgui;
 
+import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
-public class MainPage {
+import java.io.IOException;
+
+public class MainWindow {
     @FXML
     private TextArea terminalOutputArea;
     @FXML
@@ -73,6 +79,27 @@ public class MainPage {
     private ProgressBar drag;
 
     private MainApp main;
+    private Stage window;
+
+    public static void create(Stage window, MainApp main) {
+        try {
+            FXMLLoader loader;
+            MainWindow controller;
+            Scene scene;
+            loader = new FXMLLoader();
+            loader.setLocation(GUI.class.getResource("MainWindow.fxml"));
+            loader.setResources(ISPD.getStrings());
+            scene = new Scene(loader.load());
+            window.setScene(scene);
+            controller = loader.getController();
+            controller.setMain(main);
+            controller.init();
+            controller.setWindow(window);
+            window.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void init() {
         initButtons();
@@ -87,7 +114,16 @@ public class MainPage {
 
     @FXML
     private void handleEditSettings() {
-        main.openSettingsPage();
+        Stage settingsWindow = new Stage();
+        SettingsWindow.create(window, settingsWindow, this.main);
+    }
+
+    public Stage getWindow() {
+        return window;
+    }
+
+    public void setWindow(Stage window) {
+        this.window = window;
     }
 
     @FXML

@@ -1,31 +1,32 @@
 package gspd.ispd;
 
 import gspd.ispd.fxgui.GUI;
+import gspd.ispd.fxgui.MainWindow;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 
 //    PROTOTYPE VERSION yet
 public class MainApp extends Application {
 
-    private Stage window;
+    private Stage mainWindow;
+    private Stage settingsWindow;
     private ISPDModel model;
     private Properties settings;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        window = primaryStage;
-        window.setOnCloseRequest(event -> {
+        mainWindow = primaryStage;
+        mainWindow.setOnCloseRequest(event -> {
             event.consume();
             this.close();
         });
         model = new ISPDModel();
         ISPD.setLocale(new Locale("pt", "BR"));
-        openMainPage();
+        MainWindow.create(mainWindow, this);
     }
 
     public Properties getSettings() {
@@ -41,14 +42,10 @@ public class MainApp extends Application {
     }
 
     public void openSettingsPage() {
-        GUI.setSettingsWindow(window, new Stage(), this);
-    }
-
-    public void openMainPage() {
-        GUI.setMainWindow(window, this);
+        GUI.setSettingsWindow(mainWindow, new Stage(), this);
     }
 
     public void close() {
-        GUI.closeMainWindow(window, this);
+        GUI.closeMainWindow(mainWindow, this);
     }
 }
