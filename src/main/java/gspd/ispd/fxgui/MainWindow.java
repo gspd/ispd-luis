@@ -2,14 +2,11 @@ package gspd.ispd.fxgui;
 
 import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
-import gspd.ispd.model.ISPDModel;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -142,7 +138,7 @@ public class MainWindow implements Initializable {
     @FXML
     private void handleAddVmClicked() {
         // create a new window to insert VM
-        VM vm = createNewVM();
+        VM vm = createNewVm();
         // if VM is returned
         if (vm != null) {
             // then adds in the model
@@ -187,6 +183,20 @@ public class MainWindow implements Initializable {
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameUserColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         userTable.setItems(main.getModel().getUsers());
+        userTable.setRowFactory(tableView -> {
+            TableRow<User> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    User user = userTable.getSelectionModel().getSelectedItem();
+                    int index = userTable.getSelectionModel().getSelectedIndex();
+                    user = createNewUser(user);
+                    if (user != null) {
+                        userTable.getItems().set(index, user);
+                    }
+                }
+            });
+            return row;
+        });
     }
 
     private void initVMTable() {
@@ -199,10 +209,24 @@ public class MainWindow implements Initializable {
         osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
         vmTable.setItems(main.getModel().getVms());
         vmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        vmTable.setRowFactory(tableView -> {
+            TableRow<VM> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    VM vm = vmTable.getSelectionModel().getSelectedItem();
+                    int index = vmTable.getSelectionModel().getSelectedIndex();
+                    vm = createNewVm(vm);
+                    if (vm != null) {
+                        vmTable.getItems().set(index, vm);
+                    }
+                }
+            });
+            return row;
+        });
     }
 
-    private VM createNewVM() {
-        VM vm;
+    private VM createNewVm(VM current) {
+        VM vm = current;
         VMDialog controller;
         FXMLLoader loader;
         Scene scene;
@@ -219,6 +243,9 @@ public class MainWindow implements Initializable {
             controller.setWindow(dialog);
             controller.setMain(main);
             controller.init();
+            if (current != null) {
+                controller.loadVM(current);
+            }
             dialog.initOwner(window);
             dialog.setTitle("Edit VM");
             dialog.initModality(Modality.WINDOW_MODAL);
@@ -227,16 +254,19 @@ public class MainWindow implements Initializable {
             vm = controller.getVm();
         } catch (IOException e) {
             System.out.println("Error loading FXML");
-            vm = null;
         } catch (RuntimeException e) {
             e.printStackTrace();
-            vm = null;
         }
         return vm;
     }
 
-    private User createNewUser() {
-        User user = null;
+    private VM createNewVm() {
+        return createNewVm(null);
+    }
+
+
+    private User createNewUser(User current) {
+        User user = current;
         FXMLLoader loader;
         Scene scene;
         Stage dialog;
@@ -253,6 +283,9 @@ public class MainWindow implements Initializable {
             controller.setWindow(dialog);
             controller.setMain(main);
             controller.init();
+            if (current != null) {
+                controller.loadUser(current);
+            }
             dialog.initOwner(window);
             dialog.setTitle("Edit User");
             dialog.initModality(Modality.WINDOW_MODAL);
@@ -263,6 +296,10 @@ public class MainWindow implements Initializable {
             e.printStackTrace();
         }
         return user;
+    }
+
+    private User createNewUser() {
+        return createNewUser(null);
     }
 
     @Override

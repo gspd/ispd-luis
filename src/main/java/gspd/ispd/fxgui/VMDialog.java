@@ -64,6 +64,13 @@ public class VMDialog {
         window.close();
     }
 
+    public void loadVM(VM vm) {
+        userField.setValue(vm.getOwner());
+        memoryField.setText(String.valueOf(vm.getMemory()));
+        storageField.setText(String.valueOf(vm.getStorage()));
+        coresField.setText(String.valueOf(vm.getCores()));
+    }
+
     public boolean createVM() {
         try {
             vm = new VM();

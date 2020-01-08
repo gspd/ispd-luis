@@ -40,6 +40,14 @@ public class UserDialog {
         this.window = window;
     }
 
+    public void loadUser(User user) {
+        try {
+            nameInput.setText(user.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void handleOkButton() {
         if (createUser()) {

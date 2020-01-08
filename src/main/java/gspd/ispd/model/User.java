@@ -1,41 +1,36 @@
 package gspd.ispd.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class User {
 
     private static int ID = 1;
-    private static User defaultUser = new User("default");
 
     private String name;
     private int id;
-    private List<Machine> machines;
-    private List<VM> vms;
-    private List<Job> jobs;
+    private ObservableList<Machine> machines;
+    private ObservableList<VM> vms;
+    private ObservableList<Job> jobs;
 
     public User(String name) {
         this.id = ID;
         ID += 1;
         this.name = name;
-        this.machines = new ArrayList<>();
-        this.vms = new ArrayList<>();
-        this.jobs = new ArrayList<>();
+        this.machines = FXCollections.observableArrayList();
+        this.vms = FXCollections.observableArrayList();
+        this.jobs = FXCollections.observableArrayList();
     }
 
     public User() {
         this(null);
     }
 
-    public static User getDefault() {
-        return defaultUser;
-    }
-
-    public List<Machine> getMachines() {
+    public ObservableList<Machine> getMachines() {
         return machines;
     }
 
-    public List<VM> getVMs() {
+    public ObservableList<VM> getVMs() {
         return vms;
     }
 
