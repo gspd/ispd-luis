@@ -12,18 +12,18 @@ import java.util.Properties;
 public class ISPDModel {
 
     private Properties metadata;
-    private List<User> users;
+    private ObservableList<User> users;
     private List<Hardware> hardware;
-    private List<VM> vms;
+    private ObservableList<VM> vms;
     private Workload workload;
 
     private boolean saved;
 
     public ISPDModel() {
         metadata = new Properties();
-        users = new ArrayList<>();
+        users = FXCollections.observableArrayList();
         hardware = new ArrayList<>();
-        vms = new ArrayList<>();
+        vms = FXCollections.observableArrayList();
         workload = new Workload();
         saved = false;
     }
@@ -36,11 +36,11 @@ public class ISPDModel {
         this.metadata = metadata;
     }
 
-    public List<User> getUsers() {
+    public ObservableList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(ObservableList<User> users) {
         this.users = users;
     }
 
@@ -52,11 +52,11 @@ public class ISPDModel {
         this.hardware = hardware;
     }
 
-    public List<VM> getVms() {
+    public ObservableList<VM> getVms() {
         return vms;
     }
 
-    public void setVms(List<VM> vms) {
+    public void setVms(ObservableList<VM> vms) {
         this.vms = vms;
     }
 

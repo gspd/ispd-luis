@@ -3,11 +3,15 @@ package gspd.ispd;
 import gspd.ispd.fxgui.GUI;
 import gspd.ispd.fxgui.MainWindow;
 import gspd.ispd.model.ISPDModel;
+import gspd.ispd.model.User;
+import gspd.ispd.model.VM;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 //    PROTOTYPE VERSION yet
 public class MainApp extends Application {
@@ -16,6 +20,7 @@ public class MainApp extends Application {
     private Stage settingsWindow;
     private ISPDModel model;
     private Properties settings;
+    private FXMLLoader loader;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -25,7 +30,10 @@ public class MainApp extends Application {
             this.close();
         });
         model = new ISPDModel();
-        ISPD.setLocale(new Locale("pt", "BR"));
+        loader = new FXMLLoader();
+        ISPD.setLocale(new Locale("en", "US"));
+        ResourceBundle bundle = ISPD.getStrings();
+        loader.setResources(bundle);
         MainWindow.create(mainWindow, this);
     }
 
@@ -43,6 +51,10 @@ public class MainApp extends Application {
 
     public void openSettingsPage() {
         GUI.setSettingsWindow(mainWindow, new Stage(), this);
+    }
+
+    public FXMLLoader getLoader() {
+        return loader;
     }
 
     public void close() {

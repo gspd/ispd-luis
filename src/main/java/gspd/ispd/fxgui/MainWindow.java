@@ -2,18 +2,25 @@ package gspd.ispd.fxgui;
 
 import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
+import gspd.ispd.model.ISPDModel;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainWindow {
+public class MainWindow implements Initializable {
     @FXML
     private TextArea terminalOutputArea;
     @FXML
@@ -86,9 +93,8 @@ public class MainWindow {
             FXMLLoader loader;
             MainWindow controller;
             Scene scene;
-            loader = new FXMLLoader();
+            loader = main.getLoader();
             loader.setLocation(GUI.class.getResource("MainWindow.fxml"));
-            loader.setResources(ISPD.getStrings());
             scene = new Scene(loader.load());
             window.setScene(scene);
             controller = loader.getController();
@@ -132,7 +138,26 @@ public class MainWindow {
     }
 
     @FXML
-    private void handleAddVM() {}
+    private void handleAddVM() {
+        // create a new window to insert VM
+        VM vm = createNewVM();
+        // if VM is returned
+        if (vm != null) {
+            // then adds in the model
+            vmTable.getItems().add(vm);
+        }
+    }
+
+    @FXML
+    private void handleRemoveVM() {
+        vmTable.getItems().remove(vmTable.getSelectionModel().getSelectedIndex());
+        vmTable.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void handleDuplicateVM() {
+        vmTable.getItems().add(vmTable.getSelectionModel().getSelectedItem());
+    }
 
     private void initButtons() {
         // disable remove button oly if there is no selected item in user table
@@ -145,7 +170,7 @@ public class MainWindow {
     private void initUsers() {
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameUserColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        updateUsers();
+        userTable.setItems(main.getModel().getUsers());
     }
 
     private void initVMTable() {
@@ -156,14 +181,33 @@ public class MainWindow {
         memoryVMColumn.setCellValueFactory(new PropertyValueFactory<>("memory"));
         storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
         osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
-        updateVMTable();
+        vmTable.setItems(main.getModel().getVms());
     }
 
-    private void updateVMTable() {
-        vmTable.getItems().setAll(main.getModel().getVms());
+    private VM createNewVM() {
+        VM vm;
+        VMDialog controller;
+        FXMLLoader loader;
+        Scene scene;
+        Stage dialog;
+        try {
+            loader = main.getLoader();
+            loader.setLocation(getClass().getResource("VMDialog.fxml"));
+            controller = loader.getController();
+            scene = new Scene(loader.load());
+            dialog = new Stage();
+            dialog.initOwner(window);
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setScene(scene);
+            dialog.showAndWait();
+            vm = controller.getVm();
+        } catch (IOException e) {
+            vm = null;
+        }
+        return vm;
     }
 
-    private void updateUsers() {
-        userTable.getItems().setAll(main.getModel().getUsers());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
     }
 }

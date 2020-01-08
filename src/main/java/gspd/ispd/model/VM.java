@@ -23,6 +23,10 @@ public class VM {
         this.os = os;
     }
 
+    public VM() {
+        this(null, "", 0, 0.0, 0.0, "");
+    }
+
     public int getId() {
         return id;
     }
@@ -67,7 +71,7 @@ public class VM {
         this.storage = storage;
     }
 
-    public String getOS() {
+    public String getOs() {
         return os;
     }
 

@@ -21,6 +21,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -317,8 +318,8 @@
                                                 <HBox alignment="CENTER_RIGHT" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
                                                       <Button fx:id="addVMButton" mnemonicParsing="false" onAction="#handleAddVM" text="%button.add" />
-                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" text="%button.duplicate" />
-                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" text="%button.remove" />
+                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" onAction="#handleDuplicateVM" text="%button.duplicate" />
+                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" onAction="#handleRemoveVM" text="%button.remove" />
                                                    </children>
                                                 </HBox>
                                              </children>
@@ -338,7 +339,7 @@
                   </SplitPane>
                   <SplitPane dividerPositions="0.5057803468208093" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                     <items>
-                        <ScrollPane prefHeight="272.0" prefWidth="184.0" vbarPolicy="ALWAYS" />
+                        <TreeView prefHeight="200.0" prefWidth="200.0" />
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                            <children>
                               <Label text="%main.users" VBox.vgrow="NEVER" />

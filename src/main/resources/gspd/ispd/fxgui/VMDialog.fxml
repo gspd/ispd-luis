@@ -38,8 +38,8 @@
             <TextField fx:id="storageField" prefHeight="26.0" prefWidth="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="coresField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ChoiceBox fx:id="userField" prefWidth="150.0" GridPane.columnIndex="1" />
-            <ChoiceBox fx:id="hypervisorField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox fx:id="osField" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="hypervisorField" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="osField" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -48,8 +48,8 @@
       <Separator prefWidth="200.0" />
       <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="292.0" spacing="10.0">
          <children>
-          <Button mnemonicParsing="false" text="%button.ok" />
-            <Button mnemonicParsing="false" text="%button.cancel">
+          <Button defaultButton="true" mnemonicParsing="false" text="%button.ok" />
+            <Button cancelButton="true" mnemonicParsing="false" text="%button.cancel">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
