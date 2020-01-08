@@ -48,8 +48,8 @@
       <Separator prefWidth="200.0" />
       <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="292.0" spacing="10.0">
          <children>
-          <Button defaultButton="true" mnemonicParsing="false" text="%button.ok" />
-            <Button cancelButton="true" mnemonicParsing="false" text="%button.cancel">
+          <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="%button.ok" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

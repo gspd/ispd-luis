@@ -105,6 +105,7 @@ public class GUI {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("VMDialog.fxml"));
             loader.setResources(ISPD.getStrings());
+            System.out.println(loader.getClassLoader().getName());
             Scene scene = new Scene(loader.load());
             window.setTitle("VM Edit");
             window.initOwner(owner);

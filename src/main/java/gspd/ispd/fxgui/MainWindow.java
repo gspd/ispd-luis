@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -138,7 +140,7 @@ public class MainWindow implements Initializable {
     }
 
     @FXML
-    private void handleAddVM() {
+    private void handleAddVmClicked() {
         // create a new window to insert VM
         VM vm = createNewVM();
         // if VM is returned
@@ -149,14 +151,28 @@ public class MainWindow implements Initializable {
     }
 
     @FXML
-    private void handleRemoveVM() {
+    private void handleRemoveVmClicked() {
         vmTable.getItems().remove(vmTable.getSelectionModel().getSelectedIndex());
         vmTable.getSelectionModel().clearSelection();
     }
 
     @FXML
-    private void handleDuplicateVM() {
+    private void handleDuplicateVmClicked() {
         vmTable.getItems().add(vmTable.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    private void handleAddUserClicked() {
+        User user = createNewUser();
+        if (user != null) {
+            userTable.getItems().add(user);
+        }
+    }
+
+    @FXML
+    private void handleRemoveUser() {
+        userTable.getItems().remove(userTable.getSelectionModel().getSelectedIndex());
+        userTable.getSelectionModel().clearSelection();
     }
 
     private void initButtons() {
@@ -182,6 +198,7 @@ public class MainWindow implements Initializable {
         storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
         osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
         vmTable.setItems(main.getModel().getVms());
+        vmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     private VM createNewVM() {
@@ -190,21 +207,62 @@ public class MainWindow implements Initializable {
         FXMLLoader loader;
         Scene scene;
         Stage dialog;
+        Parent root;
         try {
-            loader = main.getLoader();
-            loader.setLocation(getClass().getResource("VMDialog.fxml"));
-            controller = loader.getController();
-            scene = new Scene(loader.load());
+            loader = new FXMLLoader();
+            loader.setLocation(VMDialog.class.getResource("VMDialog.fxml"));
+            loader.setResources(ISPD.getStrings());
+            root = loader.load();
+            scene = new Scene(root);
             dialog = new Stage();
+            controller = loader.getController();
+            controller.setWindow(dialog);
+            controller.setMain(main);
+            controller.init();
             dialog.initOwner(window);
+            dialog.setTitle("Edit VM");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setScene(scene);
             dialog.showAndWait();
             vm = controller.getVm();
         } catch (IOException e) {
+            System.out.println("Error loading FXML");
+            vm = null;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
             vm = null;
         }
         return vm;
+    }
+
+    private User createNewUser() {
+        User user = null;
+        FXMLLoader loader;
+        Scene scene;
+        Stage dialog;
+        UserDialog controller;
+        Parent root;
+        try {
+            loader = new FXMLLoader();
+            loader.setLocation(UserDialog.class.getResource("UserDialog.fxml"));
+            loader.setResources(ISPD.getStrings());
+            root = loader.load();
+            scene = new Scene(root);
+            dialog = new Stage();
+            controller = loader.getController();
+            controller.setWindow(dialog);
+            controller.setMain(main);
+            controller.init();
+            dialog.initOwner(window);
+            dialog.setTitle("Edit User");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setScene(scene);
+            dialog.showAndWait();
+            user = controller.getUser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     @Override

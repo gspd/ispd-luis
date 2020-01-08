@@ -317,9 +317,9 @@
                                                 </AnchorPane>
                                                 <HBox alignment="CENTER_RIGHT" spacing="5.0" VBox.vgrow="NEVER">
                                                    <children>
-                                                      <Button fx:id="addVMButton" mnemonicParsing="false" onAction="#handleAddVM" text="%button.add" />
-                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" onAction="#handleDuplicateVM" text="%button.duplicate" />
-                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" onAction="#handleRemoveVM" text="%button.remove" />
+                                                      <Button fx:id="addVMButton" mnemonicParsing="false" onAction="#handleAddVmClicked" text="%button.add" />
+                                                      <Button fx:id="duplicateVMButton" mnemonicParsing="false" onAction="#handleDuplicateVmClicked" text="%button.duplicate" />
+                                                      <Button fx:id="removeVMButton" mnemonicParsing="false" onAction="#handleRemoveVmClicked" text="%button.remove" />
                                                    </children>
                                                 </HBox>
                                              </children>
@@ -355,8 +355,8 @@
                               </AnchorPane>
                               <ButtonBar buttonMinWidth="20.0" VBox.vgrow="NEVER">
                                  <buttons>
-                                    <Button fx:id="addUserButton" mnemonicParsing="false" text="+" />
-                                    <Button fx:id="removeUserButton" mnemonicParsing="false" text="-" />
+                                    <Button fx:id="addUserButton" mnemonicParsing="false" onAction="#handleAddUserClicked" text="+" />
+                                    <Button fx:id="removeUserButton" mnemonicParsing="false" onAction="#handleRemoveUser" text="-" />
                                  </buttons>
                               </ButtonBar>
                            </children>

@@ -23,6 +23,10 @@ public class User {
         this.jobs = new ArrayList<>();
     }
 
+    public User() {
+        this(null);
+    }
+
     public static User getDefault() {
         return defaultUser;
     }
@@ -37,6 +41,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {

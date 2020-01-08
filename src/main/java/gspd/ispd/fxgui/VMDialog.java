@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class VMDialog {
     @FXML
@@ -28,24 +29,39 @@ public class VMDialog {
     private Stage window;
     private MainApp main;
 
+    public VMDialog() {
+
+    }
+
     public void init() {
         userField.setItems(main.getModel().getUsers());
+        userField.setConverter(new StringConverter<User>() {
+            @Override
+            public String toString(User object) {
+                return object.getName();
+            }
+
+            @Override
+            public User fromString(String string) {
+                return null;
+            }
+        });
         osField.getItems().addAll("Linux", "Windows");
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("VMDialog.fxml"));
     }
 
     @FXML
     private void handleOK() {
         if (createVM()) {
-            // close the window
+            window.close();
+        } else {
+            System.out.println("could not create VM");
         }
     }
 
     @FXML
     private void handleCancel() {
         vm = null;
-        // close the window
+        window.close();
     }
 
     public boolean createVM() {
@@ -58,9 +74,8 @@ public class VMDialog {
             vm.setHypervisor(hypervisorField.getValue());
             vm.setOs(osField.getValue());
             return true;
-        } catch (NumberFormatException e) {
-            // open an alert saying that data was not correctly inserted
-        } finally {
+        } catch (Exception e) {
+            e.printStackTrace();
             vm = null;
             return false;
         }
@@ -68,6 +83,14 @@ public class VMDialog {
 
     public VM getVm() {
         return vm;
+    }
+
+    public void setWindow(Stage window) {
+        this.window = window;
+    }
+
+    public void setMain(MainApp main) {
+        this.main = main;
     }
 
     private boolean validate() {
