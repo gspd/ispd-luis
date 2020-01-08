@@ -109,27 +109,37 @@ public class MainWindow implements Initializable {
 
     public void init() {
         // BUTTONS
-        // disable remove button oly if there is no selected item in user table
+        // disable remove user [-] button only if there is no selected item in user table
         removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
-        // disable {remote,duplicate} button only if there is no selected item in the VM table
+        // disable remove VM button only if there is no selected item in the VM table
         removeVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
+        // disable duplicate VM button only if there is no selected item in the VM table
         duplicateVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
         // USERS TABLE
+        // the UID column of user table has the 'id' property of each user
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        // the Name column of user table has the 'name' property of each user
         nameUserColumn.setCellValueFactory(row -> row.getValue().nameProperty());
+        // any change in the user table changes directly the users list in the model
         userTable.setItems(main.getModel().getUsers());
+        // every time an user row is double clicked, open an user dialog to change its data
+        // to accomplish that, we have to set RowFactory
         userTable.setRowFactory(tableView -> {
             TableRow<User> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
+                // checks if click is doubled and is indeed a row with an user
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     User user = userTable.getSelectionModel().getSelectedItem();
                     int index = userTable.getSelectionModel().getSelectedIndex();
-                    user = createNewUser(user);
+                    // open the user dialog to change the user
+                    user = editUser(user);
+                    // if the user was changed, change it in table
                     if (user != null) {
                         userTable.getItems().set(index, user);
                     }
                 }
             });
+            // its obligated to return the row, since we are defining a RowFactory
             return row;
         });
         // VMS TABLE
@@ -148,7 +158,7 @@ public class MainWindow implements Initializable {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     VM vm = vmTable.getSelectionModel().getSelectedItem();
                     int index = vmTable.getSelectionModel().getSelectedIndex();
-                    vm = createNewVm(vm);
+                    vm = editVm(vm);
                     if (vm != null) {
                         vmTable.getItems().set(index, vm);
                     }
@@ -187,7 +197,7 @@ public class MainWindow implements Initializable {
     @FXML
     private void handleAddVmClicked() {
         // create a new window to insert VM
-        VM vm = createNewVm();
+        VM vm = editVm();
         // if VM is returned
         if (vm != null) {
             // then adds in the model
@@ -208,7 +218,7 @@ public class MainWindow implements Initializable {
 
     @FXML
     private void handleAddUserClicked() {
-        User user = createNewUser();
+        User user = editUser();
         if (user != null) {
             userTable.getItems().add(user);
         }
@@ -220,7 +230,7 @@ public class MainWindow implements Initializable {
         userTable.getSelectionModel().clearSelection();
     }
 
-    private VM createNewVm(VM current) {
+    private VM editVm(VM current) {
         VM vm = current;
         VMDialog controller;
         FXMLLoader loader;
@@ -255,12 +265,12 @@ public class MainWindow implements Initializable {
         return vm;
     }
 
-    private VM createNewVm() {
-        return createNewVm(null);
+    private VM editVm() {
+        return editVm(null);
     }
 
 
-    private User createNewUser(User current) {
+    private User editUser(User current) {
         User user = current;
         FXMLLoader loader;
         Scene scene;
@@ -293,8 +303,8 @@ public class MainWindow implements Initializable {
         return user;
     }
 
-    private User createNewUser() {
-        return createNewUser(null);
+    private User editUser() {
+        return editUser(null);
     }
 
     @Override
