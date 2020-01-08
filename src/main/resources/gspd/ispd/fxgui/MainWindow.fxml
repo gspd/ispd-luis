@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
@@ -247,12 +246,9 @@
                                                       </Hyperlink>
                                                    </items>
                                                 </ToolBar>
-                                                <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                    <content>
-                                                      <Pane prefHeight="313.0" prefWidth="386.0">
-                                                         <children>
-                                                            <ProgressBar fx:id="drag" layoutX="52.0" layoutY="82.0" prefWidth="200.0" progress="0.0" />
-                                                         </children></Pane>
+                                                      <Pane fx:id="hardwarePane" prefHeight="313.0" prefWidth="386.0" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>

@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -79,9 +80,10 @@ public class MainWindow implements Initializable {
     private Button removeVMButton;
     @FXML
     private MenuItem exitMenuItem;
-    // TODO: this 'drag' is temporary (don't forget to delete soon)
     @FXML
-    private ProgressBar drag;
+    private Pane hardwarePane;
+    @FXML
+    private ScrollPane hardwareScrollPane;
 
     private MainApp main;
     private Stage window;
@@ -106,10 +108,57 @@ public class MainWindow implements Initializable {
     }
 
     public void init() {
-        initButtons();
-        initUsers();
-        initVMTable();
-        GUI.makeDraggable(drag);
+        // BUTTONS
+        // disable remove button oly if there is no selected item in user table
+        removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
+        // disable {remote,duplicate} button only if there is no selected item in the VM table
+        removeVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
+        duplicateVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
+        // USERS TABLE
+        idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameUserColumn.setCellValueFactory(row -> row.getValue().nameProperty());
+        userTable.setItems(main.getModel().getUsers());
+        userTable.setRowFactory(tableView -> {
+            TableRow<User> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    User user = userTable.getSelectionModel().getSelectedItem();
+                    int index = userTable.getSelectionModel().getSelectedIndex();
+                    user = createNewUser(user);
+                    if (user != null) {
+                        userTable.getItems().set(index, user);
+                    }
+                }
+            });
+            return row;
+        });
+        // VMS TABLE
+        idVMColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        userVMColumn.setCellValueFactory(row -> row.getValue().getOwner().nameProperty());
+        hypervisorVMColumn.setCellValueFactory(row -> row.getValue().hypervisorProperty());
+        coresVMColumn.setCellValueFactory(new PropertyValueFactory<>("cores"));
+        memoryVMColumn.setCellValueFactory(new PropertyValueFactory<>("memory"));
+        storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
+        osVMColumn.setCellValueFactory(row -> row.getValue().osProperty());
+        vmTable.setItems(main.getModel().getVms());
+        vmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        vmTable.setRowFactory(tableView -> {
+            TableRow<VM> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    VM vm = vmTable.getSelectionModel().getSelectedItem();
+                    int index = vmTable.getSelectionModel().getSelectedIndex();
+                    vm = createNewVm(vm);
+                    if (vm != null) {
+                        vmTable.getItems().set(index, vm);
+                    }
+                }
+            });
+            return row;
+        });
+        // Hardware Pane
+        hardwarePane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.5));
+        hardwarePane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.5));
     }
 
     public void setMain(MainApp main) {
@@ -169,60 +218,6 @@ public class MainWindow implements Initializable {
     private void handleRemoveUser() {
         userTable.getItems().remove(userTable.getSelectionModel().getSelectedIndex());
         userTable.getSelectionModel().clearSelection();
-    }
-
-    private void initButtons() {
-        // disable remove button oly if there is no selected item in user table
-        removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
-        // disable {remote,duplicate} button only if there is no selected item in the VM table
-        removeVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
-        duplicateVMButton.disableProperty().bind(vmTable.getSelectionModel().selectedItemProperty().isNull());
-    }
-
-    private void initUsers() {
-        idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameUserColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        userTable.setItems(main.getModel().getUsers());
-        userTable.setRowFactory(tableView -> {
-            TableRow<User> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    User user = userTable.getSelectionModel().getSelectedItem();
-                    int index = userTable.getSelectionModel().getSelectedIndex();
-                    user = createNewUser(user);
-                    if (user != null) {
-                        userTable.getItems().set(index, user);
-                    }
-                }
-            });
-            return row;
-        });
-    }
-
-    private void initVMTable() {
-        idVMColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        userVMColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
-        hypervisorVMColumn.setCellValueFactory(new PropertyValueFactory<>("hypervisor"));
-        coresVMColumn.setCellValueFactory(new PropertyValueFactory<>("cores"));
-        memoryVMColumn.setCellValueFactory(new PropertyValueFactory<>("memory"));
-        storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
-        osVMColumn.setCellValueFactory(new PropertyValueFactory<>("os"));
-        vmTable.setItems(main.getModel().getVms());
-        vmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        vmTable.setRowFactory(tableView -> {
-            TableRow<VM> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    VM vm = vmTable.getSelectionModel().getSelectedItem();
-                    int index = vmTable.getSelectionModel().getSelectedIndex();
-                    vm = createNewVm(vm);
-                    if (vm != null) {
-                        vmTable.getItems().set(index, vm);
-                    }
-                }
-            });
-            return row;
-        });
     }
 
     private VM createNewVm(VM current) {
