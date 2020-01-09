@@ -4,6 +4,7 @@ import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
 import gspd.ispd.fxgui.util.DragUtil;
 import gspd.ispd.fxgui.util.DrawerUtil;
+import gspd.ispd.fxgui.util.LightningUtil;
 import gspd.ispd.model.VM;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class GUI {
     static private DragUtil dragger = new DragUtil();
     static private DrawerUtil drawer = new DrawerUtil();
+    static private LightningUtil lighter = new LightningUtil();
 
     public enum AnswerType {
         CANCEL,
@@ -79,11 +81,6 @@ public class GUI {
         throw new UnsupportedOperationException("[DEPRECATED]");
     }
 
-    @Deprecated
-    static public void setSettingsWindow(Stage owner, Stage window, MainApp main) {
-        throw new UnsupportedOperationException("DEPRECATED");
-    }
-
     static public void closeMainWindow(Stage window, MainApp main) {
         AnswerType answer;
         if (main.getModel().isNotSaved()) {
@@ -118,5 +115,9 @@ public class GUI {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static public void makeHoverable(Node node) {
+        lighter.makeHoverable(node);
     }
 }

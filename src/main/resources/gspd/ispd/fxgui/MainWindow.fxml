@@ -105,7 +105,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="%menu.project">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.project.simulate">
+                        <MenuItem fx:id="simulateMenuItem" mnemonicParsing="false" text="%menu.project.simulate">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -335,7 +335,7 @@
                         <VBox>
                            <children>
                               <TextArea fx:id="terminalOutputArea" editable="false" prefHeight="62.0" prefWidth="536.0" VBox.vgrow="ALWAYS" />
-                              <TextField fx:id="terminalInputField" promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
+                              <TextField fx:id="terminalInput" promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
                            </children>
                         </VBox>
                     </items>

@@ -1,9 +1,6 @@
 package gspd.ispd.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,25 +10,53 @@ public class User {
 
     private StringProperty name;
     private IntegerProperty id;
-    private ObservableList<Machine> machines;
-    private ObservableList<VM> vms;
-    private ObservableList<Job> jobs;
+    private ObjectProperty<ObservableList<Machine>> machines;
+    private ObjectProperty<ObservableList<VM>> vms;
+    private ObjectProperty<ObservableList<Job>> jobs;
 
     public User() {
         this.id = new SimpleIntegerProperty(this, "id", ID);
         this.name = new SimpleStringProperty(this, "name", "");
-        this.machines = FXCollections.observableArrayList();
-        this.vms = FXCollections.observableArrayList();
-        this.jobs = FXCollections.observableArrayList();
+        this.machines = new SimpleObjectProperty<>(this, "machines", FXCollections.observableArrayList());
+        this.vms = new SimpleObjectProperty<>(this, "vms", FXCollections.observableArrayList());
+        this.jobs = new SimpleObjectProperty<>(this, "jobs", FXCollections.observableArrayList());
         ID += 1;
     }
 
     public ObservableList<Machine> getMachines() {
+        return machines.get();
+    }
+
+    public ObjectProperty<ObservableList<Machine>> machinesProperty() {
         return machines;
     }
 
+    public void setMachines(ObservableList<Machine> machines) {
+        this.machines.set(machines);
+    }
+
     public ObservableList<VM> getVms() {
+        return vms.get();
+    }
+
+    public ObjectProperty<ObservableList<VM>> vmsProperty() {
         return vms;
+    }
+
+    public void setVms(ObservableList<VM> vms) {
+        this.vms.set(vms);
+    }
+
+    public ObservableList<Job> getJobs() {
+        return jobs.get();
+    }
+
+    public ObjectProperty<ObservableList<Job>> jobsProperty() {
+        return jobs;
+    }
+
+    public void setJobs(ObservableList<Job> jobs) {
+        this.jobs.set(jobs);
     }
 
     public String getName() {

@@ -26,6 +26,7 @@ public class VMDialog {
 
     private boolean okClicked;
     private VM vm;
+    private User oldOwner, newOwner;
     private Stage window;
     private MainApp main;
 
@@ -65,6 +66,9 @@ public class VMDialog {
     }
 
     public void loadVM(VM vm) {
+        this.vm = vm;
+        // stores the owner of the VM when it was loaded
+        this.oldOwner = vm.getOwner();
         userField.setValue(vm.getOwner());
         memoryField.setText(String.valueOf(vm.getMemory()));
         storageField.setText(String.valueOf(vm.getStorage()));
@@ -73,13 +77,19 @@ public class VMDialog {
 
     public boolean createVM() {
         try {
-            vm = new VM();
+            // if VM does not exists yet (or it wasn't loaded), instance it
+            if (vm == null) {
+                oldOwner = null;
+                vm = new VM();
+            }
+            // set the VM values
             vm.setOwner(userField.getValue());
             vm.setCores(Integer.parseInt(coresField.getText()));
             vm.setMemory(Double.parseDouble(memoryField.getText()));
             vm.setStorage(Double.parseDouble(storageField.getText()));
             vm.setHypervisor(hypervisorField.getValue());
             vm.setOs(osField.getValue());
+            // if arrived here, VM was correctly create or altered.
             return true;
         } catch (Exception e) {
             e.printStackTrace();

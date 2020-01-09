@@ -32,16 +32,13 @@ public class UserDialog {
         this.main = main;
     }
 
-    public Stage getWindow() {
-        return window;
-    }
-
     public void setWindow(Stage window) {
         this.window = window;
     }
 
     public void loadUser(User user) {
         try {
+            this.user = user;
             nameInput.setText(user.getName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +50,7 @@ public class UserDialog {
         if (createUser()) {
             window.close();
         } else {
-            System.out.println("Something wen wrong while creating user");
+            System.out.println("Something went wrong while creating user");
         }
     }
 
@@ -65,7 +62,9 @@ public class UserDialog {
 
     private boolean createUser() {
         try {
-            user = new User();
+            if (user == null) {
+                user = new User();
+            }
             user.setName(nameInput.getText());
             return true;
         } catch (Exception e) {

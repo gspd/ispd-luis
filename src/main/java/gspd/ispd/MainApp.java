@@ -49,10 +49,6 @@ public class MainApp extends Application {
         return model;
     }
 
-    public void openSettingsPage() {
-        GUI.setSettingsWindow(mainWindow, new Stage(), this);
-    }
-
     public FXMLLoader getLoader() {
         return loader;
     }

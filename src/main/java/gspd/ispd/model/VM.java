@@ -14,15 +14,26 @@ public class VM {
     private DoubleProperty storage;
     private StringProperty os;
 
-    public VM() {
-        this.id = new SimpleIntegerProperty(this, "id", ID);
-        this.owner = new SimpleObjectProperty<>(this, "owner");
-        this.hypervisor = new SimpleStringProperty(this, "hypervisor", "");
-        this.cores = new SimpleIntegerProperty(this, "cores", 0);
-        this.memory = new SimpleDoubleProperty(this, "memory", 0.0);
-        this.storage = new SimpleDoubleProperty(this, "storage", 0.0);
-        this.os = new SimpleStringProperty(this, "os", "");
+    private VM(int id, User owner, String hypervisor, int cores, double memory, double storage, String os) {
+        // set the VM parameters
+        this.id = new SimpleIntegerProperty(this, "id", id);
+        this.owner = new SimpleObjectProperty<>(this, "owner", owner);
+        this.hypervisor = new SimpleStringProperty(this, "hypervisor", hypervisor);
+        this.cores = new SimpleIntegerProperty(this, "cores", cores);
+        this.memory = new SimpleDoubleProperty(this, "memory", memory);
+        this.storage = new SimpleDoubleProperty(this, "storage", storage);
+        this.os = new SimpleStringProperty(this, "os", os);
+        // increment the ID
+        // IMPORTANT! don't do this anywhere else
         ID += 1;
+    }
+
+    public VM() {
+        this(ID, null, "", 0, 0.0, 0.0, "");
+    }
+
+    public VM(VM vm) {
+        this(ID, vm.getOwner(), vm.getHypervisor(), vm.getCores(), vm.getMemory(), vm.getStorage(), vm.getOs());
     }
 
     public int getId() {
@@ -46,7 +57,7 @@ public class VM {
     }
 
     public void setOwner(User owner) {
-        this.owner.set(owner);
+       this.owner.set(owner);
     }
 
     public String getHypervisor() {
