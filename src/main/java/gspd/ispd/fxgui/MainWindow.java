@@ -5,9 +5,6 @@ import gspd.ispd.MainApp;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
 import javafx.beans.binding.Bindings;
-import javafx.event.EventHandler;
-import javafx.event.EventTarget;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,8 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -33,13 +31,13 @@ public class MainWindow implements Initializable {
     @FXML
     private TextArea helpArea;
     @FXML
-    private Hyperlink machineIcon;
+    private ToggleButton machineIcon;
     @FXML
-    private Hyperlink linkIcon;
+    private ToggleButton linkIcon;
     @FXML
-    private Hyperlink clusterIcon;
+    private ToggleButton clusterIcon;
     @FXML
-    private Hyperlink switchIcon;
+    private ToggleButton switchIcon;
     @FXML
     private Hyperlink taskIcon;
     @FXML
@@ -92,6 +90,10 @@ public class MainWindow implements Initializable {
     private Pane hardwarePane;
     @FXML
     private ScrollPane hardwareScrollPane;
+    @FXML
+    private ToggleGroup hardwareToolboxToggle;
+    @FXML
+    private ToggleGroup workloadToolboxToggle;
 
     private MainApp main;
     private Stage window;
@@ -116,6 +118,25 @@ public class MainWindow implements Initializable {
     }
 
     public void init() {
+        ///////////// TEST
+        ContextMenu cmenu = new ContextMenu();
+        MenuItem copy = new MenuItem("Copy");
+        MenuItem paste = new MenuItem("Paste");
+        cmenu.getItems().addAll(copy, paste);
+        terminalOutputArea.setContextMenu(cmenu);
+        hardwarePane.setOnMouseClicked(event -> {
+            Node node;
+            if (hardwareToolboxToggle.getSelectedToggle() == machineIcon) {
+                node = new Rectangle(event.getX(), event.getY(), 30, 30);
+                GUI.makeDraggable(node);
+                hardwarePane.getChildren().add(node);
+            } else if (hardwareToolboxToggle.getSelectedToggle() == clusterIcon) {
+                node = new Ellipse(event.getX(), event.getY(), 30, 30);
+                GUI.makeDraggable(node);
+                hardwarePane.getChildren().add(node);
+            }
+        });
+        ///////////// REMOVE
         // disable remove user button [-] only if there is no selected item in user table
         removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
         // disable remove VM button only if there is no selected item in the VM table
@@ -180,15 +201,15 @@ public class MainWindow implements Initializable {
         hardwarePane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.5));
         hardwarePane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.5));
         // the hardware scroll pane is pannable
-        hardwareScrollPane.setPannable(true);
-        // make machine icon hoverable (change opacity as user hovers)
-        GUI.makeHoverable(machineIcon);
-        // make link icon hoverable (change opacity as user hovers)
-        GUI.makeHoverable(linkIcon);
-        // make cluster icon hoverable (change opacity as user hovers)
-        GUI.makeHoverable(clusterIcon);
-        // make switch icon hoverable (change opacity as user hovers)
-        GUI.makeHoverable(switchIcon);
+        GUI.makePannable(hardwareScrollPane);
+        // // make machine icon hoverable (change opacity as user hovers)
+        // GUI.makeHoverable(machineIcon);
+        // // make link icon hoverable (change opacity as user hovers)
+        // GUI.makeHoverable(linkIcon);
+        // // make cluster icon hoverable (change opacity as user hovers)
+        // GUI.makeHoverable(clusterIcon);
+        // // make switch icon hoverable (change opacity as user hovers)
+        // GUI.makeHoverable(switchIcon);
     }
 
     public void setMain(MainApp main) {
@@ -233,15 +254,15 @@ public class MainWindow implements Initializable {
 
     @FXML
     private void handleDuplicateVmClicked() {
-        vmTable.getItems().add(new VM(vmTable.getSelectionModel().getSelectedItem()));
+        VM vm = vmTable.getSelectionModel().getSelectedItem();
+        main.getModel().duplicate(vm);
     }
 
     @FXML
     private void handleAddUserClicked() {
         User user = createUser();
         if (user != null) {
-            userTable.getItems().add(user);
-            user.setVms(vmTable.getItems().filtered(vm -> vm.getOwner().equals(user)));
+            main.getModel().add(user);
         }
     }
 

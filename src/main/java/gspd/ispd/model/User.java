@@ -10,29 +10,29 @@ public class User {
 
     private StringProperty name;
     private IntegerProperty id;
-    private ObjectProperty<ObservableList<Machine>> machines;
+    private ObjectProperty<ObservableList<Hardware>> hardwares;
     private ObjectProperty<ObservableList<VM>> vms;
     private ObjectProperty<ObservableList<Job>> jobs;
 
     public User() {
         this.id = new SimpleIntegerProperty(this, "id", ID);
         this.name = new SimpleStringProperty(this, "name", "");
-        this.machines = new SimpleObjectProperty<>(this, "machines", FXCollections.observableArrayList());
+        this.hardwares = new SimpleObjectProperty<>(this, "machines", FXCollections.observableArrayList());
         this.vms = new SimpleObjectProperty<>(this, "vms", FXCollections.observableArrayList());
         this.jobs = new SimpleObjectProperty<>(this, "jobs", FXCollections.observableArrayList());
         ID += 1;
     }
 
-    public ObservableList<Machine> getMachines() {
-        return machines.get();
+    public ObservableList<Hardware> getHardwares() {
+        return hardwares.get();
     }
 
-    public ObjectProperty<ObservableList<Machine>> machinesProperty() {
-        return machines;
+    public ObjectProperty<ObservableList<Hardware>> hardwaresProperty() {
+        return hardwares;
     }
 
-    public void setMachines(ObservableList<Machine> machines) {
-        this.machines.set(machines);
+    public void setHardwares(ObservableList<Hardware> machines) {
+        this.hardwares.set(machines);
     }
 
     public ObservableList<VM> getVms() {

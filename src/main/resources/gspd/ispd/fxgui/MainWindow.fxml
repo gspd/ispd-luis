@@ -19,6 +19,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
@@ -196,7 +198,7 @@
                                                          </graphic>
                                                       </Hyperlink>
                                                       <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-                                                      <Hyperlink fx:id="machineIcon">
+                                                      <ToggleButton fx:id="machineIcon" mnemonicParsing="false">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -207,8 +209,11 @@
                                                          <tooltip>
                                                             <Tooltip text="%tooltip.main.hardware.machine" />
                                                          </tooltip>
-                                                      </Hyperlink>
-                                                      <Hyperlink fx:id="linkIcon" layoutX="10.0" layoutY="10.0">
+                                                         <toggleGroup>
+                                                            <ToggleGroup fx:id="hardwareToolboxToggle" />
+                                                         </toggleGroup>
+                                                      </ToggleButton>
+                                                      <ToggleButton fx:id="linkIcon" mnemonicParsing="false" toggleGroup="$hardwareToolboxToggle">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -219,20 +224,8 @@
                                                          <tooltip>
                                                             <Tooltip text="%tooltip.main.hardware.link" />
                                                          </tooltip>
-                                                      </Hyperlink>
-                                                      <Hyperlink fx:id="clusterIcon" layoutX="113.0" layoutY="10.0">
-                                                         <graphic>
-                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@images/botao_cluster.gif" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                         <tooltip>
-                                                            <Tooltip text="%tooltip.main.hardware.cluster" />
-                                                         </tooltip>
-                                                      </Hyperlink>
-                                                      <Hyperlink fx:id="switchIcon" layoutX="216.0" layoutY="10.0">
+                                                      </ToggleButton>
+                                                      <ToggleButton fx:id="switchIcon" mnemonicParsing="false" toggleGroup="$hardwareToolboxToggle">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -243,7 +236,19 @@
                                                          <tooltip>
                                                             <Tooltip text="%tooltip.main.hardware.switch" />
                                                          </tooltip>
-                                                      </Hyperlink>
+                                                      </ToggleButton>
+                                                      <ToggleButton fx:id="clusterIcon" mnemonicParsing="false" toggleGroup="$hardwareToolboxToggle">
+                                                         <graphic>
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@images/botao_cluster.gif" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         <tooltip>
+                                                            <Tooltip text="%tooltip.main.hardware.cluster" />
+                                                         </tooltip>
+                                                      </ToggleButton>
                                                    </items>
                                                 </ToolBar>
                                                 <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

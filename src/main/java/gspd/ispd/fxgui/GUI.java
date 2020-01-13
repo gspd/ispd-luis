@@ -6,12 +6,17 @@ import gspd.ispd.fxgui.util.DragUtil;
 import gspd.ispd.fxgui.util.DrawerUtil;
 import gspd.ispd.fxgui.util.LightningUtil;
 import gspd.ispd.model.VM;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -119,5 +124,18 @@ public class GUI {
 
     static public void makeHoverable(Node node) {
         lighter.makeHoverable(node);
+    }
+
+    static public void makePannable(ScrollPane pane) {
+        pane.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.MIDDLE) {
+                pane.setPannable(true);
+            }
+        });
+        pane.setOnMouseReleased(event -> {
+            if (event.getButton() == MouseButton.MIDDLE) {
+                pane.setPannable(false);
+            }
+        });
     }
 }

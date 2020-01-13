@@ -1,8 +1,26 @@
 package gspd.ispd.model;
 
-import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class Hardware {
 
-    private List<Machine> machines;
+    private ObjectProperty<User> owner;
+
+    public Hardware() {
+        this.owner = new SimpleObjectProperty<>(this, "owner", null);
+    }
+
+    public User getOwner() {
+        return owner.get();
+    }
+
+    public ObjectProperty<User> ownerProperty() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner.set(owner);
+    }
+
 }

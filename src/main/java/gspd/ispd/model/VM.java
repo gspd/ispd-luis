@@ -119,4 +119,8 @@ public class VM {
     public void setOs(String os) {
         this.os.set(os);
     }
+
+    public VM copy() {
+        return new VM(this);
+    }
 }
