@@ -35,6 +35,7 @@ public class MainApp extends Application {
         ResourceBundle bundle = ISPD.getStrings();
         loader.setResources(bundle);
         MainWindow.create(mainWindow, this);
+        mainWindow.getScene().getStylesheets().add("/gspd/ispd/fxgui/styles/common.css");
     }
 
     public Properties getSettings() {

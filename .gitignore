@@ -8,13 +8,14 @@
 # Build results and binaries from Gradle
 build/
 bin/
+out/
 Erros/
 gspd.ispd.externo/
 gspd.ispd.externo.cloudSchedulers
 modeloiconico
 modelosimulavel
 
-# Other Hidden files
+# Other Hidden Files
 .*
 
 # Package Files #

@@ -8,14 +8,14 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -95,6 +95,11 @@ public class MainWindow implements Initializable {
     @FXML
     private ToggleGroup workloadToolboxToggle;
 
+    // This ImageView is not present in FXML file. It represents
+    // the image that follows cursor to help user remember what
+    // he is up to add.
+    private ImageView followImageView;
+
     private MainApp main;
     private Stage window;
 
@@ -124,18 +129,46 @@ public class MainWindow implements Initializable {
         MenuItem paste = new MenuItem("Paste");
         cmenu.getItems().addAll(copy, paste);
         terminalOutputArea.setContextMenu(cmenu);
-        hardwarePane.setOnMouseClicked(event -> {
-            Node node;
-            if (hardwareToolboxToggle.getSelectedToggle() == machineIcon) {
-                node = new Rectangle(event.getX(), event.getY(), 30, 30);
-                GUI.makeDraggable(node);
-                hardwarePane.getChildren().add(node);
-            } else if (hardwareToolboxToggle.getSelectedToggle() == clusterIcon) {
-                node = new Ellipse(event.getX(), event.getY(), 30, 30);
-                GUI.makeDraggable(node);
-                hardwarePane.getChildren().add(node);
+        followImageView = new ImageView();
+        followImageView.setOpacity(0.6);
+        hardwareToolboxToggle.selectedToggleProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue != linkIcon) {
+                ToggleButton selected = (ToggleButton) observable.getValue();
+                ImageView imageView = (ImageView) selected.getGraphic();
+                Image image = imageView.getImage();
+                followImageView.setImage(image);
+                GUI.follow(followImageView, hardwarePane);
+                hardwarePane.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                        ImageView imvw = new ImageView();
+                        imvw.setImage(image);
+                        imvw.setLayoutX(followImageView.getLayoutX());
+                        imvw.setLayoutY(followImageView.getLayoutY());
+                        GUI.makeDraggable(imvw);
+                        hardwarePane.getChildren().add(imvw);
+                    }
+                });
+            } else if (newValue == linkIcon) {
+                GUI.unfollow(hardwarePane);
+                hardwarePane.setOnMouseClicked(event -> {});
+            } else {
+                GUI.unfollow(hardwarePane);
+                hardwarePane.setOnMouseClicked(event -> {});
             }
-        });
+        }));
+//         hardwarePane.setOnMouseClicked(event -> {
+//             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
+//                 Image image = followImageView.getImage();
+//                 if (image != null) {
+//                     ImageView imageView = new ImageView();
+//                     imageView.setImage(image);
+//                     imageView.setLayoutX(followImageView.getLayoutX());
+//                     imageView.setLayoutY(followImageView.getLayoutY());
+//                     GUI.makeDraggable(imageView);
+//                     hardwarePane.getChildren().add(imageView);
+//                 }
+//             }
+//         });
         ///////////// REMOVE
         // disable remove user button [-] only if there is no selected item in user table
         removeUserButton.disableProperty().bind(userTable.getSelectionModel().selectedItemProperty().isNull());
@@ -196,20 +229,13 @@ public class MainWindow implements Initializable {
             });
             return row;
         });
+        vmTable.getSelectionModel();
         // Hardware Pane
         // the {width, height} of hardware pane (area that we draw hardware) is aways at least 1.5 times its parent scroll pane
         hardwarePane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.5));
         hardwarePane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.5));
         // the hardware scroll pane is pannable
         GUI.makePannable(hardwareScrollPane);
-        // // make machine icon hoverable (change opacity as user hovers)
-        // GUI.makeHoverable(machineIcon);
-        // // make link icon hoverable (change opacity as user hovers)
-        // GUI.makeHoverable(linkIcon);
-        // // make cluster icon hoverable (change opacity as user hovers)
-        // GUI.makeHoverable(clusterIcon);
-        // // make switch icon hoverable (change opacity as user hovers)
-        // GUI.makeHoverable(switchIcon);
     }
 
     public void setMain(MainApp main) {
@@ -244,6 +270,11 @@ public class MainWindow implements Initializable {
             // then adds in the model
             vmTable.getItems().add(vm);
         }
+    }
+
+    @FXML
+    private void unselectToolbox() {
+        hardwareToolboxToggle.selectToggle(null);
     }
 
     @FXML

@@ -188,7 +188,7 @@
                                              <children>
                                                 <ToolBar prefHeight="39.0" prefWidth="587.0" VBox.vgrow="NEVER">
                                                    <items>
-                                                      <Hyperlink fx:id="hardwareMousePointerIcon">
+                                                      <Hyperlink fx:id="hardwareMousePointerIcon" onAction="#unselectToolbox">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -269,7 +269,7 @@
                                              <children>
                                                 <ToolBar prefHeight="50.0" prefWidth="587.0">
                                                    <items>
-                                                      <Hyperlink fx:id="workloadMousePointerIcon">
+                                                      <Hyperlink fx:id="workloadMousePointerIcon" onAction="#unselectToolbox">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>

@@ -1,27 +1,15 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
-import gspd.ispd.fxgui.util.DragUtil;
-import gspd.ispd.fxgui.util.DrawerUtil;
-import gspd.ispd.fxgui.util.LightningUtil;
-import gspd.ispd.model.VM;
-import javafx.event.Event;
-import javafx.event.EventType;
-import javafx.fxml.FXMLLoader;
+import gspd.ispd.fxgui.util.*;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -31,6 +19,8 @@ public class GUI {
     static private DragUtil dragger = new DragUtil();
     static private DrawerUtil drawer = new DrawerUtil();
     static private LightningUtil lighter = new LightningUtil();
+    static private FollowUtil follower = new FollowUtil();
+    static private PanUtil panner = new PanUtil();
 
     public enum AnswerType {
         CANCEL,
@@ -47,8 +37,12 @@ public class GUI {
         dragger.makeDraggable(node);
     }
 
-    static public void putNodeInContext(Node node, Pane context) {
-        context.getChildren().add(node);
+    static public void follow(Node node, Pane pane) {
+        follower.makeFollow(node, pane);
+    }
+
+    static public void unfollow(Pane pane) {
+        follower.lockFollow(pane);
     }
 
     static public AnswerType checkClosingWithoutSaving() {
@@ -102,40 +96,11 @@ public class GUI {
         }
     }
 
-    static public VM openVMDialog(Stage owner, Stage window) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("VMDialog.fxml"));
-            loader.setResources(ISPD.getStrings());
-            System.out.println(loader.getClassLoader().getName());
-            Scene scene = new Scene(loader.load());
-            window.setTitle("VM Edit");
-            window.initOwner(owner);
-            window.initModality(Modality.WINDOW_MODAL);
-            window.setScene(scene);
-            VMDialog controller = loader.getController();
-            controller.init();
-            window.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     static public void makeHoverable(Node node) {
         lighter.makeHoverable(node);
     }
 
     static public void makePannable(ScrollPane pane) {
-        pane.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.MIDDLE) {
-                pane.setPannable(true);
-            }
-        });
-        pane.setOnMouseReleased(event -> {
-            if (event.getButton() == MouseButton.MIDDLE) {
-                pane.setPannable(false);
-            }
-        });
+        panner.makePannable(pane);
     }
 }

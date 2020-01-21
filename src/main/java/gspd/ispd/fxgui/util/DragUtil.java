@@ -1,6 +1,7 @@
 package gspd.ispd.fxgui.util;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
 
 public class DragUtil {
     private double x0;
@@ -15,7 +16,6 @@ public class DragUtil {
         node.setOnMousePressed(event -> {
             x0 = event.getX();
             y0 = event.getY();
-            pauseMouse(node.getParent());
         });
         node.setOnMouseDragged(event -> {
             double dx, dy, x, y;
@@ -27,25 +27,8 @@ public class DragUtil {
             node.setLayoutY(y + dy);
         });
         node.setOnMouseReleased(event -> {
-            returnMouse(node.getParent());
             x0 = 0;
             y0 = 0;
         });
-    }
-
-    private void pauseMouse(Node node) {
-        Node parent = node.getParent();
-        if (parent != null) {
-            parent.setMouseTransparent(true);
-            pauseMouse(parent);
-        }
-    }
-
-    private void returnMouse(Node node) {
-        Node parent = node.getParent();
-        if (parent != null) {
-            parent.setMouseTransparent(false);
-            returnMouse(parent);
-        }
     }
 }
