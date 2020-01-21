@@ -1,38 +1,40 @@
 package gspd.ispd.commons.distribution;
 
-public class WeibullDistributionBuilder extends AbstractDistributionBuilder {
+import java.util.Random;
 
-    private AbstractDistributionBuilder scaleBuilder;
-    private AbstractDistributionBuilder shapeBuilder;
+public class WeibullDistributionBuilder extends DistributionBuilder {
 
-    public WeibullDistributionBuilder(AbstractDistributionBuilder scaleBuilder, AbstractDistributionBuilder shapeBuilder) {
+    private DistributionBuilder scaleBuilder;
+    private DistributionBuilder shapeBuilder;
+
+    public WeibullDistributionBuilder(DistributionBuilder scaleBuilder, DistributionBuilder shapeBuilder) {
         this.scaleBuilder = scaleBuilder;
         this.shapeBuilder = shapeBuilder;
     }
 
-    public WeibullDistributionBuilder setScale(AbstractDistributionBuilder scale) {
+    public WeibullDistributionBuilder setScale(DistributionBuilder scale) {
         this.scaleBuilder = scale;
         return this;
     }
 
     public WeibullDistributionBuilder setScale(double scale) {
-        return setScale(DistributionBuilder.constant(scale));
+        return setScale(constant(scale));
     }
 
-    public AbstractDistributionBuilder getScaleBuilder() {
+    public DistributionBuilder getScaleBuilder() {
         return scaleBuilder;
     }
 
-    public  WeibullDistributionBuilder setShape(AbstractDistributionBuilder shape) {
+    public  WeibullDistributionBuilder setShape(DistributionBuilder shape) {
         this.shapeBuilder = shape;
         return this;
     }
 
     public WeibullDistributionBuilder setShape(double shape) {
-        return setShape(DistributionBuilder.constant(shape));
+        return setShape(constant(shape));
     }
 
-    public AbstractDistributionBuilder getShapeBuilder() {
+    public DistributionBuilder getShapeBuilder() {
         return shapeBuilder;
     }
 
@@ -40,15 +42,13 @@ public class WeibullDistributionBuilder extends AbstractDistributionBuilder {
     public Distribution build() {
         Distribution scale = scaleBuilder.build();
         Distribution shape = shapeBuilder.build();
-        return new Distribution() {
-            @Override
-            public double random() {
-                double r, sc, sh;
-                r = nextDouble();
-                sc = scale.random();
-                sh = shape.random();
-                return sc * Math.pow(-Math.log(1 - r), 1 / sh);
-            }
+        Random lcg = new Random();
+        return () -> {
+            double r, sc, sh;
+            r = lcg.nextDouble();
+            sc = scale.random();
+            sh = shape.random();
+            return sc * Math.pow(-Math.log(1 - r), 1 / sh);
         };
     }
 }

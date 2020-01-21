@@ -1,6 +1,8 @@
 package gspd.ispd.commons.distribution;
 
-public class DistributionBuilder {
+public abstract class DistributionBuilder {
+
+    public abstract Distribution build();
 
     public static NormalDistributionBuilder normal() {
         return normal(0, 1);

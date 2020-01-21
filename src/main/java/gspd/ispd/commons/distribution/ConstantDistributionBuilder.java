@@ -1,6 +1,6 @@
 package gspd.ispd.commons.distribution;
 
-public class ConstantDistributionBuilder extends AbstractDistributionBuilder {
+public class ConstantDistributionBuilder extends DistributionBuilder {
     private double constant;
 
     public ConstantDistributionBuilder(double constant) {

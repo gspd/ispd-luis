@@ -1,42 +1,42 @@
 package gspd.ispd.commons.distribution;
 
-public class PoissonDistributionBuilder extends AbstractDistributionBuilder {
-    private AbstractDistributionBuilder lambdaBuilder;
+import java.util.Random;
 
-    public PoissonDistributionBuilder(AbstractDistributionBuilder lambdaBuilder) {
+public class PoissonDistributionBuilder extends DistributionBuilder {
+    private DistributionBuilder lambdaBuilder;
+
+    public PoissonDistributionBuilder(DistributionBuilder lambdaBuilder) {
         this.lambdaBuilder = lambdaBuilder;
     }
 
-    public PoissonDistributionBuilder setLambda(AbstractDistributionBuilder lambda) {
+    public PoissonDistributionBuilder setLambda(DistributionBuilder lambda) {
         this.lambdaBuilder = lambda;
         return this;
     }
 
     public PoissonDistributionBuilder setLambda(double lambda) {
-        return setLambda(DistributionBuilder.constant(lambda));
+        return setLambda(constant(lambda));
     }
 
-    public AbstractDistributionBuilder getLambdaBuilder() {
+    public DistributionBuilder getLambdaBuilder() {
         return lambdaBuilder;
     }
 
     @Override
     public Distribution build() {
         Distribution lambda = lambdaBuilder.build();
-        return new Distribution() {
-            @Override
-            public double random() {
-                double el, p, k, l;
-                l = lambda.random();
-                el = Math.exp(-l);
-                p = 1;
-                k = 0;
-                do {
-                    p *= nextDouble();
-                    k++;
-                } while (p > el);
-                return k-1;
-            }
+        Random lcg = new Random();
+        return () -> {
+            double el, p, k, l;
+            l = lambda.random();
+            el = Math.exp(-l);
+            p = 1;
+            k = 0;
+            do {
+                p *= lcg.nextDouble();
+                k++;
+            } while (p > el);
+            return k-1;
         };
     }
 }

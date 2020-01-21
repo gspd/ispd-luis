@@ -1,37 +1,39 @@
 package gspd.ispd.commons.distribution;
 
-public class UniformDistributionBuilder extends AbstractDistributionBuilder {
-    private AbstractDistributionBuilder minBuilder;
-    private AbstractDistributionBuilder maxBuilder;
+import java.util.Random;
 
-    public UniformDistributionBuilder(AbstractDistributionBuilder minBuilder, AbstractDistributionBuilder maxBuilder) {
+public class UniformDistributionBuilder extends DistributionBuilder {
+    private DistributionBuilder minBuilder;
+    private DistributionBuilder maxBuilder;
+
+    public UniformDistributionBuilder(DistributionBuilder minBuilder, DistributionBuilder maxBuilder) {
         this.minBuilder = minBuilder;
         this.maxBuilder = maxBuilder;
     }
 
-    public UniformDistributionBuilder setMin(AbstractDistributionBuilder min) {
+    public UniformDistributionBuilder setMin(DistributionBuilder min) {
         this.minBuilder = min;
         return this;
     }
 
     public UniformDistributionBuilder setMin(double min) {
-        return setMin(DistributionBuilder.constant(min));
+        return setMin(constant(min));
     }
 
-    public AbstractDistributionBuilder getMinBuilder() {
+    public DistributionBuilder getMinBuilder() {
         return minBuilder;
     }
 
-    public UniformDistributionBuilder setMax(AbstractDistributionBuilder max) {
+    public UniformDistributionBuilder setMax(DistributionBuilder max) {
         this.maxBuilder = max;
         return this;
     }
 
     public UniformDistributionBuilder setMax(double max) {
-        return setMax(DistributionBuilder.constant(max));
+        return setMax(constant(max));
     }
 
-    public AbstractDistributionBuilder getMaxBuilder() {
+    public DistributionBuilder getMaxBuilder() {
         return maxBuilder;
     }
 
@@ -39,20 +41,18 @@ public class UniformDistributionBuilder extends AbstractDistributionBuilder {
     public Distribution build() {
         Distribution min = minBuilder.build();
         Distribution max = maxBuilder.build();
-        return new Distribution() {
-            @Override
-            public double random() {
-                double a, b, r, swap;
-                r = nextDouble();
-                a = min.random();
-                b = max.random();
-                if (a > b) {
-                    swap = a;
-                    a = b;
-                    b = swap;
-                }
-                return (b - a) * r  + a;
+        Random lcg = new Random();
+        return () -> {
+            double a, b, r, swap;
+            r = lcg.nextDouble();
+            a = min.random();
+            b = max.random();
+            if (a > b) {
+                swap = a;
+                a = b;
+                b = swap;
             }
+            return (b - a) * r  + a;
         };
     }
 }

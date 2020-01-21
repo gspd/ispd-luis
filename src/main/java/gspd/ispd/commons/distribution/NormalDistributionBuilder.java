@@ -1,38 +1,40 @@
 package gspd.ispd.commons.distribution;
 
-public class NormalDistributionBuilder extends AbstractDistributionBuilder {
+import java.util.Random;
 
-    private AbstractDistributionBuilder averageBuilder;
-    private AbstractDistributionBuilder deviationBuilder;
+public class NormalDistributionBuilder extends DistributionBuilder {
 
-    public NormalDistributionBuilder(AbstractDistributionBuilder averageBuilder, AbstractDistributionBuilder deviationBuilder) {
+    private DistributionBuilder averageBuilder;
+    private DistributionBuilder deviationBuilder;
+
+    public NormalDistributionBuilder(DistributionBuilder averageBuilder, DistributionBuilder deviationBuilder) {
         this.averageBuilder = averageBuilder;
         this.deviationBuilder = deviationBuilder;
     }
 
-    public NormalDistributionBuilder setAverage(AbstractDistributionBuilder average) {
+    public NormalDistributionBuilder setAverage(DistributionBuilder average) {
         this.averageBuilder = average;
         return this;
     }
 
     public NormalDistributionBuilder setAverage(double average) {
-        return setAverage(DistributionBuilder.constant(average));
+        return setAverage(constant(average));
     }
 
-    public AbstractDistributionBuilder getAverageBuilder() {
+    public DistributionBuilder getAverageBuilder() {
         return averageBuilder;
     }
 
-    public NormalDistributionBuilder setDeviation(AbstractDistributionBuilder deviation) {
+    public NormalDistributionBuilder setDeviation(DistributionBuilder deviation) {
         this.deviationBuilder = deviation;
         return this;
     }
 
     public NormalDistributionBuilder setDeviation(double deviation) {
-        return setDeviation(DistributionBuilder.constant(deviation));
+        return setDeviation(constant(deviation));
     }
 
-    public AbstractDistributionBuilder getDeviationBuilder() {
+    public DistributionBuilder getDeviationBuilder() {
         return deviationBuilder;
     }
 
@@ -40,18 +42,16 @@ public class NormalDistributionBuilder extends AbstractDistributionBuilder {
     public Distribution build() {
         Distribution average = averageBuilder.build();
         Distribution deviation = deviationBuilder.build();
-        return new Distribution() {
-            @Override
-            public double random() {
-                int i;
-                double sum = 0.0, a, d;
-                a = average.random();
-                d = deviation.random();
-                for (i = 0; i < 12; i++) {
-                    sum += nextDouble();
-                }
-                return (a + (d * (sum - 6.0)));
+        Random lcg = new Random();
+        return () -> {
+            int i;
+            double sum = 0.0, a, d;
+            a = average.random();
+            d = deviation.random();
+            for (i = 0; i < 12; i++) {
+                sum += lcg.nextDouble();
             }
+            return (a + (d * (sum - 6.0)));
         };
     }
 }

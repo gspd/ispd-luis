@@ -1,17 +1,17 @@
 package gspd.ispd.commons.distribution;
 
-public abstract class AbstractLogDistributionBuilder extends AbstractDistributionBuilder {
-    private AbstractDistributionBuilder distributionBuilder;
+public abstract class AbstractLogDistributionBuilder extends DistributionBuilder {
+    private DistributionBuilder distributionBuilder;
 
-    public AbstractLogDistributionBuilder(AbstractDistributionBuilder distributionBuilder) {
+    public AbstractLogDistributionBuilder(DistributionBuilder distributionBuilder) {
         this.distributionBuilder = distributionBuilder;
     }
 
-    public AbstractDistributionBuilder getDistribution() {
+    public DistributionBuilder getDistribution() {
         return distributionBuilder;
     }
 
-    public void setDistribution(AbstractDistributionBuilder distributionBuilder) {
+    public void setDistribution(DistributionBuilder distributionBuilder) {
         this.distributionBuilder = distributionBuilder;
     }
 

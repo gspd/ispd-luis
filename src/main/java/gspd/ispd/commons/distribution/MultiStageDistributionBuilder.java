@@ -1,13 +1,13 @@
 package gspd.ispd.commons.distribution;
 
 // TODO: review this class
-public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
+public class MultiStageDistributionBuilder extends DistributionBuilder {
 
-    private AbstractDistributionBuilder dealerDistribution;
-    private AbstractDistributionBuilder[] stagesDistributions;
+    private DistributionBuilder dealerDistribution;
+    private DistributionBuilder[] stagesDistributions;
     private double[] stagesLimits;
 
-    public MultiStageDistributionBuilder(AbstractDistributionBuilder dealer, AbstractDistributionBuilder[] stagesDistributions, double[] stagesLimits) {
+    public MultiStageDistributionBuilder(DistributionBuilder dealer, DistributionBuilder[] stagesDistributions, double[] stagesLimits) {
         this.stagesDistributions = stagesDistributions;
         this.stagesLimits = stagesLimits;
         this.dealerDistribution = dealer;
@@ -17,7 +17,7 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
         this.stagesLimits = limits;
     }
 
-    public void setStages(AbstractDistributionBuilder... stages) {
+    public void setStages(DistributionBuilder... stages) {
         try {
             this.stagesDistributions = stages;
             stagesLimits = new double[stages.length - 1];
@@ -27,7 +27,7 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
         }
     }
 
-    public void setDealer(AbstractDistributionBuilder dealer) {
+    public void setDealer(DistributionBuilder dealer) {
         this.dealerDistribution = dealer;
     }
 
@@ -40,7 +40,7 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
         }
     }
 
-    public void setStage(int index, AbstractDistributionBuilder distribution) {
+    public void setStage(int index, DistributionBuilder distribution) {
         try {
             stagesDistributions[index] = distribution;
         } catch (IndexOutOfBoundsException e) {
@@ -49,7 +49,7 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
         }
     }
 
-    public AbstractDistributionBuilder[] getStages() {
+    public DistributionBuilder[] getStages() {
         return stagesDistributions;
     }
 
@@ -57,7 +57,7 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
         return stagesLimits;
     }
 
-    public AbstractDistributionBuilder getDealer() {
+    public DistributionBuilder getDealer() {
         return dealerDistribution;
     }
 
@@ -83,23 +83,20 @@ public class MultiStageDistributionBuilder extends AbstractDistributionBuilder {
                 distributions[i] = stagesDistributions[i].build();
             }
         }
-        return new Distribution() {
-            @Override
-            public double random() {
-                try {
-                    double p;
-                    int i;
-                    p = dealer.random();
-                    i = 0;
-                    while (i < stagesLimits.length && stagesLimits[i] > p) {
-                        i++;
-                    }
-                    return distributions[i].random();
-                } catch (Exception e) {
-                    System.out.println("An error occurred probably in the distribution builder specification. Are you sure the stages are specified correctly?");
-                    e.printStackTrace();
-                    return -1.0;
+        return () -> {
+            try {
+                double p;
+                int j;
+                p = dealer.random();
+                j = 0;
+                while (j < stagesLimits.length && stagesLimits[j] > p) {
+                    j++;
                 }
+                return distributions[j].random();
+            } catch (Exception e) {
+                System.out.println("An error occurred probably in the distribution builder specification. Are you sure the stages are specified correctly?");
+                e.printStackTrace();
+                return -1.0;
             }
         };
     }

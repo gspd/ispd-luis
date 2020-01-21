@@ -7,7 +7,7 @@ public class LogNormalDistributionBuilder extends AbstractLogDistributionBuilder
         super(normalBuilder);
     }
 
-    public LogNormalDistributionBuilder setAverage(AbstractDistributionBuilder average) {
+    public LogNormalDistributionBuilder setAverage(DistributionBuilder average) {
         normalBuilder.setAverage(average);
         return this;
     }
@@ -17,7 +17,7 @@ public class LogNormalDistributionBuilder extends AbstractLogDistributionBuilder
         return this;
     }
 
-    public LogNormalDistributionBuilder setDeviation(AbstractDistributionBuilder deviation) {
+    public LogNormalDistributionBuilder setDeviation(DistributionBuilder deviation) {
         normalBuilder.setDeviation(deviation);
         return this;
     }
@@ -27,11 +27,11 @@ public class LogNormalDistributionBuilder extends AbstractLogDistributionBuilder
         return this;
     }
 
-    public AbstractDistributionBuilder getAverageBuilder() {
+    public DistributionBuilder getAverageBuilder() {
         return normalBuilder.getAverageBuilder();
     }
 
-    public AbstractDistributionBuilder getDeviationBuilder() {
+    public DistributionBuilder getDeviationBuilder() {
         return normalBuilder.getDeviationBuilder();
     }
 }
