@@ -8,6 +8,7 @@ public class DistributionBuilderTest {
 
     @Test
     public void testDistributions() {
+        System.out.println("Testing distributions");
         distribution = DistributionBuilder
             .weibull()
             .setScale(2.0)
