@@ -178,7 +178,7 @@ public abstract class AreaDesenho extends JPanel implements MouseListener, Mouse
         this.units = units;
         if (posicaoFixa && vertices != null) {
             for (Vertice icone : vertices) {
-                ((Vertice) icone).setPosition(getPosFixaX(icone.getX()), getPosFixaY(icone.getY()));
+                icone.setPosition(getPosFixaX(icone.getX()), getPosFixaY(icone.getY()));
             }
         }
     }

@@ -37,14 +37,6 @@ public class Machine extends Vertice implements ItemGrade {
     private Double costperdisk;
     private String VMMallocpolicy;
 
-    
-
-    
-
-    
-
-
-    
     public Machine(int x, int y, int idLocal, int idGlobal) {
         super(x, y);
         this.id = new IdentificadorItemGrade(idLocal, idGlobal, "mac" + idGlobal);
@@ -64,8 +56,6 @@ public class Machine extends Vertice implements ItemGrade {
         conexoesEntrada = new HashSet<ItemGrade>();
         conexoesSaida = new HashSet<ItemGrade>();
     }
-
-    
 
     @Override
     public IdentificadorItemGrade getId() {
