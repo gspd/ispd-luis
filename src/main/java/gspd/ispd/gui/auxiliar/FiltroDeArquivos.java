@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileFilter;
 public class FiltroDeArquivos extends FileFilter {
 
     private String descricao;
-    private String[] extensao;
+    private String[] extensao; //conjunto de extensões aceitas
     private boolean permitirDiretorio;
 
     public FiltroDeArquivos(String descricao, String[] extensao, boolean permitirDiretorio) {
@@ -24,12 +24,10 @@ public class FiltroDeArquivos extends FileFilter {
     }
 
     public FiltroDeArquivos(String descricao, String extensao, boolean permitirDiretorio) {
-        this.descricao = descricao;
-        String[] exts = {extensao};
-        this.extensao = exts;
-        this.permitirDiretorio = permitirDiretorio;
+        this(descricao, new String[]{extensao}, permitirDiretorio);
     }
 
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory() && permitirDiretorio) {
             return true;
@@ -42,6 +40,7 @@ public class FiltroDeArquivos extends FileFilter {
         return false;
     }
 
+    @Override
     public String getDescription() {
         return descricao;
     }
@@ -55,7 +54,6 @@ public class FiltroDeArquivos extends FileFilter {
     }
 
     public void setExtensao(String string) {
-        String[] exts = {string};
-        this.extensao = exts;
+        setExtensao(new String[] {string});
     }
 }

@@ -62,7 +62,7 @@ javafx {
 }
 
 // Define the main class for the application
-mainClassName = 'gspd.ispd.MainApp'
+mainClassName = 'gspd.ispd.Main'
 version = '2.0-SNAPSHOT'
 // compileJava.options.fork = true
 // compileJava.options.forkOptions.executable = /path_to_javac

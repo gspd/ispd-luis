@@ -38,11 +38,18 @@ public class JPanelConfigIcon extends javax.swing.JPanel {
     private ManipularArquivos escalonadores;
     private ManipularArquivosCloud escalonadoresCloud;
     private ManipularArquivosAlloc alocadores;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabelIconName;
+    private javax.swing.JLabel jLabelTitle;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    // End of variables declaration//GEN-END:variables
 
     public JPanelConfigIcon() {
         palavras = ResourceBundle.getBundle("idioma/Idioma", new Locale("en", "US"));
         Tmachine = new VariedRowTable(){
-            //Implementa as dicas para cada célula da tabela          
+            //Implementa as dicas para cada célula da tabela
+            @Override
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
                 java.awt.Point p = e.getPoint();
@@ -304,13 +311,6 @@ public class JPanelConfigIcon extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabelIconName;
-    private javax.swing.JLabel jLabelTitle;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    // End of variables declaration//GEN-END:variables
 
     public void setEscalonadores(ManipularArquivos escalonadores) {
         this.escalonadores = escalonadores;

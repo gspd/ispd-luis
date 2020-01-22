@@ -13,7 +13,6 @@ package gspd.ispd.gui;
 import DescreveSistema.DescreveSistema;
 import gspd.ispd.ISPD;
 import gspd.ispd.arquivo.exportador.Exportador;
-import gspd.ispd.arquivo.xml.IconicoXML;
 import gspd.ispd.arquivo.interpretador.gridsim.InterpretadorGridSim;
 import gspd.ispd.arquivo.interpretador.simgrid.InterpretadorSimGrid;
 import gspd.ispd.gui.auxiliar.Corner;
@@ -37,7 +36,6 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -64,9 +62,78 @@ import org.xml.sax.SAXException;
  */
 public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
-    private EscolherClasse ChooseClass; //janela de escolha de qual tipo de serviço irá ser modelado
-    private ConfigurarVMs JanelaVM; //janela de configuração de máquinas virtuais para IaaS
+    private EscolherClasse chooseClass; //janela de escolha de qual tipo de serviço irá ser modelado
+    private ConfigurarVMs janelaVM; //janela de configuração de máquinas virtuais para IaaS
     private int tipoModelo; //define se o modelo é GRID, IAAS ou PAAS;
+    private ResourceBundle palavras; //utilizadas para exibir string no idioma correto
+    private boolean modificado = false;//indica se arquivo atual foi modificado
+    private File arquivoAberto = null; //indica o arquivo atual
+    private DesenhoGrade aDesenho = null; //define qual será a área de desenho
+    private HashSet<VirtualMachine> maquinasVirtuais; //define o conjunto de máquinas virtuais
+    private FiltroDeArquivos filtro; //define o filtro das extensões aceitas pelo iSPD
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonConfigVM;
+    private javax.swing.JButton jButtonSimular;
+    private javax.swing.JButton jButtonTarefas;
+    private javax.swing.JButton jButtonUsuarios;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemConectado;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemEscalonavel;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemGrade;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemIndireto;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemRegua;
+    private javax.swing.JFileChooser jFileChooser;
+    private gspd.ispd.gui.GerenciarEscalonador jFrameGerenciador;
+    private gspd.ispd.gui.GerenciarAlocadores jFrameGerenciadorAlloc;
+    private gspd.ispd.gui.GerenciarEscalonadorCloud jFrameGerenciadorCloud;
+    private javax.swing.JMenu jMenuAjuda;
+    private javax.swing.JMenu jMenuArquivo;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenu jMenuEditar;
+    private javax.swing.JMenu jMenuExibir;
+    private javax.swing.JMenu jMenuExport;
+    private javax.swing.JMenu jMenuFerramentas;
+    private javax.swing.JMenu jMenuIdioma;
+    private javax.swing.JMenu jMenuImport;
+    private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemAbrirResult;
+    private javax.swing.JMenuItem jMenuItemAjuda;
+    private javax.swing.JMenuItem jMenuItemCopy;
+    private javax.swing.JMenuItem jMenuItemDelete;
+    private javax.swing.JMenuItem jMenuItemEquiparar;
+    private javax.swing.JMenuItem jMenuItemFechar;
+    private javax.swing.JMenuItem jMenuItemGerar;
+    private javax.swing.JMenuItem jMenuItemGerenciar;
+    private javax.swing.JMenuItem jMenuItemGerenciarAllocation;
+    private javax.swing.JMenuItem jMenuItemGerenciarCloud;
+    private javax.swing.JMenuItem jMenuItemGridSim;
+    private javax.swing.JMenuItem jMenuItemIngles;
+    private javax.swing.JMenuItem jMenuItemNovo;
+    private javax.swing.JMenuItem jMenuItemOrganizar;
+    private javax.swing.JMenuItem jMenuItemPaste;
+    private javax.swing.JMenuItem jMenuItemPortugues;
+    private javax.swing.JMenuItem jMenuItemSair;
+    private javax.swing.JMenuItem jMenuItemSalvar;
+    private javax.swing.JMenuItem jMenuItemSalvarComo;
+    private javax.swing.JMenuItem jMenuItemSimGrid;
+    private javax.swing.JMenuItem jMenuItemSobre;
+    private javax.swing.JMenuItem jMenuItemToGridSim;
+    private javax.swing.JMenuItem jMenuItemToJPG;
+    private javax.swing.JMenuItem jMenuItemToSimGrid;
+    private javax.swing.JMenuItem jMenuItemToTXT;
+    private gspd.ispd.gui.configuracao.JPanelConfigIcon jPanelConfiguracao;
+    private gspd.ispd.gui.configuracao.JPanelSimples jPanelPropriedades;
+    private gspd.ispd.gui.configuracao.JPanelSimples jPanelSimples;
+    private javax.swing.JScrollPane jScrollPaneAreaDesenho;
+    private javax.swing.JScrollPane jScrollPaneBarraLateral;
+    private javax.swing.JScrollPane jScrollPaneBarraNotifica;
+    private javax.swing.JScrollPane jScrollPaneProperties;
+    private javax.swing.JTextArea jTextAreaNotifica;
+    private javax.swing.JToggleButton jToggleButtonCluster;
+    private javax.swing.JToggleButton jToggleButtonInternet;
+    private javax.swing.JToggleButton jToggleButtonMaquina;
+    private javax.swing.JToggleButton jToggleButtonRede;
+    private javax.swing.JToolBar jToolBar;
+    // End of variables declaration//GEN-END:variables
 
     public int getTipoModelo() {
         return tipoModelo;
@@ -885,9 +952,9 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         if (modificado) {
             escolha = savarAlteracao();
         }
-        ChooseClass = new EscolherClasse(this, true);
-        ChooseClass.setLocationRelativeTo(this);
-        ChooseClass.setVisible(true);
+        chooseClass = new EscolherClasse(this, true);
+        chooseClass.setLocationRelativeTo(this);
+        chooseClass.setVisible(true);
         aDesenho = new DesenhoGrade(1500, 1500);
         aDesenho.addKeyListener(this);
         aDesenho.setPaineis(this);
@@ -899,7 +966,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         abrirEdição(null);
         //novo modelo não salvo ainda
         modificar();
-        this.tipoModelo = ChooseClass.getEscolha();
+        this.tipoModelo = chooseClass.getEscolha();
         aDesenho.setTipoModelo(tipoModelo);
         switch (tipoModelo) {
 
@@ -1479,15 +1546,15 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                     JOptionPane.PLAIN_MESSAGE // Ícone da caixa de mensagem  
             );
         } else {
-            JanelaVM = new ConfigurarVMs(this, true,
+            janelaVM = new ConfigurarVMs(this, true,
                     aDesenho.getUsuarios().toArray(),
                     aDesenho.getNosEscalonadores().toArray(),
                     maquinasVirtuais);
-            JanelaVM.setLocationRelativeTo(this);
-            JanelaVM.setVisible(true);
+            janelaVM.setLocationRelativeTo(this);
+            janelaVM.setVisible(true);
             //depois que a janela fechou..
-            maquinasVirtuais = JanelaVM.getMaqVirtuais();
-            aDesenho.setUsuarios(JanelaVM.atualizaUsuarios());
+            maquinasVirtuais = janelaVM.getMaqVirtuais();
+            aDesenho.setUsuarios(janelaVM.atualizaUsuarios());
             aDesenho.setMaquinasVirtuais(maquinasVirtuais);
             modificar();
         }
@@ -1511,75 +1578,6 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuFerramentasActionPerformed
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConfigVM;
-    private javax.swing.JButton jButtonSimular;
-    private javax.swing.JButton jButtonTarefas;
-    private javax.swing.JButton jButtonUsuarios;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemConectado;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemEscalonavel;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemGrade;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemIndireto;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemRegua;
-    private javax.swing.JFileChooser jFileChooser;
-    private gspd.ispd.gui.GerenciarEscalonador jFrameGerenciador;
-    private gspd.ispd.gui.GerenciarAlocadores jFrameGerenciadorAlloc;
-    private gspd.ispd.gui.GerenciarEscalonadorCloud jFrameGerenciadorCloud;
-    private javax.swing.JMenu jMenuAjuda;
-    private javax.swing.JMenu jMenuArquivo;
-    private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JMenu jMenuEditar;
-    private javax.swing.JMenu jMenuExibir;
-    private javax.swing.JMenu jMenuExport;
-    private javax.swing.JMenu jMenuFerramentas;
-    private javax.swing.JMenu jMenuIdioma;
-    private javax.swing.JMenu jMenuImport;
-    private javax.swing.JMenuItem jMenuItemAbrir;
-    private javax.swing.JMenuItem jMenuItemAbrirResult;
-    private javax.swing.JMenuItem jMenuItemAjuda;
-    private javax.swing.JMenuItem jMenuItemCopy;
-    private javax.swing.JMenuItem jMenuItemDelete;
-    private javax.swing.JMenuItem jMenuItemEquiparar;
-    private javax.swing.JMenuItem jMenuItemFechar;
-    private javax.swing.JMenuItem jMenuItemGerar;
-    private javax.swing.JMenuItem jMenuItemGerenciar;
-    private javax.swing.JMenuItem jMenuItemGerenciarAllocation;
-    private javax.swing.JMenuItem jMenuItemGerenciarCloud;
-    private javax.swing.JMenuItem jMenuItemGridSim;
-    private javax.swing.JMenuItem jMenuItemIngles;
-    private javax.swing.JMenuItem jMenuItemNovo;
-    private javax.swing.JMenuItem jMenuItemOrganizar;
-    private javax.swing.JMenuItem jMenuItemPaste;
-    private javax.swing.JMenuItem jMenuItemPortugues;
-    private javax.swing.JMenuItem jMenuItemSair;
-    private javax.swing.JMenuItem jMenuItemSalvar;
-    private javax.swing.JMenuItem jMenuItemSalvarComo;
-    private javax.swing.JMenuItem jMenuItemSimGrid;
-    private javax.swing.JMenuItem jMenuItemSobre;
-    private javax.swing.JMenuItem jMenuItemToGridSim;
-    private javax.swing.JMenuItem jMenuItemToJPG;
-    private javax.swing.JMenuItem jMenuItemToSimGrid;
-    private javax.swing.JMenuItem jMenuItemToTXT;
-    private gspd.ispd.gui.configuracao.JPanelConfigIcon jPanelConfiguracao;
-    private gspd.ispd.gui.configuracao.JPanelSimples jPanelPropriedades;
-    private gspd.ispd.gui.configuracao.JPanelSimples jPanelSimples;
-    private javax.swing.JScrollPane jScrollPaneAreaDesenho;
-    private javax.swing.JScrollPane jScrollPaneBarraLateral;
-    private javax.swing.JScrollPane jScrollPaneBarraNotifica;
-    private javax.swing.JScrollPane jScrollPaneProperties;
-    private javax.swing.JTextArea jTextAreaNotifica;
-    private javax.swing.JToggleButton jToggleButtonCluster;
-    private javax.swing.JToggleButton jToggleButtonInternet;
-    private javax.swing.JToggleButton jToggleButtonMaquina;
-    private javax.swing.JToggleButton jToggleButtonRede;
-    private javax.swing.JToolBar jToolBar;
-    // End of variables declaration//GEN-END:variables
-    private ResourceBundle palavras;
-    private boolean modificado = false;//indica se arquivo atual foi modificado
-    private File arquivoAberto = null;
-    private DesenhoGrade aDesenho = null;
-    private HashSet<VirtualMachine> maquinasVirtuais;
-    private FiltroDeArquivos filtro;
 
     public JPanelConfigIcon getjPanelConfiguracao() {
         return jPanelConfiguracao;
