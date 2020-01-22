@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainWindow implements Initializable {
+public class MainWindow {
     @FXML
     private TextArea terminalOutputArea;
     @FXML
@@ -426,9 +426,5 @@ public class MainWindow implements Initializable {
             e.printStackTrace();
         }
         return user;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
     }
 }

@@ -1,10 +1,11 @@
 package gspd.ispd.commons.distribution;
 
-public class LogNormalDistributionBuilder extends AbstractLogDistributionBuilder {
+public class LogNormalDistributionBuilder extends LogDistributionBuilder {
     private NormalDistributionBuilder normalBuilder;
 
     public LogNormalDistributionBuilder(NormalDistributionBuilder normalBuilder) {
         super(normalBuilder);
+        this.normalBuilder = normalBuilder;
     }
 
     public LogNormalDistributionBuilder setAverage(DistributionBuilder average) {

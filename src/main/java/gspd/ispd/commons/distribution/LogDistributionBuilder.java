@@ -1,9 +1,9 @@
 package gspd.ispd.commons.distribution;
 
-public abstract class AbstractLogDistributionBuilder extends DistributionBuilder {
+public class LogDistributionBuilder extends DistributionBuilder {
     private DistributionBuilder distributionBuilder;
 
-    public AbstractLogDistributionBuilder(DistributionBuilder distributionBuilder) {
+    public LogDistributionBuilder(DistributionBuilder distributionBuilder) {
         this.distributionBuilder = distributionBuilder;
     }
 
@@ -18,11 +18,6 @@ public abstract class AbstractLogDistributionBuilder extends DistributionBuilder
     @Override
     public Distribution build() {
         Distribution distribution = distributionBuilder.build();
-        return new Distribution() {
-            @Override
-            public double random() {
-                return Math.exp(distribution.random());
-            }
-        };
+        return () -> Math.exp(distribution.random());
     }
 }
