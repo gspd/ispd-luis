@@ -7,7 +7,7 @@ package gspd.ispd.dependencies;
  * 
  * @author luisbaldissera
  */
-public class AcyclicDependency extends SimpleDependency {
+public class AcyclicDependencyNode extends SimpleDependencyNode {
 
     /**
      * Used in the algorithm for identifying cycles
@@ -24,7 +24,7 @@ public class AcyclicDependency extends SimpleDependency {
      * Acyclic dependency node constructor
      * @param reference the object the node refers to
      */
-    public AcyclicDependency(Object reference) {
+    public AcyclicDependencyNode(Object reference) {
         super(reference);
         flag = false;
         counter = 0;
@@ -33,23 +33,23 @@ public class AcyclicDependency extends SimpleDependency {
     /**
      * Acyclic dependency node constructor without object reference
      */
-    public AcyclicDependency() {
+    public AcyclicDependencyNode() {
         this(null);
     }
 
     @Override
-    protected boolean validateNewDependency(Dependency dependency) {
-        return ((AcyclicDependency) dependency).validateNewDependent(this);
+    protected boolean validateNewDependency(DependencyNode dependencyNode) {
+        return ((AcyclicDependencyNode) dependencyNode).validateNewDependent(this);
     }
 
     @Override
-    protected boolean validateNewDependent(Dependency dependent) {
+    protected boolean validateNewDependent(DependencyNode dependent) {
         boolean valid = true;
         // chacks first if it is a simple dependency
         if (super.validateNewDependent(dependent)) {
             // then if it is, check is it has cycles
             flagUp();
-            ((AcyclicDependency) dependent).inCycle();
+            ((AcyclicDependencyNode) dependent).inCycle();
             if (isFlagDown()) {
                 valid = false;
             }
@@ -88,8 +88,8 @@ public class AcyclicDependency extends SimpleDependency {
             // verification of the childs are needded.
             // Flag up to denote it may be in a cycle
             flagUp();
-            for (Dependency dependent : dependents) {
-                AcyclicDependency aDependent = (AcyclicDependency) dependent;
+            for (DependencyNode dependent : dependents) {
+                AcyclicDependencyNode aDependent = (AcyclicDependencyNode) dependent;
                 if (aDependent.inCycle()) {
                     // *** CYCLE DETECTED IN DEPENDENT ***
                     // if the dependent is in a cycle, then the

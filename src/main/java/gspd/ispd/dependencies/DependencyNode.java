@@ -10,11 +10,11 @@ import java.util.List;
  *
  * @author luisbaldissera
  */
-public class Dependency {
+public class DependencyNode {
     /**
      * The list of dependencies those depends on this
      */
-    protected List<Dependency> dependents;
+    protected List<DependencyNode> dependents;
     /**
      * The number of dependencies this depends on
      */
@@ -28,7 +28,7 @@ public class Dependency {
      * Dependency constructor
      * @param reference the object this dependency node refer to
      */
-    public Dependency(Object reference) {
+    public DependencyNode(Object reference) {
         dependents = new ArrayList<>();
         dependenciesCount = 0;
         this.reference = reference;
@@ -38,7 +38,7 @@ public class Dependency {
      * Dependency contructor, with no reference
      * object
      */
-    public Dependency() {
+    public DependencyNode() {
         this(null);
     }
 
@@ -51,20 +51,20 @@ public class Dependency {
 
     /**
      * Adds a dependency that this depends on.
-     * @param dependency the dependency to add
+     * @param dependencyNode the dependency to add
      * @return always true
      */
-    public boolean addDependency(Dependency dependency) {
-        dependency.addDependent(this);
+    public boolean addDependency(DependencyNode dependencyNode) {
+        dependencyNode.addDependent(this);
         return true;
     }
 
     /**
      * Adds a dependency that depends on this
-     * @param dependency the dependent
+     * @param dependent the dependent
      * @return always true
      */
-    public boolean addDependent(Dependency dependent) {
+    public boolean addDependent(DependencyNode dependent) {
         dependents.add(dependent);
         dependent.dependenciesCount++;
         return true;
@@ -72,17 +72,17 @@ public class Dependency {
 
     /**
      * Removes the dependency of this, if this has it as dependency
-     * @param dependency the dependency to remove
+     * @param dependencyNode the dependency to remove
      */
-    public void removeDependency(Dependency dependency) {
-        dependency.removeDependent(this);
+    public void removeDependency(DependencyNode dependencyNode) {
+        dependencyNode.removeDependent(this);
     }
 
     /**
      * Removes the dependent if it is dependent of this
      * @param dependent the dependent to remove
      */
-    public void removeDependent(Dependency dependent) {
+    public void removeDependent(DependencyNode dependent) {
         if (dependents.remove(dependent)) {
             dependent.dependenciesCount--;
         }
@@ -94,7 +94,7 @@ public class Dependency {
      * @param index the index of the dependency to remove
      */
     private void removeDependent(int index) {
-        Dependency removed = dependents.remove(index);
+        DependencyNode removed = dependents.remove(index);
         if (removed != null) {
             removed.dependenciesCount--;
         }
@@ -111,20 +111,20 @@ public class Dependency {
 
     /**
      * Checks if this dependency depends on the given dependency
-     * @param dependency the dependency
+     * @param dependencyNode the dependency
      * @return true if {@code dependency} is a dependency of this
      */
-    public boolean dependsOn(Dependency dependency) {
-        return dependency.isDependencyOf(this);
+    public boolean dependsOn(DependencyNode dependencyNode) {
+        return dependencyNode.isDependencyOf(this);
     }
 
     /**
      * Checks whether this dependency is a dependency of given dependency
-     * @param dependency the dependency
+     * @param dependencyNode the dependency
      * @return true if this dependency is a dependency of {@code dependency}
      */
-    public boolean isDependencyOf(Dependency dependency) {
-        return dependents.contains(dependency);
+    public boolean isDependencyOf(DependencyNode dependencyNode) {
+        return dependents.contains(dependencyNode);
     }
 
     /**

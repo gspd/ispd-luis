@@ -6,12 +6,12 @@ import org.junit.Test;
 /**
  * SimpleDependencyTest
  */
-public class SimpleDependencyTest {
+public class SimpleDependencyNodeTest {
 
     @Test
     public void testSimpleDependency() {
-        Dependency a = new SimpleDependency();
-        Dependency b = new SimpleDependency();
+        DependencyNode a = new SimpleDependencyNode();
+        DependencyNode b = new SimpleDependencyNode();
         // b depends on a (a -> b)
         assertTrue(b.addDependency(a));
         // do not add loops

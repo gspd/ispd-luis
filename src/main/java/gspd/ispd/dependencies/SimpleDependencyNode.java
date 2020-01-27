@@ -6,32 +6,32 @@ package gspd.ispd.dependencies;
  * 
  * @author luisbaldissera
  */
-public class SimpleDependency extends Dependency {
+public class SimpleDependencyNode extends DependencyNode {
 
     /**
      * Simple dependency node constructor
      * @param reference the object the node refers to
      */
-    public SimpleDependency(Object reference) {
+    public SimpleDependencyNode(Object reference) {
         super(reference);
     }
 
     /**
      * Acyclic dependency node constructor without object reference
      */
-    public SimpleDependency() {
+    public SimpleDependencyNode() {
         this(null);
     }
 
     /**
      * Adds a dependency that this depends on.
-     * @param dependency the dependency to add
+     * @param dependencyNode the dependency to add
      * @return true if could be added and false otherwise
      */
     @Override
-    public boolean addDependency(Dependency dependency) {
-        if (validateNewDependency(dependency)) {
-            return super.addDependency(dependency);
+    public boolean addDependency(DependencyNode dependencyNode) {
+        if (validateNewDependency(dependencyNode)) {
+            return super.addDependency(dependencyNode);
         } else {
             return false;
         }
@@ -39,11 +39,11 @@ public class SimpleDependency extends Dependency {
 
     /**
      * Adds a dependency that depends on this
-     * @param dependency the dependent
+     * @param dependent the dependent
      * @return true if could be added and false otherwise
      */
     @Override
-    public boolean addDependent(Dependency dependent) {
+    public boolean addDependent(DependencyNode dependent) {
         if (validateNewDependent(dependent)) {
             return super.addDependent(dependent);
         } else {
@@ -55,21 +55,21 @@ public class SimpleDependency extends Dependency {
      * Check if the dependency to be added as dependency of this will not break the
      * rules for the simple graph.
      * 
-     * @param dependency the dependency to be added
+     * @param dependencyNode the dependency to be added
      * @return true if the dependency can be safety added
      */
-    protected boolean validateNewDependency(Dependency dependency) {
-        return ((SimpleDependency) dependency).validateNewDependent(this);
+    protected boolean validateNewDependency(DependencyNode dependencyNode) {
+        return ((SimpleDependencyNode) dependencyNode).validateNewDependent(this);
     }
 
     /**
      * Check if the dependent to be added as dependent of this will not break the
      * rules for the simple graph
      * 
-     * @param dependency the dependency to be added
+     * @param dependent the dependency to be added
      * @return true if the dependency can be safety added
      */
-    protected boolean validateNewDependent(Dependency dependent) {
+    protected boolean validateNewDependent(DependencyNode dependent) {
         return !isDependencyOf(dependent) && dependent != this;
     }
 

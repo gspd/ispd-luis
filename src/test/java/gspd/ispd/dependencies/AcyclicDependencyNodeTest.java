@@ -6,13 +6,13 @@ import org.junit.Test;
 /**
  * AcyclicDependencyTest
  */
-public class AcyclicDependencyTest {
+public class AcyclicDependencyNodeTest {
 
     @Test
     public void testAcyclic() {
-        Dependency a = new AcyclicDependency();
-        Dependency b = new AcyclicDependency();
-        Dependency c = new AcyclicDependency();
+        DependencyNode a = new AcyclicDependencyNode();
+        DependencyNode b = new AcyclicDependencyNode();
+        DependencyNode c = new AcyclicDependencyNode();
         assertTrue(a.addDependent(b));
         assertTrue(b.addDependent(c));
         // do not allow cyclic dependencies chaining

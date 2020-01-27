@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class DependencyTest {
+public class DependencyNodeTest {
 
     @Test
     public void testDepedency() {
-        Dependency a = new Dependency();
-        Dependency b = new Dependency();
+        DependencyNode a = new DependencyNode();
+        DependencyNode b = new DependencyNode();
         // a and b are independents
         assertFalse(a.isDependencyOf(b));
         b.addDependency(a);
@@ -45,9 +45,9 @@ public class DependencyTest {
 
     @Test
     public void testReferencing() {
-        Dependency d1 = new Dependency("T1");
-        Dependency d2 = new Dependency("T2");
-        Dependency d3 = new Dependency("T3");
+        DependencyNode d1 = new DependencyNode("T1");
+        DependencyNode d2 = new DependencyNode("T2");
+        DependencyNode d3 = new DependencyNode("T3");
 
         assertTrue(d1.addDependency(d2));
         assertTrue(d2.addDependency(d3));
