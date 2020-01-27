@@ -25,11 +25,29 @@ import javax.swing.text.StyleConstants;
  */
 /**
  * Realiza faz chamada ao motor de simulação e apresenta os passos realizados e
- * porcentagem da simulação concluida
+ * porcentagem da simulação concluida.
  *
  * @author denison_usuario
  */
 public class JSimulacao extends javax.swing.JDialog implements Runnable {
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JProgressBar jProgressBar;
+    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JTextPane jTextPaneNotificacao;
+    // End of variables declaration//GEN-END:variables
+    private SimpleAttributeSet configuraCor = new SimpleAttributeSet();// configura a cor do texto que é exibido no painel de notificações
+    private Thread threadSim;// thread principal que realiza a simulação
+    private RedeDeFilas redeDeFilas;// rede de filas (caso de GRID)
+    private RedeDeFilasCloud redeDeFilasCloud;// rede de fulas (caso de CLOUD)
+    private List<Tarefa> tarefas;//lista de tarefas a serem executadas
+    private String modeloTexto;
+    private Document modelo;//XML do modelo (?)
+    private ResourceBundle palavras;
+    private double porcentagem = 0; //% da execução da simulação
+    private SimulationProgress progrSim;
+    private int tipoModelo; //define se o modelo simulado é de grid, cloud iaas ou cloud paas (de acordo com {@link EscolherClasse})
 
     /**
      * Creates new form AguardaSimulacao
@@ -71,6 +89,7 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
         this.tarefas = null;
         this.redeDeFilas = null;
         this.redeDeFilasCloud = null;
+        // antes de fechar a janela, verifica se há uma simulação em execução e a termina
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -156,23 +175,6 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
         }
         this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCancelar;
-    private javax.swing.JProgressBar jProgressBar;
-    private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JTextPane jTextPaneNotificacao;
-    // End of variables declaration//GEN-END:variables
-    private SimpleAttributeSet configuraCor = new SimpleAttributeSet();
-    private Thread threadSim;
-    private RedeDeFilas redeDeFilas;
-    private RedeDeFilasCloud redeDeFilasCloud;
-    private List<Tarefa> tarefas;
-    private String modeloTexto;
-    private Document modelo;
-    private ResourceBundle palavras;
-    private double porcentagem = 0;
-    private SimulationProgress progrSim;
-    private int tipoModelo; //define se o modelo simulado é de grid, cloud iaas ou cloud paas
 
     public void setRedeDeFilas(RedeDeFilas redeDeFilas) {
         this.redeDeFilas = redeDeFilas;
@@ -206,6 +208,7 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
         jProgressBar.setValue(value);
     }
 
+    // execução principal que é realizada pela 'threadSim'
     @Override
     public void run() {
         progrSim.println("Simulation Initiated.");
@@ -214,7 +217,7 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
             //Verifica se foi construido modelo na area de desenho
             progrSim.validarInicioSimulacao(modelo);//[5%] --> 5%
             //Constrói e verifica modelos icônicos e simuláveis
-            progrSim.AnalisarModelos(modeloTexto);//[20%] --> 25%
+            progrSim.analisarModelos(modeloTexto);//[20%] --> 25%
             //criar grade
             progrSim.print("Mounting network queue.");
             progrSim.print(" -> ");
