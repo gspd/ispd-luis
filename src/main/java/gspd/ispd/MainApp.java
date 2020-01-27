@@ -5,6 +5,7 @@ import gspd.ispd.fxgui.MainWindow;
 import gspd.ispd.model.ISPDModel;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
+import gspd.ispd.temp.Temp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -24,6 +25,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Temp.exec();
         mainWindow = primaryStage;
         mainWindow.setOnCloseRequest(event -> {
             event.consume();

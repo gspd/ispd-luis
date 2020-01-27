@@ -32,15 +32,19 @@ public class SequentialSimulation extends Simulation {
         this.time = 0;
         this.eventos = new PriorityQueue<EventoFuturo>();
 
+        // modelo não existe
         if (redeDeFilas == null) {
             throw new IllegalArgumentException("The model has no icons.");
+        // modelo precisa de mesteres
         } else if (redeDeFilas.getMestres() == null || redeDeFilas.getMestres().isEmpty()) {
             throw new IllegalArgumentException("The model has no Masters.");
+        // modelo precisa ter conexões
         } else if (redeDeFilas.getLinks() == null || redeDeFilas.getLinks().isEmpty()) {
             janela.println("The model has no Networks.", Color.orange);
         }
+        // modelo precisa ter tarefas
         if (tarefas == null || tarefas.isEmpty()) {
-            throw new IllegalArgumentException("One or more  workloads have not been configured.");
+            throw new IllegalArgumentException("One or more workloads have not been configured.");
         }
         janela.print("Creating routing.");
         janela.print(" -> ");

@@ -217,7 +217,7 @@ public class Tarefa implements Cliente {
 
     public void finalizarAtendimentoProcessamento(double tempo) {
         this.estado = CONCLUIDO;
-        triggerDependentsTasks();
+        // triggerDependentsTasks();
         this.metricas.incTempoProcessamento(tempo - inicioEspera);
         if (this.tempoFinal.size() < this.tempoInicial.size()) {
             this.tempoFinal.add(tempo);

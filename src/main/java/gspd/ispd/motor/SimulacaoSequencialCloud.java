@@ -27,6 +27,10 @@ import java.util.PriorityQueue;
 public class SimulacaoSequencialCloud extends Simulation {
 
     private double time = 0;
+    /**
+     * List of futures event sorted by priority, where this priority
+     * is the time instant the event was created. See {@link EventoFuturo#compareTo(EventoFuturo)}
+     */
     private PriorityQueue<EventoFuturo> eventos;
     
     public SimulacaoSequencialCloud(SimulationProgress janela, RedeDeFilasCloud redeDeFilas, List<Tarefa> tarefas) throws IllegalArgumentException {
@@ -85,14 +89,14 @@ public class SimulacaoSequencialCloud extends Simulation {
     @Override
     public void simular() {
         //inicia os escalonadores
-         System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
         iniciarEscalonadoresCloud();
-         System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
         
         iniciarAlocadoresCloud();
-         System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
         addEventos(this.getTarefas());
-         System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
         
         
         if (atualizarEscalonadores()) {

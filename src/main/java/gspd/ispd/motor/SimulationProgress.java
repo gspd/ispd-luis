@@ -48,7 +48,7 @@ public abstract class SimulationProgress {
      *
      * @param ModeloIconico Texto contendo o modelo icônico que será analisado
      */
-    public void AnalisarModelos(String ModeloIconico) {
+    public void analisarModelos(String ModeloIconico) {
         //escreve modelo iconico
         this.print("Writing iconic model.");
         this.print(" -> ");
