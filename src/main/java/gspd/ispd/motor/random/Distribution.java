@@ -70,11 +70,11 @@ public class Distribution extends Random {
         return result;
     }
 
-    public double nextExponential(double b) {
+    public double exponencial(double media) {
         double randx;
         double result;
         randx = nextDouble();
-        result = -1 * b * Math.log(randx);
+        result = -media * Math.log(randx);
         return result;
     }
 

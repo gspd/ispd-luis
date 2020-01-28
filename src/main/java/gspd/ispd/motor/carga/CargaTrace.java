@@ -4,13 +4,14 @@
  */
 package gspd.ispd.motor.carga;
 
-import NumerosAleatorios.GeracaoNumAleatorios;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
 import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_Maquina;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_Mestre;
+import gspd.ispd.motor.random.Distribution;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -56,7 +57,9 @@ public class CargaTrace extends GerarCarga {
         List<Double> pcomp = new ArrayList<Double>();
         int quantidadePorMestre = this.num_tasks / rdf.getMestres().size();
         int resto = this.num_tasks % rdf.getMestres().size();
-        GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int) System.currentTimeMillis());
+        // GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int) System.currentTimeMillis());
+        // REMOVED GeracaoNumAleatorios
+        Distribution gerador = new Distribution((int) System.currentTimeMillis());
         double mediaCap = MediaCapProcGrade(rdf.getMaquinas());
         try {
             BufferedReader in = new BufferedReader(new FileReader(caminho));

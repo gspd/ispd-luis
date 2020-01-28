@@ -4,10 +4,11 @@
  */
 package gspd.ispd.motor.carga;
 
-import NumerosAleatorios.GeracaoNumAleatorios;
 import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
+import gspd.ispd.motor.random.Distribution;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -67,7 +68,9 @@ public class CargaForNode extends GerarCarga {
             i++;
         }
         if (encontrou) {
-            GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int)System.currentTimeMillis());
+            // GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int)System.currentTimeMillis());
+            // REMOVED GeracaoNumAleatorios
+            Distribution gerador = new Distribution((int) System.currentTimeMillis());
             for (i = 0; i < this.getNumeroTarefas(); i++) {
                 //Random sorteio = new Random();
                 //double srt = sorteio.nextInt(this.maxComputacao.intValue()) + this.minComputacao;

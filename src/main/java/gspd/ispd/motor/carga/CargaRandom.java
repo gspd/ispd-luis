@@ -4,10 +4,11 @@
  */
 package gspd.ispd.motor.carga;
 
-import NumerosAleatorios.GeracaoNumAleatorios;
 import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
+import gspd.ispd.motor.random.Distribution;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,9 @@ public class CargaRandom extends GerarCarga {
         int identificador = 0;
         int quantidadePorMestre = this.getNumeroTarefas() / rdf.getMestres().size();
         int resto = this.getNumeroTarefas() % rdf.getMestres().size();
-        GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int)System.currentTimeMillis());
+        // GeracaoNumAleatorios gerador = new GeracaoNumAleatorios((int)System.currentTimeMillis());
+        // REMOVED GeracaoNumAleatorios
+        Distribution gerador = new Distribution((int) System.currentTimeMillis());
         for (CS_Processamento mestre : rdf.getMestres()) {
             for (int i = 0; i < quantidadePorMestre; i++) {
                 Tarefa tarefa = new Tarefa(
