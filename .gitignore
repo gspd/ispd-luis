@@ -9,6 +9,8 @@
 build/
 bin/
 out/
+
+# Automatic files created by iSPD execution
 Erros/
 gspd.ispd.externo/
 gspd.ispd.externo.cloudSchedulers
@@ -17,9 +19,11 @@ modelosimulavel
 
 # Other Hidden Files
 .*
+.project
+.classpath
 
 # Package Files #
-# Until coding iSPD.jav as regular Java
+# Until coding iSPD.jar as regular Java
 # *.jar
 *.war
 *.ear
