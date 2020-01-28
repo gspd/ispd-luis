@@ -3,12 +3,10 @@ package gspd.ispd.queues;
 import gspd.ispd.queues.disciplines.FIFO;
 import gspd.ispd.queues.disciplines.QueueDiscipline;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class EventQueue<C extends Client> implements ClientInput<C>, ClientOutput<C> {
-
-    private ClientOutput<C> input;
-    private ClientInput<C> output;
+public class EventQueue<C extends Client> implements Iterable<C> {
 
     private QueueDiscipline<C> discipline;
     private List<C> queue;
@@ -16,10 +14,6 @@ public class EventQueue<C extends Client> implements ClientInput<C>, ClientOutpu
     public void add(C client) {
         queue.add(client);
         discipline.discipline(client);
-    }
-
-    public boolean hasNext() {
-        return queue.size() > 0;
     }
 
     public void setDiscipline(QueueDiscipline<C> discipline) {
@@ -32,12 +26,20 @@ public class EventQueue<C extends Client> implements ClientInput<C>, ClientOutpu
     }
 
     @Override
-    public void receiveClient(C client) {
-        add(client);
+    public Iterator<C> iterator() {
+        return new EventQueueIterator();
     }
 
-    @Override
-    public void transmitClient(C client) {
-        output.receiveClient(client);
+    class EventQueueIterator implements Iterator<C> {
+
+        @Override
+        public boolean hasNext() {
+            return queue.iterator().hasNext();
+        }
+
+        @Override
+        public C next() {
+            return queue.iterator().next();
+        }
     }
 }
