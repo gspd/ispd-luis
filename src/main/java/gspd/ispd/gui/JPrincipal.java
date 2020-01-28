@@ -1032,7 +1032,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                             file = null;
                             //Carregar na aDesenho
                             aDesenho = new DesenhoGrade(1500, 1500);
-                            aDesenho.setGrade(descricao);
+                            aDesenho.setGrade(descricao); // not really necessary (only when an .ims is opening)
                         }
                         aDesenho.addKeyListener(this);
                         aDesenho.setPaineis(this);
