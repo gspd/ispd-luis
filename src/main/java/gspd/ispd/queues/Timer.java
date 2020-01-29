@@ -1,6 +1,6 @@
-package gspd.ispd.queues.time;
+package gspd.ispd.queues;
 
-import gspd.ispd.queues.EventObserver;
+import gspd.ispd.queues.events.EventObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +39,14 @@ public class Timer {
     }
 
     private void setTime(double time) {
-        try {
-            semaphore.acquire();
+        synchronized (Timer.class) {
             this.time = time;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            semaphore.release();
         }
         // notify all observers that time has been set
         notifyObservers();
     }
 
-    public void incrementTime(double time) {
+    public final void incrementTime(double time) {
         setTime(this.time + time);
     }
 

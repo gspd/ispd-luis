@@ -1,6 +1,6 @@
-package gspd.ispd.queues;
+package gspd.ispd.queues.events;
 
-import gspd.ispd.queues.disciplines.FIFO;
+import gspd.ispd.queues.Client;
 import gspd.ispd.queues.disciplines.QueueDiscipline;
 
 import java.util.Iterator;

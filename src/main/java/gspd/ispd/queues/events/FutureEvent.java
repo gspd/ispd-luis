@@ -1,21 +1,23 @@
-package gspd.ispd.queues;
+package gspd.ispd.queues.events;
+
+import gspd.ispd.queues.Client;
+import gspd.ispd.queues.ServiceCentre;
 
 import java.util.EventObject;
 
 /**
  * A future event specifies a source that made the event and involves
  * a client.
- * @param <C>
  */
-public class FutureEvent<C extends Client> extends EventObject {
+public class FutureEvent extends EventObject implements Comparable<FutureEvent> {
     /**
      * The service centre that made the event
      */
-    private ServiceCentre<C> source;
+    private ServiceCentre source;
     /**
      * the client that is subject of the event
      */
-    private C client;
+    private Client client;
     /**
      * the event type
      */
@@ -25,7 +27,7 @@ public class FutureEvent<C extends Client> extends EventObject {
      */
     private double time;
 
-    public FutureEvent(ServiceCentre<C> source, C client, EventType eventType) {
+    public FutureEvent(ServiceCentre source, Client client, EventType eventType) {
         super(source);
         this.source = source;
         this.eventType = eventType;
@@ -36,12 +38,17 @@ public class FutureEvent<C extends Client> extends EventObject {
         return eventType;
     }
 
-    public C getClient() {
+    public Client getClient() {
         return client;
     }
 
     @Override
-    public ServiceCentre<C> getSource() {
+    public ServiceCentre getSource() {
         return this.source;
+    }
+
+    @Override
+    public int compareTo(FutureEvent futureEvent) {
+        return (int) (this.time - futureEvent.time);
     }
 }

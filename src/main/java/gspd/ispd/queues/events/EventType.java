@@ -1,4 +1,4 @@
-package gspd.ispd.queues;
+package gspd.ispd.queues.events;
 
 /**
  * The possible types of {@link FutureEvent}

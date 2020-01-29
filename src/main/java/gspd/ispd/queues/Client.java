@@ -1,16 +1,6 @@
 package gspd.ispd.queues;
 
-import java.util.List;
+import gspd.ispd.commons.ID;
 
-public class Client {
-    private List<ServiceCentre<Client>> path;
-
-    public Client() {
-    }
-
-    public List<ServiceCentre<Client>> getPath() {
-        return path;
-    }
-
-
+public interface Client extends ID {
 }

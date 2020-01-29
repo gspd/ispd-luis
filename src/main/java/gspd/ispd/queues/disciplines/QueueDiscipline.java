@@ -14,20 +14,20 @@ public abstract class QueueDiscipline<E> {
         this.queue = queue;
     }
 
-    protected void setAhead(E element) {
+    protected void putAhead(E element) {
         setPosition(element, 0);
     }
 
-    protected void setAhead(int index) {
+    protected void putAhead(int index) {
         setPosition(index, 0);
     }
 
-    protected void setBehind(E element) {
+    protected void putBehind(E element) {
         int position = queue.size() - 1;
         setPosition(element, position);
     }
 
-    protected void setBehind(int index) {
+    protected void putBehind(int index) {
         int position = queue.size() - 1;
         setPosition(index, position);
     }
@@ -46,11 +46,16 @@ public abstract class QueueDiscipline<E> {
         queue.add(position, element);
     }
 
+    protected E getElement(int index) {
+        return queue.get(index);
+    }
+
     /**
      * Specifies the discipline a just arrived element needs to follow.
-     * Consider using {@link QueueDiscipline#setAhead(Object)},
-     * {@link QueueDiscipline#setBehind(Object)}, and
-     * {@link QueueDiscipline#setPosition(Object, int)} in its implementation
+     * Consider using {@link QueueDiscipline#putAhead(Object)},
+     * {@link QueueDiscipline#putBehind(Object)},
+     * {@link QueueDiscipline#setPosition(Object, int)}, ans
+     * {@link QueueDiscipline#getElement(int)} in its implementation
      * 
      * @param element the element that just arrived in queue
      */
