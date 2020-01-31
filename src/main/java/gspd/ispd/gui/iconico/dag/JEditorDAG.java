@@ -52,6 +52,28 @@ import javax.swing.JOptionPane;
 public class JEditorDAG extends javax.swing.JFrame {
 
     File file;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private gspd.ispd.gui.iconico.dag.DesenhoDAG desenhoDAG1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonComplete;
+    private javax.swing.JButton jButtonOpen;
+    private javax.swing.JButton jButtonSave;
+    private javax.swing.JButton jButtonThread;
+    private javax.swing.JFileChooser jFileChooser;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    // End of variables declaration//GEN-END:variables
+
 
     /**
      * Creates new form JGrafoTarefa
@@ -407,28 +429,6 @@ public class JEditorDAG extends javax.swing.JFrame {
         desenhoDAG1.setAddVertice(true);
         desenhoDAG1.setTipoVertice(DesenhoDAG.COMPLEXTASK);
     }//GEN-LAST:event_jButton10ActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gspd.ispd.gui.iconico.dag.DesenhoDAG desenhoDAG1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JButton jButtonCancel;
-    private javax.swing.JButton jButtonComplete;
-    private javax.swing.JButton jButtonOpen;
-    private javax.swing.JButton jButtonSave;
-    private javax.swing.JButton jButtonThread;
-    private javax.swing.JFileChooser jFileChooser;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JToolBar jToolBar2;
-    // End of variables declaration//GEN-END:variables
 
     public File getFile() {
         return file;

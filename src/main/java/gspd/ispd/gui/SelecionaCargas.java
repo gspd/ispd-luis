@@ -13,6 +13,8 @@ package gspd.ispd.gui;
 import gspd.ispd.ISPD;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
+import gspd.ispd.gui.iconico.dag.DesenhoDAG;
+import gspd.ispd.gui.iconico.dag.JEditorDAG;
 import gspd.ispd.motor.carga.CargaList;
 import gspd.ispd.motor.carga.CargaRandom;
 import gspd.ispd.motor.carga.CargaForNode;
@@ -43,6 +45,8 @@ public class SelecionaCargas extends javax.swing.JDialog {
     private File file;
     private final Vector<Vector> dagLinha;
     private final Vector dagColuna;
+    
+    private int selectedDAGIcon;
 
     /**
      * Creates new form SelecionaCargas
@@ -157,14 +161,26 @@ public class SelecionaCargas extends javax.swing.JDialog {
         jButtonOpenWMSX = new javax.swing.JButton();
         jTextFieldCaminhoWMS = new javax.swing.JTextField();
         jFileExternalTrace = new javax.swing.JFileChooser();
+        jPanelDAG = new javax.swing.JPanel();
+        jToolBar1 = new javax.swing.JToolBar();
+        jToggleTaskDAG = new javax.swing.JToggleButton();
+        jToggleTaskDelay = new javax.swing.JToggleButton();
+        jToogleTaskSync = new javax.swing.JToggleButton();
+        jToogleTaskDependency = new javax.swing.JToggleButton();
+        jToogleTaskExpansion = new javax.swing.JToggleButton();
+        jToogleTaskRecursion = new javax.swing.JToggleButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        desenhoDAG = new gspd.ispd.gui.iconico.dag.DesenhoDAG();
+        buttonGroupDAG = new javax.swing.ButtonGroup();
         jPanelModo = new javax.swing.JPanel();
         jRadioButtonTraces = new javax.swing.JRadioButton();
         jRadioButtonForNode = new javax.swing.JRadioButton();
         jRadioButtonRandom = new javax.swing.JRadioButton();
+        jRadioButtonDAG = new javax.swing.JRadioButton();
         jButtonCancelar = new javax.swing.JButton();
         jButtonAddUser = new javax.swing.JButton();
         jScrollPaneSelecionado = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelAreaEscolha = new javax.swing.JPanel();
         jButtonOK1 = new javax.swing.JButton();
 
         jPanelRandom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -173,9 +189,9 @@ public class SelecionaCargas extends javax.swing.JDialog {
 
         jLabelNumberOfTasks.setText(palavras.getString("Number of tasks")); // NOI18N
 
-        jSpinnerNumTarefas.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerNumTarefas.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
-        jSpinnerMinComputacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerMinComputacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel1.setText(palavras.getString("Computational size")); // NOI18N
 
@@ -183,29 +199,29 @@ public class SelecionaCargas extends javax.swing.JDialog {
 
         jLabel3.setText(palavras.getString("Time of arrival")); // NOI18N
 
-        jSpinnerMinComunicacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerMinComunicacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
-        jSpinnerTimeOfArrival.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerTimeOfArrival.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel4.setText(palavras.getString("Minimum")); // NOI18N
 
         jLabel5.setText(palavras.getString("Average")); // NOI18N
 
-        jSpinnerAverageComputacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerAverageComputacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
-        jSpinnerAverageComunicacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerAverageComunicacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel6.setText(palavras.getString("Maximum")); // NOI18N
 
-        jSpinnerMaxComputacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerMaxComputacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
-        jSpinnerMaxComunicacao.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerMaxComunicacao.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel7.setText(palavras.getString("Probability")); // NOI18N
 
-        jSpinnerProbabilityComputacao.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerProbabilityComputacao.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
-        jSpinnerProbabilityComunicacao.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerProbabilityComunicacao.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
         jLabel9.setText(palavras.getString("MFLOPS")); // NOI18N
 
@@ -325,19 +341,19 @@ public class SelecionaCargas extends javax.swing.JDialog {
 
         jLabelNumberOfTasks1.setText(palavras.getString("Number of tasks")); // NOI18N
 
-        jSpinnerNumTarefasNo.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinnerNumTarefasNo.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         jLabel13.setText(palavras.getString("Computational")); // NOI18N
 
         jLabel14.setText(palavras.getString("Communication")); // NOI18N
 
-        jSpinnerMaxCompNo.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerMaxCompNo.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
-        jSpinnerMinCompNo.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerMinCompNo.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
-        jSpinnerMinComuNo.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerMinComuNo.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
-        jSpinnerMaxComuNo.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+        jSpinnerMaxComuNo.setModel(new javax.swing.SpinnerNumberModel(0.0f, 0.0f, null, 1.0f));
 
         jButtonAddTabela.setText(palavras.getString("Add")); // NOI18N
         jButtonAddTabela.addActionListener(new java.awt.event.ActionListener() {
@@ -430,8 +446,8 @@ public class SelecionaCargas extends javax.swing.JDialog {
                     .addGroup(jPanelForNodeLayout.createSequentialGroup()
                         .addGroup(jPanelForNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(jSpinnerMinCompNo, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                            .addComponent(jSpinnerMinComuNo, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+                            .addComponent(jSpinnerMinCompNo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE)
+                            .addComponent(jSpinnerMinComuNo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE))
                         .addGap(18, 18, 18))
                     .addGroup(jPanelForNodeLayout.createSequentialGroup()
                         .addGroup(jPanelForNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -602,7 +618,7 @@ public class SelecionaCargas extends javax.swing.JDialog {
                 return null;
             }});
 
-            jPanelSelecionaTrace.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+            jPanelSelecionaTrace.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
             jPanelSelecionaTrace.setPreferredSize(new java.awt.Dimension(500, 300));
 
             jLabel20.setText(palavras.getString("Select an iSPD trace file to open:")); // NOI18N
@@ -661,11 +677,118 @@ public class SelecionaCargas extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jButton3)
-                    .addContainerGap(31, Short.MAX_VALUE))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
             jFileExternalTrace.setAcceptAllFileFilterUsed(false);
             jFileExternalTrace.setFileFilter(filtro2);
+
+            jPanelDAG.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            jPanelDAG.setMaximumSize(null);
+            jPanelDAG.setPreferredSize(new java.awt.Dimension(500, 300));
+
+            jToolBar1.setFloatable(false);
+            jToolBar1.setRollover(true);
+
+            buttonGroupDAG.add(jToggleTaskDAG);
+            jToggleTaskDAG.setText("Task");
+            jToggleTaskDAG.setFocusable(false);
+            jToggleTaskDAG.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToggleTaskDAG.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToggleTaskDAG.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToggleTaskDAGActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToggleTaskDAG);
+
+            buttonGroupDAG.add(jToggleTaskDelay);
+            jToggleTaskDelay.setText("Delay");
+            jToggleTaskDelay.setFocusable(false);
+            jToggleTaskDelay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToggleTaskDelay.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToggleTaskDelay.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToggleTaskDelayActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToggleTaskDelay);
+
+            buttonGroupDAG.add(jToogleTaskSync);
+            jToogleTaskSync.setText("Sync");
+            jToogleTaskSync.setFocusable(false);
+            jToogleTaskSync.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToogleTaskSync.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToogleTaskSync.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToogleTaskSyncActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToogleTaskSync);
+
+            buttonGroupDAG.add(jToogleTaskDependency);
+            jToogleTaskDependency.setText("Dependency");
+            jToogleTaskDependency.setFocusable(false);
+            jToogleTaskDependency.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToogleTaskDependency.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToogleTaskDependency.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToogleTaskDependencyActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToogleTaskDependency);
+
+            buttonGroupDAG.add(jToogleTaskExpansion);
+            jToogleTaskExpansion.setText("Expansion");
+            jToogleTaskExpansion.setFocusable(false);
+            jToogleTaskExpansion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToogleTaskExpansion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToogleTaskExpansion.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToogleTaskExpansionActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToogleTaskExpansion);
+
+            buttonGroupDAG.add(jToogleTaskRecursion);
+            jToogleTaskRecursion.setText("Recursion");
+            jToogleTaskRecursion.setFocusable(false);
+            jToogleTaskRecursion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            jToogleTaskRecursion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+            jToogleTaskRecursion.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jToogleTaskRecursionActionPerformed(evt);
+                }
+            });
+            jToolBar1.add(jToogleTaskRecursion);
+
+            javax.swing.GroupLayout desenhoDAGLayout = new javax.swing.GroupLayout(desenhoDAG);
+            desenhoDAG.setLayout(desenhoDAGLayout);
+            desenhoDAGLayout.setHorizontalGroup(
+                desenhoDAGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 2000, Short.MAX_VALUE)
+            );
+            desenhoDAGLayout.setVerticalGroup(
+                desenhoDAGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 1000, Short.MAX_VALUE)
+            );
+
+            jScrollPane3.setViewportView(desenhoDAG);
+
+            javax.swing.GroupLayout jPanelDAGLayout = new javax.swing.GroupLayout(jPanelDAG);
+            jPanelDAG.setLayout(jPanelDAGLayout);
+            jPanelDAGLayout.setHorizontalGroup(
+                jPanelDAGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            );
+            jPanelDAGLayout.setVerticalGroup(
+                jPanelDAGLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelDAGLayout.createSequentialGroup()
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
+            );
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             setTitle(palavras.getString("Random Workloads")); // NOI18N
@@ -678,7 +801,6 @@ public class SelecionaCargas extends javax.swing.JDialog {
             jPanelModo.setPreferredSize(new java.awt.Dimension(500, 60));
 
             jRadioButtonTraces.setText(palavras.getString("Traces")); // NOI18N
-            jRadioButtonTraces.setOpaque(false);
             jRadioButtonTraces.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jRadioButtonTracesActionPerformed(evt);
@@ -700,6 +822,13 @@ public class SelecionaCargas extends javax.swing.JDialog {
                 }
             });
 
+            jRadioButtonDAG.setText("DAG");
+            jRadioButtonDAG.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jRadioButtonDAGActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout jPanelModoLayout = new javax.swing.GroupLayout(jPanelModo);
             jPanelModo.setLayout(jPanelModoLayout);
             jPanelModoLayout.setHorizontalGroup(
@@ -708,10 +837,12 @@ public class SelecionaCargas extends javax.swing.JDialog {
                     .addGap(62, 62, 62)
                     .addComponent(jRadioButtonRandom)
                     .addGap(37, 37, 37)
-                    .addComponent(jRadioButtonForNode, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(31, 31, 31)
-                    .addComponent(jRadioButtonTraces, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jRadioButtonForNode, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(jRadioButtonTraces)
+                    .addGap(18, 18, 18)
+                    .addComponent(jRadioButtonDAG)
+                    .addContainerGap(28, Short.MAX_VALUE))
             );
             jPanelModoLayout.setVerticalGroup(
                 jPanelModoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -720,7 +851,8 @@ public class SelecionaCargas extends javax.swing.JDialog {
                     .addGroup(jPanelModoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jRadioButtonRandom)
                         .addComponent(jRadioButtonTraces, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButtonForNode))
+                        .addComponent(jRadioButtonForNode)
+                        .addComponent(jRadioButtonDAG))
                     .addGap(9, 9, 9))
             );
 
@@ -744,18 +876,18 @@ public class SelecionaCargas extends javax.swing.JDialog {
 
             jScrollPaneSelecionado.setPreferredSize(new java.awt.Dimension(500, 300));
 
-            javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-            jPanel1.setLayout(jPanel1Layout);
-            jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 498, Short.MAX_VALUE)
+            javax.swing.GroupLayout jPanelAreaEscolhaLayout = new javax.swing.GroupLayout(jPanelAreaEscolha);
+            jPanelAreaEscolha.setLayout(jPanelAreaEscolhaLayout);
+            jPanelAreaEscolhaLayout.setHorizontalGroup(
+                jPanelAreaEscolhaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 765, Short.MAX_VALUE)
             );
-            jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanelAreaEscolhaLayout.setVerticalGroup(
+                jPanelAreaEscolhaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGap(0, 309, Short.MAX_VALUE)
             );
 
-            jScrollPaneSelecionado.setViewportView(jPanel1);
+            jScrollPaneSelecionado.setViewportView(jPanelAreaEscolha);
 
             jButtonOK1.setText(palavras.getString("OK")); // NOI18N
             jButtonOK1.setPreferredSize(new java.awt.Dimension(80, 30));
@@ -773,14 +905,13 @@ public class SelecionaCargas extends javax.swing.JDialog {
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addGap(37, 37, 37)
                             .addComponent(jButtonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(28, 28, 28)
+                            .addGap(34, 34, 34)
                             .addComponent(jButtonAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(32, 32, 32)
+                            .addGap(38, 38, 38)
                             .addComponent(jButtonOK1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPaneSelecionado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanelModo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanelModo, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
                     .addContainerGap())
             );
             layout.setVerticalGroup(
@@ -1016,7 +1147,37 @@ private void jTextFieldCaminhoTraceActionPerformed(java.awt.event.ActionEvent ev
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxUsersActionPerformed
 
+    private void jRadioButtonDAGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonDAGActionPerformed
+        setTipo(GerarCarga.DAG);
+    }//GEN-LAST:event_jRadioButtonDAGActionPerformed
+
+    private void jToogleTaskRecursionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToogleTaskRecursionActionPerformed
+        setDAGIcon(DesenhoDAG.RECURSION);
+    }//GEN-LAST:event_jToogleTaskRecursionActionPerformed
+
+    private void jToogleTaskExpansionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToogleTaskExpansionActionPerformed
+        setDAGIcon(DesenhoDAG.EXPANSION);
+    }//GEN-LAST:event_jToogleTaskExpansionActionPerformed
+
+    private void jToogleTaskDependencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToogleTaskDependencyActionPerformed
+        setDAGIcon(DesenhoDAG.DEPENDENCY);
+    }//GEN-LAST:event_jToogleTaskDependencyActionPerformed
+
+    private void jToogleTaskSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToogleTaskSyncActionPerformed
+        setDAGIcon(DesenhoDAG.SYNC);
+    }//GEN-LAST:event_jToogleTaskSyncActionPerformed
+
+    private void jToggleTaskDelayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleTaskDelayActionPerformed
+        setDAGIcon(DesenhoDAG.DELAY);
+    }//GEN-LAST:event_jToggleTaskDelayActionPerformed
+
+    private void jToggleTaskDAGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleTaskDAGActionPerformed
+        setDAGIcon(DesenhoDAG.TASK);
+    }//GEN-LAST:event_jToggleTaskDAGActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupDAG;
+    private gspd.ispd.gui.iconico.dag.DesenhoDAG desenhoDAG;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAbreExterno;
@@ -1055,20 +1216,23 @@ private void jTextFieldCaminhoTraceActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JLabel jLabelNumberOfTasks;
     private javax.swing.JLabel jLabelNumberOfTasks1;
     private javax.swing.JFileChooser jOpenTrace;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelAreaEscolha;
     private javax.swing.JPanel jPanelConvertTrace;
+    private javax.swing.JPanel jPanelDAG;
     private javax.swing.JPanel jPanelForNode;
     private javax.swing.JPanel jPanelModo;
     private javax.swing.JPanel jPanelRandom;
     private javax.swing.JPanel jPanelSelecionaTrace;
     private javax.swing.JPanel jPanelTrace;
     private javax.swing.JRadioButton jRadioButtonConvTrace;
+    private javax.swing.JRadioButton jRadioButtonDAG;
     private javax.swing.JRadioButton jRadioButtonForNode;
     private javax.swing.JRadioButton jRadioButtonRandom;
     private javax.swing.JRadioButton jRadioButtonTraces;
     private javax.swing.JRadioButton jRadioButtonwmsx;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneSelecionado;
     private javax.swing.JScrollPane jScrollPaneTabela;
     private javax.swing.JSpinner jSpinnerAverageComputacao;
@@ -1091,6 +1255,13 @@ private void jTextFieldCaminhoTraceActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JTextField jTextFieldCaminhoWMS;
     private javax.swing.JTextArea jTextNotifTrace;
     private javax.swing.JTextArea jTextNotification;
+    private javax.swing.JToggleButton jToggleTaskDAG;
+    private javax.swing.JToggleButton jToggleTaskDelay;
+    private javax.swing.JToggleButton jToogleTaskDependency;
+    private javax.swing.JToggleButton jToogleTaskExpansion;
+    private javax.swing.JToggleButton jToogleTaskRecursion;
+    private javax.swing.JToggleButton jToogleTaskSync;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
     private FiltroDeArquivos filtro;
     private GerarCarga carga;
@@ -1168,23 +1339,38 @@ private void jTextFieldCaminhoTraceActionPerformed(java.awt.event.ActionEvent ev
     private void setTipo(int tipo) {
         switch (tipo) {
             case GerarCarga.RANDOM:
+                jRadioButtonRandom.setSelected(true);
                 jRadioButtonForNode.setSelected(false);
                 jRadioButtonTraces.setSelected(false);
-                jRadioButtonRandom.setSelected(true);
+                jRadioButtonDAG.setSelected(false);
                 jScrollPaneSelecionado.setViewportView(jPanelRandom);
                 break;
             case GerarCarga.FORNODE:
+                jRadioButtonRandom.setSelected(false);
                 jRadioButtonForNode.setSelected(true);
                 jRadioButtonTraces.setSelected(false);
-                jRadioButtonRandom.setSelected(false);
+                jRadioButtonDAG.setSelected(false);
                 jScrollPaneSelecionado.setViewportView(jPanelForNode);
                 break;
             case GerarCarga.TRACE:
+                jRadioButtonRandom.setSelected(false);
                 jRadioButtonForNode.setSelected(false);
                 jRadioButtonTraces.setSelected(true);
-                jRadioButtonRandom.setSelected(false);
+                jRadioButtonDAG.setSelected(false);
                 jScrollPaneSelecionado.setViewportView(jPanelTrace);
                 break;
+            case GerarCarga.DAG:
+                jRadioButtonRandom.setSelected(false);
+                jRadioButtonForNode.setSelected(false);
+                jRadioButtonTraces.setSelected(false);
+                jRadioButtonDAG.setSelected(true);
+                jScrollPaneSelecionado.setViewportView(jPanelDAG);
+                break;
+                
         }
+    }
+    
+    private void setDAGIcon(int iconType) {
+        desenhoDAG.setTipoVertice(iconType);
     }
 }

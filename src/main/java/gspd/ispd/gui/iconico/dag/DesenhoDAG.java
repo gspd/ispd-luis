@@ -73,6 +73,14 @@ public class DesenhoDAG extends AreaDesenho {
     private int tipoVertice = -1;
     private int indices;
     private Dimension size;
+    
+    public final static int NONE = -1;
+    public final static int TASK = 0;
+    public final static int DELAY = 1;
+    public final static int SYNC = 2;
+    public final static int DEPENDENCY = 3;
+    public final static int EXPANSION = 4;
+    public final static int RECURSION = 5;
 
     public DesenhoDAG() {
         super(true, true, true, true);
@@ -94,10 +102,68 @@ public class DesenhoDAG extends AreaDesenho {
         return size;
     }
 
+//    @Override
+//    public void adicionarVertice(int x, int y) {
+//        switch (tipoVertice) {
+//            case DAGTASK:
+//                Task beginDag = new Task(x, y, indices);
+//                Task endDag = new Task(x, y + INTERVAL * 2, indices);
+//                Line t1 = new Line(beginDag, endDag);
+//                vertices.add(beginDag);
+//                vertices.add(endDag);
+//                arestas.add(t1);
+//                tasks.add(beginDag);
+//                beginDag.exclusiveItemActionPerformed(null);
+//                indices++;
+//                break;
+//            case COMPLEXTASK:
+//                Task begin = new Task(x, y, indices);
+//                begin.setDag(Boolean.FALSE);
+//                Task end = new Task(x, y + INTERVAL * 2, indices);
+//                end.setDag(Boolean.FALSE);
+//                Line t2 = new Line(begin, end);
+//                vertices.add(begin);
+//                vertices.add(end);
+//                arestas.add(t2);
+//                tasks.add(begin);
+//                begin.exclusiveItemActionPerformed(null);
+//                indices++;
+//                break;
+//            case DATA:
+//                DataFile dt = new DataFile(x, y, indices);
+//                files.add(dt);
+//                vertices.add(dt);
+//                indices++;
+//                break;
+//            case LOOP:
+//                Loop loop = new Loop(x, y);
+//                vertices.add(loop);
+//                vertices.add(new Loop(x, y + INTERVAL, loop));
+//                break;
+//            case SEND:
+//                vertices.add(new Send(x, y));
+//                break;
+//            case RECEIVE:
+//                vertices.add(new Receive(x, y));
+//                break;
+//            case PROCESS:
+//                vertices.add(new ProcessingBlock(x, y));
+//                break;
+//            case THREAD:
+//                Thread th1 = new Thread(x + INTERVAL, y - INTERVAL);
+//                Thread th2 = new Thread(x + INTERVAL, y + INTERVAL);
+//                vertices.add(new Thread(x, y, th1, th2));
+//                vertices.add(th1);
+//                vertices.add(th2);
+//                break;
+//        }
+//        setAddVertice(false);
+//    }
+    
     @Override
     public void adicionarVertice(int x, int y) {
         switch (tipoVertice) {
-            case DAGTASK:
+            case TASK:
                 Task beginDag = new Task(x, y, indices);
                 Task endDag = new Task(x, y + INTERVAL * 2, indices);
                 Line t1 = new Line(beginDag, endDag);
@@ -108,48 +174,9 @@ public class DesenhoDAG extends AreaDesenho {
                 beginDag.exclusiveItemActionPerformed(null);
                 indices++;
                 break;
-            case COMPLEXTASK:
-                Task begin = new Task(x, y, indices);
-                begin.setDag(Boolean.FALSE);
-                Task end = new Task(x, y + INTERVAL * 2, indices);
-                end.setDag(Boolean.FALSE);
-                Line t2 = new Line(begin, end);
-                vertices.add(begin);
-                vertices.add(end);
-                arestas.add(t2);
-                tasks.add(begin);
-                begin.exclusiveItemActionPerformed(null);
-                indices++;
-                break;
-            case DATA:
-                DataFile dt = new DataFile(x, y, indices);
-                files.add(dt);
-                vertices.add(dt);
-                indices++;
-                break;
-            case LOOP:
-                Loop loop = new Loop(x, y);
-                vertices.add(loop);
-                vertices.add(new Loop(x, y + INTERVAL, loop));
-                break;
-            case SEND:
-                vertices.add(new Send(x, y));
-                break;
-            case RECEIVE:
-                vertices.add(new Receive(x, y));
-                break;
-            case PROCESS:
-                vertices.add(new ProcessingBlock(x, y));
-                break;
-            case THREAD:
-                Thread th1 = new Thread(x + INTERVAL, y - INTERVAL);
-                Thread th2 = new Thread(x + INTERVAL, y + INTERVAL);
-                vertices.add(new Thread(x, y, th1, th2));
-                vertices.add(th1);
-                vertices.add(th2);
-                break;
+            default:
+                System.out.println("NOT WORKING");
         }
-        setAddVertice(false);
     }
 
     @Override

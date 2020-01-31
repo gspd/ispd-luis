@@ -59,6 +59,11 @@ public class DataFile extends Vertice implements Identificavel {
     private static JTextField jId;
     private static JTextField jsizeMin;
     private static JTextField jsizeMax;
+    private Double sizeMin;
+    private Double sizeMax;
+    private String id;
+    private ArrayList<Message> entradas;
+    private ArrayList<Message> saidas;
 
     public static void edit(Component parent, DataFile icon) {
         if (painel == null) {
@@ -99,12 +104,6 @@ public class DataFile extends Vertice implements Identificavel {
             icon.sizeMax = tamanhoMax;
         }
     }
-
-    private Double sizeMin;
-    private Double sizeMax;
-    private String id;
-    private ArrayList<Message> entradas;
-    private ArrayList<Message> saidas;
 
     public DataFile(Integer x, Integer y, Integer id) {
         super(x, y);

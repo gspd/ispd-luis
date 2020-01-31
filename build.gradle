@@ -48,6 +48,10 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.measure/unit-api
     implementation 'javax.measure:unit-api:2.0'
 
+    // AOC Java annotations tools
+    // https://mvnrepository.com/artifact/com.jcabi/jcabi-aspects
+    compile 'com.jcabi:jcabi-aspects:0.22.6'
+
     // Use iSPD architecture
     // NOTE: if you change the JAR for any reason, please change this to the new path
     compile files('src/libs/iSPD.jar')

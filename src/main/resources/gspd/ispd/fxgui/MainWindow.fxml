@@ -30,9 +30,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Ellipse?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.MainWindow">
    <children>
@@ -263,43 +260,7 @@
                             </Tab>
                             <Tab text="Workload">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <VBox layoutX="40.0" layoutY="37.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ToolBar prefHeight="50.0" prefWidth="587.0">
-                                                   <items>
-                                                      <Hyperlink fx:id="workloadMousePointerIcon" onAction="#unselectToolbox">
-                                                         <graphic>
-                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@images/mouse_pointer.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Hyperlink>
-                                                      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-                                                      <Hyperlink fx:id="taskIcon">
-                                                         <graphic>
-                                                            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fff41f" height="25.0" stroke="BLACK" strokeType="INSIDE" width="30.0" />
-                                                         </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="dependencyIcon">
-                                                         <graphic>
-                                                            <Line endX="30.0" startY="30.0" strokeType="OUTSIDE" />
-                                                         </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="messageIcon">
-                                                         <graphic>
-                                                            <Line endX="30.0" startY="30.0" strokeDashOffset="10.0" strokeType="OUTSIDE" style="-fx-stroke-dash-array: 5;" />
-                                                         </graphic></Hyperlink>
-                                                      <Hyperlink fx:id="synchronizationIcon">
-                                                         <graphic>
-                                                            <Ellipse radiusX="15.0" radiusY="15.0" stroke="BLACK" strokeType="INSIDE" />
-                                                         </graphic></Hyperlink>
-                                                   </items></ToolBar>
-                                                <ScrollPane hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
-                                             </children>
-                                          </VBox>
-                                       </children></AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
                             </Tab>
                               <Tab text="VMs">

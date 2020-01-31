@@ -92,8 +92,6 @@ public class MainWindow {
     private ScrollPane hardwareScrollPane;
     @FXML
     private ToggleGroup hardwareToolboxToggle;
-    @FXML
-    private ToggleGroup workloadToolboxToggle;
 
     // This ImageView is not present in FXML file. It represents
     // the image that follows cursor to help user remember what

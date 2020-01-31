@@ -1,5 +1,6 @@
 package gspd.ispd.queues.disciplines;
 
+import com.jcabi.aspects.Cacheable;
 import gspd.ispd.commons.DataCache;
 
 public abstract class PriorityDiscipline<E> extends QueueDiscipline<E> {
@@ -30,6 +31,7 @@ public abstract class PriorityDiscipline<E> extends QueueDiscipline<E> {
      * @param element the element to get the priority
      * @return the calculated priority
      */
+    @Cacheable
     public final int getPriority(E element) {
         int priority;
         if (priorityCache.hit(element)) {
