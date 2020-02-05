@@ -25,6 +25,7 @@ public class DragUtil {
             dy = event.getY() - y0;
             node.setLayoutX(x + dx);
             node.setLayoutY(y + dy);
+            event.consume();
         });
         node.setOnMouseReleased(event -> {
             x0 = 0;
