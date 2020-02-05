@@ -13,3 +13,22 @@
 .split-pane-divider {
     -fx-opacity: 0.0;
 }
+
+.pin-in {
+    -fx-opacity: 0.4;
+}
+
+.correct {
+    -fx-effect: dropshadow(three-pass-box, green, 10, 0, 0, 0);
+}
+
+.incorrect {
+    -fx-effect: dropshadow(three-pass-box, red, 10, 0, 0, 0)
+}
+
+.grid {
+    -fx-background-color: #D3D3D333,
+        linear-gradient(from 0.5px 0.0px to 10.5px  0.0px, repeat, black 5%, transparent 5%),
+        linear-gradient(from 0.0px 0.5px to  0.0px 10.5px, repeat, black 5%, transparent 5%);
+}
+
