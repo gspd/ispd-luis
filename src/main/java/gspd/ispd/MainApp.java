@@ -34,8 +34,7 @@ public class MainApp extends Application {
         model = new ISPDModel();
         loader = new FXMLLoader();
         ISPD.setLocale(new Locale("en", "US"));
-        ResourceBundle bundle = ISPD.getStrings();
-        loader.setResources(bundle);
+        loader.setResources(ISPD.strings);
         MainWindow.create(mainWindow, this);
         mainWindow.getScene().getStylesheets().add("/gspd/ispd/fxgui/styles/common.css");
     }

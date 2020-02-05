@@ -45,11 +45,11 @@ public class SettingsWindow {
             // Loads FXML file (GUI description)
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(GUI.class.getResource("SettingsWindow.fxml"));
-            loader.setResources(ISPD.getStrings());
+            loader.setResources(ISPD.strings);
             // starts the content of the main window
             Scene scene = new Scene(loader.load());
             // creates the window itself
-            window.setTitle(ISPD.getStrings().getString("settings.title"));
+            window.setTitle(ISPD.strings.getString("settings.title"));
             // define the settings window as a child of the stage that called it
             window.initOwner(owner);
             window.initModality(Modality.WINDOW_MODAL);
