@@ -149,6 +149,8 @@
                     <items>
                         <CheckMenuItem mnemonicParsing="false" text="%menu.view.grid" />
                         <CheckMenuItem mnemonicParsing="false" text="%menu.view.ruler" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#handleFullScreenClicked" text="%menu.view.fullscreen" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="%menu.help">
@@ -170,7 +172,7 @@
                   <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                     <items>
                         <TextArea fx:id="helpArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Click an icon to get help" />
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0" />
+                        <ScrollPane fx:id="propertiesScrollPane" prefHeight="200.0" prefWidth="200.0" />
                     </items>
                   </SplitPane>
                   <SplitPane dividerPositions="0.8717948717948718" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
@@ -185,7 +187,7 @@
                                              <children>
                                                 <ToolBar prefHeight="39.0" prefWidth="587.0" VBox.vgrow="NEVER">
                                                    <items>
-                                                      <Hyperlink fx:id="hardwareMousePointerIcon" onAction="#unselectToolbox">
+                                                      <Hyperlink fx:id="hardwareMousePointerIcon" onAction="#unselectToolbox" stylesheets="@styles/common.css">
                                                          <graphic>
                                                             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
@@ -224,7 +226,7 @@
                                                       </ToggleButton>
                                                       <ToggleButton fx:id="switchIcon" mnemonicParsing="false" toggleGroup="$hardwareToolboxToggle">
                                                          <graphic>
-                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="correc">
                                                                <image>
                                                                   <Image url="@images/botao_internet.gif" />
                                                                </image>
@@ -301,7 +303,12 @@
                         <VBox>
                            <children>
                               <TextArea fx:id="terminalOutputArea" editable="false" prefHeight="62.0" prefWidth="536.0" VBox.vgrow="ALWAYS" />
-                              <TextField fx:id="terminalInput" promptText="&gt;&gt;&gt;" VBox.vgrow="NEVER" />
+                              <HBox VBox.vgrow="NEVER">
+                                 <children>
+                                    <TextField fx:id="terminalInput" promptText="&gt;&gt;&gt;" HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" text="%button.ok" />
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                     </items>

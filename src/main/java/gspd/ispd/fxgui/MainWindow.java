@@ -4,24 +4,28 @@ import gspd.ispd.ISPD;
 import gspd.ispd.MainApp;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
+import gspd.ispd.fxgui.util.FormBuilder;
+import gspd.ispd.model.data.MachineData;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MainWindow {
     @FXML
@@ -92,6 +96,10 @@ public class MainWindow {
     private ScrollPane hardwareScrollPane;
     @FXML
     private ToggleGroup hardwareToolboxToggle;
+    @FXML
+    private ScrollPane propertiesScrollPane;
+    @FXML
+    private CheckMenuItem fullScreenMenuItem;
 
     // This ImageView is not present in FXML file. It represents
     // the image that follows cursor to help user remember what
@@ -112,8 +120,8 @@ public class MainWindow {
             window.setScene(scene);
             controller = loader.getController();
             controller.setMain(main);
-            controller.init();
             controller.setWindow(window);
+            controller.init();
             window.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -154,6 +162,23 @@ public class MainWindow {
                 hardwarePane.setOnMouseClicked(event -> {});
             }
         }));
+        propertiesScrollPane.setContent(FormBuilder.getInstance().makeForm(MachineData.class));
+        DrawPane dPane = new DrawPane();
+        Group group = new Group(dPane);
+        hardwareScrollPane.setContent(group);
+        Node n1 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
+        Node n2 = new ImageView(new Image("/gspd/ispd/gui/images/botao_internet.gif"));
+        dPane.add(n1, 20.0, 20.0);
+        dPane.add(n2, 200.0, 200.0);
+        Line line = new Line();
+        line.setStartX(n1.getLayoutX() + n1.getBoundsInLocal().getCenterX());
+        line.setStartY(n1.getLayoutY() + n1.getBoundsInLocal().getCenterY());
+        line.setEndX(n2.getLayoutX() + n2.getBoundsInLocal().getCenterX());
+        line.setEndY(n2.getLayoutY() + n2.getBoundsInLocal().getCenterY());
+        line.setStroke(Color.BLUE);
+        line.setStrokeWidth(4.0);
+        dPane.add(line);
+        line.toBack();
 //         hardwarePane.setOnMouseClicked(event -> {
 //             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
 //                 Image image = followImageView.getImage();
@@ -260,6 +285,15 @@ public class MainWindow {
     }
 
     @FXML
+    private void handleFullScreenClicked() {
+        if (!window.isFullScreen()) {
+            window.setFullScreen(true);
+        } else {
+            window.setFullScreen(false);
+        }
+    }
+
+    @FXML
     private void handleAddVmClicked() {
         // create a new window to insert VM
         VM vm = createVm();
@@ -311,7 +345,7 @@ public class MainWindow {
         try {
             loader = new FXMLLoader();
             loader.setLocation(VMDialog.class.getResource("VMDialog.fxml"));
-            loader.setResources(ISPD.getStrings());
+            loader.setResources(ISPD.strings);
             root = loader.load();
             scene = new Scene(root);
             dialog = new Stage();
@@ -342,7 +376,7 @@ public class MainWindow {
         try {
             loader = new FXMLLoader();
             loader.setLocation(VMDialog.class.getResource("VMDialog.fxml"));
-            loader.setResources(ISPD.getStrings());
+            loader.setResources(ISPD.strings);
             root = loader.load();
             scene = new Scene(root);
             dialog = new Stage();
@@ -376,7 +410,7 @@ public class MainWindow {
         try {
             loader = new FXMLLoader();
             loader.setLocation(UserDialog.class.getResource("UserDialog.fxml"));
-            loader.setResources(ISPD.getStrings());
+            loader.setResources(ISPD.strings);
             root = loader.load();
             scene = new Scene(root);
             dialog = new Stage();
@@ -405,7 +439,7 @@ public class MainWindow {
         try {
             loader = new FXMLLoader();
             loader.setLocation(UserDialog.class.getResource("UserDialog.fxml"));
-            loader.setResources(ISPD.getStrings());
+            loader.setResources(ISPD.strings);
             root = loader.load();
             scene = new Scene(root);
             dialog = new Stage();
