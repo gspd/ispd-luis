@@ -1,7 +1,7 @@
 package gspd.ispd.queues;
 
-import gspd.ispd.commons.ID;
-import gspd.ispd.commons.Multiplicity;
+import gspd.ispd.util.ID;
+import gspd.ispd.util.Multiplicity;
 
 public interface ServiceCentre extends ID, Multiplicity {
     void request(Client client);

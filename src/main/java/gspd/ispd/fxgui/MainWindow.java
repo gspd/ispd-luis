@@ -17,7 +17,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -91,6 +90,10 @@ public class MainWindow {
     @FXML
     private MenuItem simulateMenuItem;
     @FXML
+    private MenuItem redoMenuItem;
+    @FXML
+    private MenuItem undoMenuItem;
+    @FXML
     private Pane hardwarePane;
     @FXML
     private ScrollPane hardwareScrollPane;
@@ -163,7 +166,7 @@ public class MainWindow {
             }
         }));
         propertiesScrollPane.setContent(FormBuilder.getInstance().makeForm(MachineData.class));
-        DrawPane dPane = new DrawPane();
+        DrawingPane dPane = new DrawingPane();
         Group group = new Group(dPane);
         hardwareScrollPane.setContent(group);
         dPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
@@ -181,6 +184,7 @@ public class MainWindow {
         line.setStrokeWidth(4.0);
         dPane.add(line);
         line.toBack();
+        undoMenuItem.setOnAction(event -> dPane.undo());
 //         hardwarePane.setOnMouseClicked(event -> {
 //             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
 //                 Image image = followImageView.getImage();

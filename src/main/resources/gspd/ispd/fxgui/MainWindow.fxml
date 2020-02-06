@@ -116,7 +116,7 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="%menu.edit">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.edit.undo">
+                        <MenuItem fx:id="undoMenuItem" mnemonicParsing="false" text="%menu.edit.undo">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -125,7 +125,7 @@
                               </ImageView>
                            </graphic>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" text="%menu.edit.redo">
+                        <MenuItem fx:id="redoMenuItem" mnemonicParsing="false" text="%menu.edit.redo">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

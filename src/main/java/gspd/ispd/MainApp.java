@@ -3,29 +3,27 @@ package gspd.ispd;
 import gspd.ispd.fxgui.GUI;
 import gspd.ispd.fxgui.MainWindow;
 import gspd.ispd.model.ISPDModel;
-import gspd.ispd.model.User;
-import gspd.ispd.model.VM;
-import gspd.ispd.temp.Temp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
 //    PROTOTYPE VERSION yet
 public class MainApp extends Application {
 
     private Stage mainWindow;
-    private Stage settingsWindow;
     private ISPDModel model;
-    private Properties settings;
     private FXMLLoader loader;
 
+    /**
+     * Define what to do as iSPD starts.
+     *
+     * @param primaryStage the window
+     * @throws Exception something goes wrong
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Temp.exec();
         mainWindow = primaryStage;
         mainWindow.setOnCloseRequest(event -> {
             event.consume();
@@ -36,11 +34,26 @@ public class MainApp extends Application {
         ISPD.setLocale(new Locale("en", "US"));
         loader.setResources(ISPD.strings);
         MainWindow.create(mainWindow, this);
-        mainWindow.getScene().getStylesheets().add("/gspd/ispd/fxgui/styles/common.css");
     }
 
-    public Properties getSettings() {
-        return settings;
+    /**
+     * Defines whats iSPD does when the application is normally closed
+     *
+     * @throws Exception something goes wrong
+     */
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+    }
+
+    /**
+     * Defines what iSPD does when initializing
+     *
+     * @throws Exception something goes wrong
+     */
+    @Override
+    public void init() throws Exception {
+        super.init();
     }
 
     public void setModel(ISPDModel model) {

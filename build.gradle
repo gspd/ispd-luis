@@ -55,6 +55,10 @@ dependencies {
     // Use iSPD architecture
     // NOTE: if you change the JAR for any reason, please change this to the new path
     compile files('src/libs/iSPD.jar')
+
+    // styles sheets
+    compile "org.aerofx:aerofx:0.2"
+    compile "com.aquafx-project:aquafx:0.2"
 }
 
 javafx {

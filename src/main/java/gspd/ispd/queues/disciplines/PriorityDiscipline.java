@@ -1,7 +1,7 @@
 package gspd.ispd.queues.disciplines;
 
 import com.jcabi.aspects.Cacheable;
-import gspd.ispd.commons.DataCache;
+import gspd.ispd.util.DataCache;
 
 public abstract class PriorityDiscipline<E> extends QueueDiscipline<E> {
 

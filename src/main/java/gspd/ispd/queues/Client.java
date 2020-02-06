@@ -1,6 +1,6 @@
 package gspd.ispd.queues;
 
-import gspd.ispd.commons.ID;
+import gspd.ispd.util.ID;
 
 public interface Client extends ID {
 }
