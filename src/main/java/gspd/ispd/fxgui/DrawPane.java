@@ -86,10 +86,8 @@ public class DrawPane extends Pane {
          * Relevant information about dragging the selection
          */
         private DragContext dragContext;
-        // Mouse event handlers. They are responsible for updating selections,
-        // updating the selection rectangle and updating items position. The
-        // 'box*' handlers refers to handling the selection box, while the 'group*'
-        // handlers takes care of positioning the selected items.
+        // box* handlers: handles the events that are responsible for drawing the
+        // selection box rectangle
         private EventHandler<MouseEvent> boxMousePressedHandler = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 boxContext.setStartX(event.getX());
@@ -116,6 +114,7 @@ public class DrawPane extends Pane {
                 event.consume();
             }
         };
+        // group* handlers: handles event of moving the nodes that are already selected
         private EventHandler<MouseEvent> groupMousePressedHandler = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 dragContext.setStartX(event.getX());
@@ -136,6 +135,13 @@ public class DrawPane extends Pane {
         };
         private EventHandler<MouseEvent> groupMouseReleasedHandler = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
+                event.consume();
+            }
+        };
+        // single* handlers: handle events to directly drag a node, indirectly selecting it
+        private EventHandler<MouseEvent> singleMousePressedEvent = event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                clearAndSelect((Node)event.getTarget());
                 event.consume();
             }
         };
