@@ -166,6 +166,8 @@ public class MainWindow {
         DrawPane dPane = new DrawPane();
         Group group = new Group(dPane);
         hardwareScrollPane.setContent(group);
+        dPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
+        dPane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.3));
         Node n1 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
         Node n2 = new ImageView(new Image("/gspd/ispd/gui/images/botao_internet.gif"));
         dPane.add(n1, 20.0, 20.0);
