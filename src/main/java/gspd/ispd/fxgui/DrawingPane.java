@@ -40,7 +40,7 @@ public class DrawingPane extends Pane {
         // initializes the selection model and passes 'this' in order to
         // grant access to the nodes children to selection model
         selectionModel = new SelectionModel(this);
-        undoStack = new FixedStack<>(16);
+        undoStack = new FixedStack<>(32);
         setCursor(Cursor.CROSSHAIR);
         setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
     }
@@ -179,7 +179,6 @@ public class DrawingPane extends Pane {
          */
         private EventHandler<MouseEvent> boxMousePressedHandler = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                pane.takeSnapshot();
                 boxContext.setStartX(event.getX());
                 boxContext.setStartY(event.getY());
                 boxContext.setEndX(event.getX());
@@ -445,6 +444,9 @@ public class DrawingPane extends Pane {
                 // The list is then un-reversed
                 FXCollections.reverse(pane.getChildren());
             }
+            if (!set.isEmpty()) {
+                pane.takeSnapshot();
+            }
             set.forEach(this::select);
         }
 
@@ -608,11 +610,18 @@ public class DrawingPane extends Pane {
      * Note that it is immutable via constructor and getters
      */
     private static class Snapshot {
+        /**
+         * Stores the nodes in scene, and maps them to their respective layout
+         * position
+         */
         private Map<Node, Point2D> children;
+        /**
+         * Stores the set of selected node
+         */
         private Set<Node> selected;
 
         public Snapshot(DrawingPane pane) {
-            this.children = new HashMap<>();
+            this.children = new LinkedHashMap<>();
             pane.getChildren().forEach(node -> {
                 Point2D point = new Point2D(node.getLayoutX(), node.getLayoutY());
                 children.put(node, point);
@@ -625,7 +634,7 @@ public class DrawingPane extends Pane {
         }
 
         public Map<Node, Point2D> getChildren() {
-            return new HashMap(children);
+            return new LinkedHashMap<>(children);
         }
     }
 }
