@@ -1,10 +1,12 @@
 package gspd.ispd.fxgui;
 
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -50,6 +52,7 @@ public class DrawPane extends Pane {
      */
     public void add(Node node) {
         getChildren().add(node);
+        selectionModel.watch(node);
     }
 
     /**
@@ -65,10 +68,16 @@ public class DrawPane extends Pane {
      * can be moved inside the drawing pane.
      */
     public static class SelectionModel {
+
         /**
-         * Group that contains selected nodes
+         * Set that contains selected nodes
          */
         private Set<Node> selected;
+        /**
+         * Set that contains all the node the selection
+         * model is able to see to select
+         */
+        private Set<Node> watching;
         /**
          * The pane which this selection model refers.
          * Needed to access pane children
@@ -86,8 +95,24 @@ public class DrawPane extends Pane {
          * Relevant information about dragging the selection
          */
         private DragContext dragContext;
-        // box* handlers: handles the events that are responsible for drawing the
-        // selection box rectangle
+
+        // box* handles the events that are responsible for drawing the
+        // selection box rectangle.
+
+        /**
+         * <p>
+         * Handles the start of the selection box, it position its start and
+         * adds the rectangle to the drawing pane.
+         * </p>
+         * <p>
+         * <b>Note</b> that if other events that intersects the drawing pane
+         * in JavaFX scene graph don't be correctly consumed, it can cause
+         * error by the rectangle trying to be added more than once
+         * </p>
+         *
+         * @see Event#consume()
+         * @see Parent#getChildren()
+         */
         private EventHandler<MouseEvent> boxMousePressedHandler = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 boxContext.setStartX(event.getX());
@@ -142,6 +167,10 @@ public class DrawPane extends Pane {
         private EventHandler<MouseEvent> singleMousePressedEvent = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 clearAndSelect((Node)event.getTarget());
+                // fires the event to the same target to respond with the new event handler
+                // set on clearAndSelect method
+                Event.fireEvent(event.getTarget(), event);
+                // consume the event to not propagate in event chain
                 event.consume();
             }
         };
@@ -154,6 +183,7 @@ public class DrawPane extends Pane {
             super();
             this.pane = pane;
             selected = new HashSet<>();
+            watching = new HashSet<>();
             selectionBox = new Rectangle(0, 0, 0, 0);
             boxContext = new SelectionBoxContext();
             dragContext = new DragContext();
@@ -176,35 +206,62 @@ public class DrawPane extends Pane {
         }
 
         /**
-         * Select a given node in the drawing pane. If the node is not in drawing pane, an
-         * {@link IllegalArgumentException} is thrown.
+         * Select a given node in the drawing pane. If the node is not being watched for selection,
+         * and {@link IllegalArgumentException} is thrown.
          *
          * @param node the node to select
+         *
+         * @see SelectionModel#watch(Node)
          */
         public void select(Node node) {
-            if (pane.getChildren().contains(node)) {
+            if (watching.contains(node)) {
+                // adds node to the selected set
                 selected.add(node);
+                // exchange the single handler by the group handler in order to respect selection
+                // events with other selected items
+                node.removeEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
                 node.addEventHandler(MouseEvent.MOUSE_PRESSED, groupMousePressedHandler);
                 node.addEventHandler(MouseEvent.MOUSE_DRAGGED, groupMouseDraggedHandler);
                 node.addEventHandler(MouseEvent.MOUSE_RELEASED, groupMouseReleasedHandler);
+                // changes the blend mode to change the visual when selected
                 node.setBlendMode(BlendMode.DIFFERENCE);
             } else {
-                throw new IllegalArgumentException("Node is not one of the " + DrawPane.class.getName() + " children");
+                throw new IllegalArgumentException("Node is not being watched. Did you use watch(Node) before?");
             }
         }
 
         /**
-         * Unselect a given node. If the node is not in drawing pane, an {@link IllegalArgumentException}
+         * Unselect a given node. If the node is being watched for selections, an {@link IllegalArgumentException}
          * is thrown. If the node is in drawing pane but it is not selected, it remains unselected and nothing
          * happens.
          *
          * @param node the node to unselect
+         *
+         * @see SelectionModel#watch(Node)
          */
         public void clearSelection(Node node) {
-            if (pane.getChildren().contains(node)) {
+            if (watching.contains(node)) {
                 unselect(node);
             } else {
-                throw new IllegalArgumentException("Node is not one od the " + DrawPane.class.getName() + " children");
+                throw new IllegalArgumentException("Node is not being watched. Did you use watch(Node) before?");
+            }
+        }
+
+        /**
+         * Starts to watch node for selections, configuring it
+         * to respond the selection model. If given node is not
+         * in the drawing pane, an {@link IllegalArgumentException}
+         * is throw.
+         *
+         * @param node the node to watch
+         */
+        public void watch(Node node) {
+            if (pane.getChildren().contains(node)) {
+                if (watching.add(node)) {
+                    node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
+                }
+            } else {
+                throw new IllegalArgumentException("Node is not one of the " + DrawPane.class.getName() + " children");
             }
         }
 
@@ -214,8 +271,12 @@ public class DrawPane extends Pane {
          * @param node the node to unselect
          */
         private void unselect(Node node) {
+            // removes the node from selected set
             selected.remove(node);
+            // exchange the group handler by the single handler in order to be able
+            // to be indirectly selected alone
             node.removeEventHandler(MouseEvent.MOUSE_PRESSED, groupMousePressedHandler);
+            node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
             node.removeEventHandler(MouseEvent.MOUSE_DRAGGED, groupMouseDraggedHandler);
             node.removeEventHandler(MouseEvent.MOUSE_RELEASED, groupMouseReleasedHandler);
             node.setBlendMode(BlendMode.SRC_OVER);
@@ -261,6 +322,20 @@ public class DrawPane extends Pane {
             return selected.isEmpty();
         }
 
+        /**
+         * Stops to watch the node for selections, and removes
+         * configurations to node respond to watches. If the node
+         * is not being watched, nothing happens
+         *
+         * @param node the node to unwatch
+         */
+        public void unwatch(Node node) {
+            if (watching.remove(node)) {
+                node.removeEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
+            }
+        }
+
+
         private void clearAndUpdateSelectedItems() {
             clearSelection();
             updateSelectedItems();
@@ -281,7 +356,7 @@ public class DrawPane extends Pane {
                 }
             } else if (boxContext.getPolicy() == SelectionPolicy.INTERSECTS) {
                 for (Node node : pane.getChildren()) {
-                    if (node.getBoundsInParent().intersects(selectionBox.getBoundsInParent())) {
+                    if (node.getLayoutBounds().intersects(selectionBox.getLayoutBounds())) {
                         set.add(node);
                     }
                 }
