@@ -48,11 +48,35 @@ public class DrawPane extends Pane {
 
     /**
      * Adds a node to the drawing pane itself
+     *
      * @param node the node no add
      */
     public void add(Node node) {
         getChildren().add(node);
         selectionModel.watch(node);
+    }
+
+    /**
+     * Removes a given node from the drawing pane. If the node is not
+     * in the drawing pane, nothing happens
+     *
+     * @param node the node to remove
+     */
+    public void remove(Node node) {
+        selectionModel.clearSelection(node);
+        selectionModel.unwatch(node);
+        getChildren().remove(node);
+    }
+
+    /**
+     * Convenience method to remove all the nodes selected by the selection
+     * model from the drawing pane
+     */
+    public void removeSelected() {
+        // do not use for/foreach due ConcurrentModifyException
+        while (!selectionModel.isEmpty()) {
+            remove(selectionModel.getSelectedItems().iterator().next());
+        }
     }
 
     /**
@@ -356,7 +380,7 @@ public class DrawPane extends Pane {
                 }
             } else if (boxContext.getPolicy() == SelectionPolicy.INTERSECTS) {
                 for (Node node : pane.getChildren()) {
-                    if (node.getLayoutBounds().intersects(selectionBox.getLayoutBounds())) {
+                    if (node.getBoundsInParent().intersects(selectionBox.getBoundsInParent())) {
                         set.add(node);
                     }
                 }
