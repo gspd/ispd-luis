@@ -19,20 +19,24 @@ import java.util.List;
  * Classe abstrata ue implementa os escalonadores.
  * 
  * lista de atributos:
- * 
+ * <ul>
+ *     <li>
  *  protected List<CS_Processamento> escravos : Lista de escravos para quem o escalonador dele distribuir tarefas
+ *     <li>
  *  protected List<List> filaEscravo : Lista que contem informações sobre cada escravo, utilizado em políticas dinâmicas.
+ *     <li>
  *  protected List<Tarefa> tarefas : Lista de tarefas para serem distribuídas entre os escravos
+ *     <li>
  *  protected MetricasUsuarios metricaUsuarios : Objeto que calcula métricas sobre o escalonamento para os usuários
- *  protected Mestre mestre : 
- 
+ *     <li>
+ *  protected Mestre mestre :
+ * </ul>
+
  * @author Diogo Tavares
  */
 
 public abstract class Escalonador {
     //Atributos
-    
-    
     protected List<CS_Processamento> escravos;
     protected List<List> filaEscravo;
     protected List<Tarefa> tarefas;

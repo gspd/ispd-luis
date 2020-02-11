@@ -1,6 +1,24 @@
 package gspd.ispd.queues;
 
-import gspd.ispd.util.ID;
+import gspd.ispd.queues.events.FutureEventType;
 
-public interface Client extends ID {
+public abstract class Client {
+
+    /**
+     * The simulation that own this client
+     */
+    private Simulation simulation;
+
+    // client future events types
+    public final static FutureEventType SERVER_ENTER = FutureEventType.get("SERVER_ENTER");
+    public final static FutureEventType SERVER_ATTENDANCE = FutureEventType.get("SERVER_ATTENDANCE");
+    public final static FutureEventType SERVER_EXIT = FutureEventType.get("SERVER_EXIT");
+
+    public Client(Simulation simulation) {
+        this.simulation = simulation;
+    }
+
+    public Simulation getSimulation() {
+        return simulation;
+    }
 }

@@ -1,20 +1,31 @@
 package gspd.ispd;
 
-import gspd.ispd.fxgui.GUI;
+import gspd.ispd.fxgui.GUIUtil;
 import gspd.ispd.fxgui.MainWindow;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
-import java.util.Locale;
+import java.util.Properties;
+import java.util.Stack;
 
 //    PROTOTYPE VERSION yet
-public class MainApp extends Application {
+public class GUI extends Application {
 
-    private Stage mainWindow;
+    private Stage mainStage;
     private ISPDModel model;
     private FXMLLoader loader;
+    private Properties settings = new Properties();
+    /**
+     * Stack of the stages (windows) of the iSPD, making easier to
+     * return to previous windows
+     */
+    private Stack<Stage> stageStack = new Stack<>();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     /**
      * Define what to do as iSPD starts.
@@ -24,16 +35,16 @@ public class MainApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        mainWindow = primaryStage;
-        mainWindow.setOnCloseRequest(event -> {
+        stageStack.push(primaryStage);
+        mainStage = primaryStage;
+        mainStage.setOnCloseRequest(event -> {
             event.consume();
             this.close();
         });
         model = new ISPDModel();
         loader = new FXMLLoader();
-        ISPD.setLocale(new Locale("en", "US"));
         loader.setResources(ISPD.strings);
-        MainWindow.create(mainWindow, this);
+        MainWindow.create(mainStage, this);
     }
 
     /**
@@ -53,6 +64,7 @@ public class MainApp extends Application {
      */
     @Override
     public void init() throws Exception {
+        loadSettings();
         super.init();
     }
 
@@ -69,6 +81,18 @@ public class MainApp extends Application {
     }
 
     public void close() {
-        GUI.closeMainWindow(mainWindow, this);
+        GUIUtil.closeMainWindow(mainStage, this);
+    }
+
+    private void loadSettings() {
+        //
+    }
+
+    private void pushFXML(String filename) {
+
+    }
+
+    private void pushStage(Stage stage) {
+
     }
 }

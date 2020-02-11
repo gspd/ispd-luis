@@ -1,45 +1,15 @@
 package gspd.ispd.queues.events;
 
-import gspd.ispd.queues.Client;
 import gspd.ispd.queues.disciplines.QueueDiscipline;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class EventQueue<C extends Client> implements Iterable<C> {
+public class EventQueue<E extends FutureEvent> extends LinkedBlockingQueue<E> {
 
-    private QueueDiscipline<C> discipline;
-    private List<C> queue;
+    private QueueDiscipline<E> discipline;
+    private List<E> queue;
+    private int maxUsers;
+    public static int INFINITY = -1;
 
-    public void add(C client) {
-        queue.add(client);
-        discipline.discipline(client);
-    }
-
-    public void setDiscipline(QueueDiscipline<C> discipline) {
-        this.discipline = discipline;
-        this.discipline.setQueue(queue);
-    }
-
-    public void setQueue(List<C> queue) {
-        this.queue = queue;
-    }
-
-    @Override
-    public Iterator<C> iterator() {
-        return new EventQueueIterator();
-    }
-
-    class EventQueueIterator implements Iterator<C> {
-
-        @Override
-        public boolean hasNext() {
-            return queue.iterator().hasNext();
-        }
-
-        @Override
-        public C next() {
-            return queue.iterator().next();
-        }
-    }
 }

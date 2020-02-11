@@ -5,14 +5,8 @@ import gspd.ispd.util.DataCache;
 
 public abstract class PriorityDiscipline<E> extends QueueDiscipline<E> {
 
-    /**
-     * Cache some priority values associated with the elements
-     */
-    private DataCache<E, Integer> priorityCache;
-    private static int MAX_CACHE_SIZE = 16;
-
     public PriorityDiscipline() {
-        priorityCache = new DataCache<>(MAX_CACHE_SIZE);
+        super();
     }
 
     @Override
@@ -33,13 +27,7 @@ public abstract class PriorityDiscipline<E> extends QueueDiscipline<E> {
      */
     @Cacheable
     public final int getPriority(E element) {
-        int priority;
-        if (priorityCache.hit(element)) {
-            priority = priorityCache.get(element);
-        } else {
-            priority = calculatePriority(element);
-            priorityCache.put(element, priority);
-        }
+        int priority = calculatePriority(element);
         return priority;
     }
 

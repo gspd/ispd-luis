@@ -1,7 +1,10 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.util.structures.FixedStack;
-import javafx.collections.FXCollections;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,11 +12,14 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 import java.util.*;
 
@@ -23,7 +29,7 @@ import java.util.*;
  *
  * @author luisbaldissera
  */
-public class DrawingPane extends Pane {
+public class DrawPane extends Pane {
     /**
      * Selection Model automatic takes care of the selecting system.
      * In this case, see {@link SelectionModel}, in order to
@@ -35,14 +41,61 @@ public class DrawingPane extends Pane {
      * undo operations
      */
     private Stack<Snapshot> undoStack;
+    /**
+     * True if grid enabled
+     */
+    private BooleanProperty gridEnable;
+    /**
+     * The blank background
+     */
+    private final static Background blankBackground = new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));;
+    /**
+     * The grid background
+     */
+    private static Background gridBackground;
 
-    public DrawingPane() {
+    public DrawPane() {
+        // initializes the statics background
+        initStatic();
         // initializes the selection model and passes 'this' in order to
         // grant access to the nodes children to selection model
         selectionModel = new SelectionModel(this);
         undoStack = new FixedStack<>(32);
-        setCursor(Cursor.CROSSHAIR);
-        setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        gridEnable = new SimpleBooleanProperty();
+        gridEnable.addListener((obs, oValue, nValue) -> {
+            if (nValue)
+                setBackground(gridBackground);
+            else
+                setBackground(blankBackground);
+        });
+        setBackground(blankBackground);
+    }
+
+    /**
+     * Initializes the static fields of the class if they weren't yet
+     */
+    private static void initStatic() {
+        if (gridBackground == null) {
+            Rectangle rectangle = new Rectangle(32, 32);
+            rectangle.setFill(Color.WHITE);
+            rectangle.setStroke(Color.LIGHTGRAY);
+            rectangle.setStrokeType(StrokeType.CENTERED);
+            rectangle.setStrokeWidth(0.5);
+            Image image = rectangle.snapshot(new SnapshotParameters(), null);
+            gridBackground = new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
+        }
+    }
+
+    public boolean getGridEnabled() {
+        return gridEnable.get();
+    }
+
+    public BooleanProperty gridEnableProperty() {
+        return gridEnable;
+    }
+
+    public void setGridEnable(boolean gridEnable) {
+        this.gridEnable.set(gridEnable);
     }
     /**
      * Adds a node to the pane, with its center located at given positions
@@ -67,7 +120,6 @@ public class DrawingPane extends Pane {
         getChildren().add(node);
         selectionModel.watch(node);
     }
-
     /**
      * Removes a given node from the drawing pane. If the node is not
      * in the drawing pane, nothing happens
@@ -130,7 +182,7 @@ public class DrawingPane extends Pane {
         selectionModel.selectAll(snapshot.getSelected());
     }
     /**
-     * Specifies the selection model engine for iSPD {@link DrawingPane}. The way the selected
+     * Specifies the selection model engine for iSPD {@link DrawPane}. The way the selected
      * items interacts with the selection shape (rectangle). And also how the selected items
      * can be moved inside the drawing pane.
      */
@@ -149,7 +201,7 @@ public class DrawingPane extends Pane {
          * The pane which this selection model refers.
          * Needed to access pane children
          */
-        private DrawingPane pane;
+        private DrawPane pane;
         /**
          * The selection box rectangle
          */
@@ -231,6 +283,9 @@ public class DrawingPane extends Pane {
         // single* handlers: handle events to directly drag a node, indirectly selecting it
         private EventHandler<MouseEvent> singleMousePressedEvent = event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
+                // clear the selection and selects only the pressed node.
+                // Note that in selection the event that node listen will be changed
+                // then it can be dragged
                 clearAndSelect((Node)event.getTarget());
                 // fires the event to the same target to respond with the new event handler
                 // set on clearAndSelect method
@@ -244,7 +299,7 @@ public class DrawingPane extends Pane {
          * Selection model constructor
          * @param pane the drawing pane the selection model belongs to
          */
-        public SelectionModel(DrawingPane pane) {
+        public SelectionModel(DrawPane pane) {
             super();
             this.pane = pane;
             selected = new HashSet<>();
@@ -334,7 +389,7 @@ public class DrawingPane extends Pane {
                     node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
                 }
             } else {
-                throw new IllegalArgumentException("Node is not one of the " + DrawingPane.class.getName() + " children");
+                throw new IllegalArgumentException("Node is not one of the " + DrawPane.class.getName() + " children");
             }
         }
 
@@ -433,23 +488,24 @@ public class DrawingPane extends Pane {
                     }
                 }
             } else if (boxContext.getPolicy() == SelectionPolicy.SINGLE) {
-                // The list is reversed in order to get the 'up-layers' first
-                FXCollections.reverse(pane.getChildren());
-                for (Node node : pane.getChildren()) {
+                // iterates the list in reverse order to get the 'up-layer' nodes first
+                ListIterator<Node> iterator = pane.getChildren().listIterator(pane.getChildren().size());
+                while (iterator.hasPrevious()) {
+                    Node node = iterator.previous();
                     if (node.getBoundsInParent().contains(boxContext.getStartX(), boxContext.getStartY())) {
                         set.add(node);
                         break;
                     }
                 }
-                // The list is then un-reversed
-                FXCollections.reverse(pane.getChildren());
             }
             if (!set.isEmpty()) {
                 pane.takeSnapshot();
             }
             set.forEach(this::select);
         }
-
+        /**
+         * Change the selection box position accordingly with drag context
+         */
         private void updateSelectionRectangle() {
             selectionBox.setX(boxContext.getStartX());
             selectionBox.setY(boxContext.getStartY());
@@ -466,6 +522,9 @@ public class DrawingPane extends Pane {
             }
         }
 
+        /**
+         * Change all the selected items position accordingly with the drag context
+         */
         private void updateSelectedItemsPosition() {
             selected.forEach(node -> {
                 node.setLayoutX(Math.max(0, node.getLayoutX() + dragContext.getTranslateX()));
@@ -478,6 +537,7 @@ public class DrawingPane extends Pane {
          * correctness
          */
         private static class SelectionBoxContext {
+
             private double startX;
             private double startY;
             private double endX;
@@ -602,7 +662,6 @@ public class DrawingPane extends Pane {
             }
         }
     }
-
     /**
      * Snapshot of important states about the drawing pane, in order to allow
      * undo and redo operations.
@@ -620,7 +679,9 @@ public class DrawingPane extends Pane {
          */
         private Set<Node> selected;
 
-        public Snapshot(DrawingPane pane) {
+        public Snapshot(DrawPane pane) {
+            // Linked hash map is used here to guarantee the order of keys is in the same order
+            // they were added. It is important in the later snapshot restoring process
             this.children = new LinkedHashMap<>();
             pane.getChildren().forEach(node -> {
                 Point2D point = new Point2D(node.getLayoutX(), node.getLayoutY());

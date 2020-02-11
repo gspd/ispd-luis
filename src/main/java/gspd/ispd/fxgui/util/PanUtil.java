@@ -11,8 +11,8 @@ public class PanUtil {
     public void makePannable(ScrollPane pane) {
         pane.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.MIDDLE) {
-                lastCursor = pane.getContent().getCursor();
-                pane.getContent().setCursor(Cursor.CLOSED_HAND);
+                lastCursor = pane.getCursor();
+                pane.setCursor(Cursor.HAND);
                 pane.setPannable(true);
                 event.consume();
             }
@@ -20,7 +20,7 @@ public class PanUtil {
         pane.setOnMouseReleased(event -> {
             if (event.getButton() == MouseButton.MIDDLE) {
                 pane.setPannable(false);
-                pane.getContent().setCursor(lastCursor);
+                pane.setCursor(lastCursor);
                 event.consume();
             }
         });

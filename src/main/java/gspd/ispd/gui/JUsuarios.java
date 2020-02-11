@@ -11,12 +11,12 @@
 
 package gspd.ispd.gui;
 
+import gspd.ispd.GUI;
+
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-
-import gspd.ispd.ISPD;
 
 /**
  * Janela usada para adicionar e remover os usuarios da simulação modelada
@@ -62,7 +62,7 @@ public class JUsuarios extends javax.swing.JDialog {
 
         jToolBar.setFloatable(false);
 
-        jButtonAdicionar.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/insert-object.png"))); // NOI18N
+        jButtonAdicionar.setIcon(new javax.swing.ImageIcon(GUI.class.getResource("gui/images/insert-object.png"))); // NOI18N
         jButtonAdicionar.setText(palavras.getString("Add")); // NOI18N
         jButtonAdicionar.setFocusable(false);
         jButtonAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -77,7 +77,7 @@ public class JUsuarios extends javax.swing.JDialog {
         });
         jToolBar.add(jButtonAdicionar);
 
-        jButtonRemover.setIcon(new javax.swing.ImageIcon(ISPD.class.getResource("gui/images/window-close.png"))); // NOI18N
+        jButtonRemover.setIcon(new javax.swing.ImageIcon(GUI.class.getResource("gui/images/window-close.png"))); // NOI18N
         jButtonRemover.setText(palavras.getString("Remove")); // NOI18N
         jButtonRemover.setFocusable(false);
         jButtonRemover.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

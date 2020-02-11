@@ -1,14 +1,13 @@
 package gspd.ispd.settings;
 
+import gspd.ispd.GUI;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Properties;
-
-import gspd.ispd.ISPD;
-import gspd.ispd.Main;
 
 /**
  * This class has just methods to access common properties of the iSPD.
@@ -33,7 +32,7 @@ public class IspdSettings extends Properties {
     public void load(String filename) {
         try {
             this.filename = filename;
-            super.load(ISPD.class.getResourceAsStream("settings/" + filename));
+            super.load(GUI.class.getResourceAsStream("settings/" + filename));
             locale = new Locale(getProperty("locale.language", "en"), getProperty("locale.country", "US"));
             Locale.setDefault(locale);
             setWorkingDirectory(getUserHome() + File.separator +  getProperty("directories.default", "."));

@@ -147,7 +147,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="%menu.view">
                     <items>
-                        <CheckMenuItem mnemonicParsing="false" text="%menu.view.grid" />
+                        <CheckMenuItem fx:id="gridMenuItem" mnemonicParsing="false" text="%menu.view.grid" />
                         <CheckMenuItem mnemonicParsing="false" text="%menu.view.ruler" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#handleFullScreenClicked" text="%menu.view.fullscreen" />

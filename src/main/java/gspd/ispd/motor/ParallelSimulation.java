@@ -162,6 +162,7 @@ public class ParallelSimulation extends Simulation {
         } else {
             threadFilaEventos.get(ev.getServidor()).offer(ev);
         }
+        System.out.println("SimuParalela: " + ev.getTempoOcorrencia() + " | Cli:" + ev.getCliente() + " | CS:" + ev.getServidor() + " | T:" + ev.getTipo());
     }
 
     @Override

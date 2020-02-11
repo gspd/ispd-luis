@@ -1,7 +1,8 @@
 package gspd.ispd.fxgui;
 
+import gspd.ispd.GUI;
 import gspd.ispd.ISPD;
-import gspd.ispd.MainApp;
+import gspd.ispd.model.ISPDModel;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
 import gspd.ispd.fxgui.util.FormBuilder;
@@ -21,6 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -103,22 +105,25 @@ public class MainWindow {
     private ScrollPane propertiesScrollPane;
     @FXML
     private CheckMenuItem fullScreenMenuItem;
+    @FXML
+    private CheckMenuItem gridMenuItem;
 
     // This ImageView is not present in FXML file. It represents
     // the image that follows cursor to help user remember what
     // he is up to add.
     private ImageView followImageView;
 
-    private MainApp main;
+    private GUI main;
     private Stage window;
+    private ISPDModel model;
 
-    public static void create(Stage window, MainApp main) {
+    public static void create(Stage window, GUI main) {
         try {
             FXMLLoader loader;
             MainWindow controller;
             Scene scene;
             loader = main.getLoader();
-            loader.setLocation(GUI.class.getResource("MainWindow.fxml"));
+            loader.setLocation(GUIUtil.class.getResource("MainWindow.fxml"));
             scene = new Scene(loader.load());
             window.setScene(scene);
             controller = loader.getController();
@@ -146,27 +151,27 @@ public class MainWindow {
                 ImageView imageView = (ImageView) selected.getGraphic();
                 Image image = imageView.getImage();
                 followImageView.setImage(image);
-                GUI.follow(followImageView, hardwarePane);
+                GUIUtil.follow(followImageView, hardwarePane);
                 hardwarePane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         ImageView imvw = new ImageView();
                         imvw.setImage(image);
                         imvw.setLayoutX(followImageView.getLayoutX());
                         imvw.setLayoutY(followImageView.getLayoutY());
-                        GUI.makeDraggable(imvw);
+                        GUIUtil.makeDraggable(imvw);
                         hardwarePane.getChildren().add(imvw);
                     }
                 });
             } else if (newValue == linkIcon) {
-                GUI.unfollow(hardwarePane);
+                GUIUtil.unfollow(hardwarePane);
                 hardwarePane.setOnMouseClicked(event -> {});
             } else {
-                GUI.unfollow(hardwarePane);
+                GUIUtil.unfollow(hardwarePane);
                 hardwarePane.setOnMouseClicked(event -> {});
             }
         }));
         propertiesScrollPane.setContent(FormBuilder.getInstance().makeForm(MachineData.class));
-        DrawingPane dPane = new DrawingPane();
+        DrawPane dPane = new DrawPane();
         Group group = new Group(dPane);
         hardwareScrollPane.setContent(group);
         dPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
@@ -184,7 +189,15 @@ public class MainWindow {
         line.setStrokeWidth(4.0);
         dPane.add(line);
         line.toBack();
+        line.startXProperty().bind(n1.layoutXProperty());
+        line.startYProperty().bind(n1.layoutYProperty());
+        line.endXProperty().bind(n2.layoutXProperty());
+        line.endYProperty().bind(n2.layoutYProperty());
         undoMenuItem.setOnAction(event -> dPane.undo());
+        dPane.gridEnableProperty().bind(gridMenuItem.selectedProperty());
+        Text text = new Text("This is a text");
+        text.setFill(Color.GRAY);
+        dPane.add(text, 100, 300);
 //         hardwarePane.setOnMouseClicked(event -> {
 //             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
 //                 Image image = followImageView.getImage();
@@ -264,10 +277,10 @@ public class MainWindow {
         hardwarePane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.5));
         hardwarePane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.5));
         // the hardware scroll pane is pannable
-        GUI.makePannable(hardwareScrollPane);
+        GUIUtil.makePannable(hardwareScrollPane);
     }
 
-    public void setMain(MainApp main) {
+    public void setMain(GUI main) {
         this.main = main;
     }
 
@@ -283,6 +296,14 @@ public class MainWindow {
 
     public void setWindow(Stage window) {
         this.window = window;
+    }
+
+    public void setModel(ISPDModel model) {
+        this.model = model;
+    }
+
+    public ISPDModel getModel() {
+        return model;
     }
 
     @FXML

@@ -107,6 +107,7 @@ public class SequentialSimulation extends Simulation {
     @Override
     public void addEventoFuturo(EventoFuturo ev) {
         eventos.offer(ev);
+        System.out.println("SimuSeq: " + ev.getTempoOcorrencia() + " | Cli:" + ev.getCliente() + " | CS:" + ev.getServidor() + " | T:" + ev.getTipo());
     }
 
     @Override

@@ -25,7 +25,7 @@ import javax.swing.UIManager;
  * Indetifica se deve executar comando a partir do termila ou carrega interface gráfica
  * @author denison
  */
-public class Main {
+public class MainSwing {
 
     /**
      * @param args the command line arguments
@@ -44,7 +44,7 @@ public class Main {
                 System.exit(0);
             } else {
                 // Configure loading program window
-                ImageIcon image = new ImageIcon(ISPD.class.getResource("gui/images/Splash.gif"));
+                ImageIcon image = new ImageIcon(GUI.class.getResource("gui/images/Splash.gif"));
                 SplashWindow window = new SplashWindow(image);
                 window.setText("Copyright (c) 2010 - 2014 GSPD.  All rights reserved.");
                 // Show loading program window
@@ -76,11 +76,11 @@ public class Main {
                 gui.setVisible(true);
             }
         } catch (FileNotFoundException e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "File not Found", e);
+            Logger.getLogger(MainSwing.class.getName()).log(Level.SEVERE, "File not Found", e);
         } catch (NullPointerException e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Object not defined", e);
+            Logger.getLogger(MainSwing.class.getName()).log(Level.SEVERE, "Object not defined", e);
         } catch (Exception e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Something wrong has occurred while starting iSPD", e);
+            Logger.getLogger(MainSwing.class.getName()).log(Level.SEVERE, "Something wrong has occurred while starting iSPD", e);
         }
     }
 }

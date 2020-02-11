@@ -4,7 +4,7 @@
  */
 package gspd.ispd.gui.iconico.grade;
 
-import gspd.ispd.ISPD;
+import gspd.ispd.GUI;
 import gspd.ispd.ValidaValores;
 import gspd.ispd.arquivo.xml.IconicoXML;
 import gspd.ispd.gui.EscolherClasse;
@@ -38,8 +38,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -854,15 +852,15 @@ public class DesenhoGrade extends AreaDesenho {
 
     private static void criarImagens() {
         if (IMACHINE == null) {
-            ImageIcon maq = new ImageIcon(ISPD.class.getResource("gui/images/botao_no.gif"));
+            ImageIcon maq = new ImageIcon(GUI.class.getResource("gui/images/botao_no.gif"));
             IMACHINE = maq.getImage();
-            ImageIcon clt = new ImageIcon(ISPD.class.getResource("gui/images/botao_cluster.gif"));
+            ImageIcon clt = new ImageIcon(GUI.class.getResource("gui/images/botao_cluster.gif"));
             ICLUSTER = clt.getImage();
-            ImageIcon net = new ImageIcon(ISPD.class.getResource("gui/images/botao_internet.gif"));
+            ImageIcon net = new ImageIcon(GUI.class.getResource("gui/images/botao_internet.gif"));
             IINTERNET = net.getImage();
-            ImageIcon verd = new ImageIcon(ISPD.class.getResource("gui/images/verde.png"));
+            ImageIcon verd = new ImageIcon(GUI.class.getResource("gui/images/verde.png"));
             IVERDE = verd.getImage();
-            ImageIcon verm = new ImageIcon(ISPD.class.getResource("gui/images/vermelho.png"));
+            ImageIcon verm = new ImageIcon(GUI.class.getResource("gui/images/vermelho.png"));
             IVERMELHO = verm.getImage();
         }
     }

@@ -16,6 +16,8 @@ import gspd.ispd.motor.filas.servidores.implementacao.CS_MaquinaCloud;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_Mestre;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_VMM;
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -130,9 +132,19 @@ public class SimulacaoSequencialCloud extends Simulation {
         }
     }
 
+    private static PrintStream testEventStream;
     @Override
     public void addEventoFuturo(EventoFuturo ev) {
         eventos.offer(ev);
+        if (testEventStream == null) {
+            try {
+                testEventStream = new PrintStream("trackSimu.csv");
+                testEventStream.println("Tempo,Cliente,CentroServico,Tipo");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        testEventStream.println(ev.getTempoOcorrencia() + "," + ev.getCliente() + "," + ev.getServidor() + "," + ev.getTipo());
     }
 
     @Override

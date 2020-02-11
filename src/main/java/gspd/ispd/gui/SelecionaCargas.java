@@ -10,11 +10,10 @@
  */
 package gspd.ispd.gui;
 
-import gspd.ispd.ISPD;
+import gspd.ispd.GUI;
 import gspd.ispd.arquivo.interpretador.cargas.Interpretador;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
 import gspd.ispd.gui.iconico.dag.DesenhoDAG;
-import gspd.ispd.gui.iconico.dag.JEditorDAG;
 import gspd.ispd.motor.carga.CargaList;
 import gspd.ispd.motor.carga.CargaRandom;
 import gspd.ispd.motor.carga.CargaForNode;
@@ -609,7 +608,7 @@ public class SelecionaCargas extends javax.swing.JDialog {
                 }
                 if (ext != null) {
                     if (ext.equals("wmsx")) {
-                        java.net.URL imgURL = ISPD.class.getResource("gui/images/Logo_iSPD_25.png");
+                        java.net.URL imgURL = GUI.class.getResource("gui/images/Logo_iSPD_25.png");
                         if (imgURL != null) {
                             return new ImageIcon(imgURL);
                         }

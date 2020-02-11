@@ -1,10 +1,9 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.MainApp;
+import gspd.ispd.GUI;
 import gspd.ispd.model.User;
 import gspd.ispd.model.VM;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,7 +27,7 @@ public class VMDialog {
     private VM vm;
     private User oldOwner, newOwner;
     private Stage window;
-    private MainApp main;
+    private GUI main;
 
     public VMDialog() {
 
@@ -106,7 +105,7 @@ public class VMDialog {
         this.window = window;
     }
 
-    public void setMain(MainApp main) {
+    public void setMain(GUI main) {
         this.main = main;
     }
 

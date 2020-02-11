@@ -1,7 +1,7 @@
 package gspd.ispd.fxgui;
 
+import gspd.ispd.GUI;
 import gspd.ispd.ISPD;
-import gspd.ispd.MainApp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -35,16 +35,16 @@ public class SettingsWindow {
     @FXML
     private CheckBox resourcesChartCheckBox;
 
-    private MainApp mainApp;
+    private GUI ispd;
     private Stage window;
     private Properties settings;
     private boolean okClicked;
 
-    public static void create(Stage owner, Stage window, MainApp main) {
+    public static void create(Stage owner, Stage window, GUI main) {
         try {
             // Loads FXML file (GUI description)
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUI.class.getResource("SettingsWindow.fxml"));
+            loader.setLocation(GUIUtil.class.getResource("SettingsWindow.fxml"));
             loader.setResources(ISPD.strings);
             // starts the content of the main window
             Scene scene = new Scene(loader.load());
@@ -76,8 +76,8 @@ public class SettingsWindow {
         okClicked = false;
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setIspd(GUI ispd) {
+        this.ispd = ispd;
     }
 
     public void setWindow(Stage window) {

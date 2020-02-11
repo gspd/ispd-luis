@@ -1,5 +1,7 @@
 package gspd.ispd.settings;
 
+import gspd.ispd.GUI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -7,8 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
-import gspd.ispd.ISPD;
 
 /**
  * Settings
@@ -81,7 +81,7 @@ public class Settings {
 
     private void loadProperties() throws IOException {
         properties = new Properties();
-        InputStream stream = ISPD.class.getResourceAsStream(filename);
+        InputStream stream = GUI.class.getResourceAsStream(filename);
         properties.load(stream);
     }
 

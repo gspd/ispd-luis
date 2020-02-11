@@ -1,6 +1,6 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.MainApp;
+import gspd.ispd.GUI;
 import gspd.ispd.fxgui.util.*;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Implements some util methods to work with JavaFX in iSPD.
  */
-public class GUI {
+public class GUIUtil {
     static private DragUtil dragger = new DragUtil();
     static private DrawerUtil drawer = new DrawerUtil();
     static private LightningUtil lighter = new LightningUtil();
@@ -76,11 +76,11 @@ public class GUI {
     }
 
     @Deprecated
-    static public void setMainWindow(Stage window, MainApp main) {
+    static public void setMainWindow(Stage window, GUI main) {
         throw new UnsupportedOperationException("[DEPRECATED]");
     }
 
-    static public void closeMainWindow(Stage window, MainApp main) {
+    static public void closeMainWindow(Stage window, GUI main) {
         AnswerType answer;
         if (main.getModel().isNotSaved()) {
             answer = checkClosingWithoutSaving();

@@ -1,6 +1,6 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.MainApp;
+import gspd.ispd.GUI;
 import gspd.ispd.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +12,7 @@ public class UserDialog {
     @FXML
     private TextField nameInput;
 
-    private MainApp main;
+    private GUI main;
     private Stage window;
     private User user;
 
@@ -24,11 +24,11 @@ public class UserDialog {
         return user;
     }
 
-    public MainApp getMain() {
+    public GUI getMain() {
         return main;
     }
 
-    public void setMain(MainApp main) {
+    public void setMain(GUI main) {
         this.main = main;
     }
 
