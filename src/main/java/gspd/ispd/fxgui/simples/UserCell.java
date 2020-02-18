@@ -1,14 +1,17 @@
 package gspd.ispd.fxgui.simples;
 
+import gspd.ispd.fxgui.GUIUtil;
 import gspd.ispd.model.ModelService;
 import gspd.ispd.model.data.User;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import org.controlsfx.control.textfield.CustomTextField;
 
 /**
@@ -16,11 +19,11 @@ import org.controlsfx.control.textfield.CustomTextField;
  */
 public class UserCell extends ListCell<User> {
 
-    private final static Image USER_O_IMG = new Image(UserCell.class.getResource("fa-user-o.png").toExternalForm());
-    private final static Image USER_IMG = new Image(UserCell.class.getResource("fa-user.png").toExternalForm());
+    private final static Image USER_O_IMG = new Image(GUIUtil.class.getResource("images/icons/fa-user-o.png").toExternalForm());
+    private final static Image USER_IMG = new Image(GUIUtil.class.getResource("images/icons/fa-user.png").toExternalForm());
 
-    private static User editingUser;
-    private static CustomTextField editField;
+    private User editingUser;
+    private CustomTextField editField;
 
     private final static ModelService service = ModelService.getInstance();
 
@@ -35,11 +38,10 @@ public class UserCell extends ListCell<User> {
             setText(item.getName());
             ImageView iv = new ImageView(item.isEmpty() ? USER_O_IMG : USER_IMG);
             setGraphic(iv);
-            String tooltipString = ""
-                    + item.getName() + "\n"
-                    + "MAC: " + ((item.getMachines() == null) ? 0 : item.getMachines().size()) + "\n"
-                    + "LNK: " + ((item.getLinks() == null) ? 0 : item.getLinks().size()) + "\n"
-                    + "VMS: " + ((item.getVms() == null) ? 0 : item.getVms().size());
+            String tooltipString = item.getName() + '\n' +
+                    "MAC: " + (item.getMachines() == null ? 0 : item.getMachines().size()) + '\n' +
+                    "LNK: " + (item.getLinks() == null ? 0 : item.getLinks().size()) + '\n' +
+                    "VMS: " + (item.getVms() == null ? 0 : item.getVms().size());
             if (getTooltip() == null) {
                 setTooltip(new Tooltip(tooltipString));
             } else {
@@ -53,21 +55,29 @@ public class UserCell extends ListCell<User> {
         super.startEdit();
         editingUser = super.getItem();
         editField = new CustomTextField();
+        editField.setRight(new CommitCancel(this));
         editField.setText(editingUser.getName());
         editField.selectAll();
+        editField.setMinWidth(1.0);
         setText(null);
         setGraphic(editField);
-        this.setOnKeyPressed(this::handleKeys);
+        setOnKeyPressed(this::handleKeys);
     }
 
     private void handleKeys(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            if (service.changeUsername(editingUser, editField.getText())) {
-                commitEdit(editingUser);
-            } else {
-                cancelEdit();
-            }
+            changeUsername();
+            event.consume();
         } else if (event.getCode() == KeyCode.ESCAPE) {
+            cancelEdit();
+            event.consume();
+        }
+    }
+
+    private void changeUsername() {
+        if (service.changeUsername(editingUser, editField.getText())) {
+            commitEdit(editingUser);
+        } else {
             cancelEdit();
         }
     }
@@ -80,7 +90,44 @@ public class UserCell extends ListCell<User> {
 
     @Override
     public void commitEdit(User newValue) {
-        updateItem(editingUser, editingUser == null);
         super.commitEdit(newValue);
+        updateItem(newValue, newValue == null);
+    }
+
+    private static class CommitCancel extends HBox {
+
+        private UserCell cell;
+
+        private static final Image CHECK_IMG = new Image(GUIUtil.class.getResource("images/icons/fa-check.png").toExternalForm());
+        private static final Image TIMES_IMG = new Image(GUIUtil.class.getResource("images/icons/fa-times.png").toExternalForm());
+
+        private static final Tooltip commitTooltip = new Tooltip("Change username");
+        private static final Tooltip cancelTooltip = new Tooltip("Cancel");
+
+        public CommitCancel(UserCell cell) {
+            this.cell = cell;
+
+            Hyperlink commitLink = new Hyperlink("");
+            commitLink.setGraphic(new ImageView(CHECK_IMG));
+            commitLink.setOnAction(this::handleCommit);
+            commitLink.setTooltip(commitTooltip);
+
+            Hyperlink cancelLink = new Hyperlink("");
+            cancelLink.setGraphic(new ImageView(TIMES_IMG));
+            cancelLink.setOnAction(this::handleCancel);
+            cancelLink.setTooltip(cancelTooltip);
+
+            super.getChildren().addAll(cancelLink, commitLink);
+        }
+
+        private void handleCommit(ActionEvent event) {
+            cell.changeUsername();
+            event.consume();
+        }
+
+        private void handleCancel(ActionEvent event) {
+            cell.cancelEdit();
+            event.consume();
+        }
     }
 }
