@@ -148,7 +148,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
                 //Gera evento para atender proximo cliente da lista
                 EventoFuturo evtFut = new EventoFuturo(
                         next,
-                        EventoFuturo.SAÍDA,
+                        EventoFuturo.SAIDA,
                         this, cliente);
                 //Event adicionado a lista de evntos futuros
                 simulacao.addEventoFuturo(evtFut);
@@ -268,7 +268,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
     public void atenderCancelamento(Simulation simulacao, Mensagem mensagem) {
         if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             //remover evento de saida do cliente do servidor
-            simulacao.removeEventoFuturo(EventoFuturo.SAÍDA, this, mensagem.getTarefa());
+            simulacao.removeEventoFuturo(EventoFuturo.SAIDA, this, mensagem.getTarefa());
             tarefaEmExecucao.remove(mensagem.getTarefa());
             //gerar evento para atender proximo cliente
             if (filaTarefas.isEmpty()) {
@@ -305,7 +305,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
         if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             //remover evento de saida do cliente do servidor
             boolean remover = simulacao.removeEventoFuturo(
-                    EventoFuturo.SAÍDA,
+                    EventoFuturo.SAIDA,
                     this,
                     mensagem.getTarefa());
             //gerar evento para atender proximo cliente
@@ -361,7 +361,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
             remover = filaTarefas.remove(mensagem.getTarefa());
         } else if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             remover = simulacao.removeEventoFuturo(
-                    EventoFuturo.SAÍDA,
+                    EventoFuturo.SAIDA,
                     this,
                     mensagem.getTarefa());
             //gerar evento para atender proximo cliente
@@ -518,7 +518,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
             //Gera evento para atender proximo cliente da lista
             EventoFuturo novoEvt = new EventoFuturo(
                     simulacao.getTime(this),
-                    EventoFuturo.SAÍDA,
+                    EventoFuturo.SAIDA,
                     this, tarefa);
             //Event adicionado a lista de evntos futuros
             simulacao.addEventoFuturo(novoEvt);

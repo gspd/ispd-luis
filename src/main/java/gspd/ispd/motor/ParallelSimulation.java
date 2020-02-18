@@ -248,7 +248,7 @@ public class ParallelSimulation extends Simulation {
                             //System.out.println(recurso.getId() + " " + eventoAtual.getServidor().getId() + " vou atender a tarefa " + eventoAtual.getTempoOcorrencia());
                             eventoAtual.getServidor().atendimento(simulacao, (Tarefa) eventoAtual.getCliente());
                             break;
-                        case EventoFuturo.SAÍDA:
+                        case EventoFuturo.SAIDA:
                             eventoAtual.getServidor().saidaDeCliente(simulacao, (Tarefa) eventoAtual.getCliente());
                             break;
                         case EventoFuturo.ESCALONAR:
@@ -309,7 +309,7 @@ public class ParallelSimulation extends Simulation {
                         case EventoFuturo.ATENDIMENTO:
                             eventoAtual.getServidor().atendimento(this.getSimulacao(), (Tarefa) eventoAtual.getCliente());
                             break;
-                        case EventoFuturo.SAÍDA:
+                        case EventoFuturo.SAIDA:
                             eventoAtual.getServidor().saidaDeCliente(this.getSimulacao(), (Tarefa) eventoAtual.getCliente());
                             break;
                         case EventoFuturo.ESCALONAR:

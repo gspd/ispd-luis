@@ -255,7 +255,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
         System.out.println("Tarefa:" + tarefa.getIdentificador() + "escalonada para vm:" + tarefa.getLocalProcessamento().getId());
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
-                EventoFuturo.SAÍDA,
+                EventoFuturo.SAIDA,
                 this, tarefa);
         //Event adicionado a lista de evntos futuros
         simulacao.addEventoFuturo(evtFut);
@@ -286,7 +286,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
         tarefa.setCaminho(vm.getCaminho());
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
-                EventoFuturo.SAÍDA,
+                EventoFuturo.SAIDA,
                 this, tarefa);
         //Event adicionado a lista de evntos futuros
         simulacao.addEventoFuturo(evtFut);

@@ -100,7 +100,7 @@ public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Ve
             //Gera evento para saida do cliente do servidor
             EventoFuturo evtFut = new EventoFuturo(
                     simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado()),
-                    EventoFuturo.SAÍDA,
+                    EventoFuturo.SAIDA,
                     this, cliente);
             //Event adicionado a lista de evntos futuros
             simulacao.addEventoFuturo(evtFut);
@@ -191,7 +191,7 @@ public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Ve
         //Gera evento para atender proximo cliente da lista
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
-                EventoFuturo.SAÍDA,
+                EventoFuturo.SAIDA,
                 this, tarefa);
         //Event adicionado a lista de evntos futuros
         simulacao.addEventoFuturo(evtFut);
@@ -340,7 +340,7 @@ public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Ve
         boolean temp1 = false;
         if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             //remover evento de saida do cliente do servidor
-            temp1 = simulacao.removeEventoFuturo(EventoFuturo.SAÍDA, this, mensagem.getTarefa());
+            temp1 = simulacao.removeEventoFuturo(EventoFuturo.SAIDA, this, mensagem.getTarefa());
             //gerar evento para atender proximo cliente
             if (filaTarefas.isEmpty()) {
                 //Indica que está livre
@@ -371,7 +371,7 @@ public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Ve
     public void atenderParada(Simulation simulacao, Mensagem mensagem) {
         if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             //remover evento de saida do cliente do servidor
-            boolean remover = simulacao.removeEventoFuturo(EventoFuturo.SAÍDA, this , mensagem.getTarefa());
+            boolean remover = simulacao.removeEventoFuturo(EventoFuturo.SAIDA, this , mensagem.getTarefa());
             //gerar evento para atender proximo cliente
             if (filaTarefas.isEmpty()) {
                 //Indica que está livre
@@ -422,7 +422,7 @@ public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Ve
             temp2 = escalonador.getFilaTarefas().remove(mensagem.getTarefa());
         } else if (mensagem.getTarefa().getEstado() == Tarefa.PROCESSANDO) {
             //remover evento de saida do cliente do servidor
-            temp1 = simulacao.removeEventoFuturo(EventoFuturo.SAÍDA, this, mensagem.getTarefa());
+            temp1 = simulacao.removeEventoFuturo(EventoFuturo.SAIDA, this, mensagem.getTarefa());
             //gerar evento para atender proximo cliente
             if (filaTarefas.isEmpty()) {
                 //Indica que está livre

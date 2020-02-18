@@ -114,4 +114,9 @@ public class Mensagem implements Cliente {
     public TarefaDAG getTarefaOrigem() {
         return tarefaOrigem;
     }
+
+    @Override
+    public String toString() {
+        return "Mensagem{origem="+ origem + "}";
+    }
 }

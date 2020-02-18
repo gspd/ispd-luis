@@ -71,7 +71,7 @@ public class CS_Switch extends CS_Comunicacao implements Vertice {
         //Gera evento para atender proximo cliente da lista
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this) + tempoTransmitir(cliente.getTamComunicacao()),
-                EventoFuturo.SAÍDA,
+                EventoFuturo.SAIDA,
                 this, cliente);
         //Event adicionado a lista de evntos futuros
         simulacao.addEventoFuturo(evtFut);

@@ -76,32 +76,33 @@ public abstract class Simulation {
             //utilisa a classe de escalonamento diretamente 
             //pode ser modificado para gerar um evento 
             //mas deve ser o primeiro evento executado nos mestres
+            System.out.println("Mestre " + mestre.getId() + " iniciando escalonador " + mestre.getEscalonador().toString());
             mestre.getEscalonador().iniciar();
         }
     }
     
     
     public void iniciarAlocadoresCloud() {
+        janela.println("Initializing allocators", Color.blue);
         for (CS_Processamento mst : redeDeFilasCloud.getMestres()) {
             CS_VMM mestre = (CS_VMM) mst;
             //utiliza a classe de escalonamento diretamente 
             //pode ser modificado para gerar um evento 
             //mas deve ser o primeiro evento executado nos mestres
-            System.out.println("VMM " +  mst.getId()+ " iniciando o alocador" + mestre.getAlocadorVM().toString());
+            janela.println(":: VMM " + mestre.getId() + " initializing allocator");
             mestre.getAlocadorVM().iniciar();
-            
-            
         }
     }
     
     public void iniciarEscalonadoresCloud(){
+        janela.println("Initializing schedulers", Color.blue);
         for (CS_Processamento mst : redeDeFilasCloud.getMestres()){
             CS_VMM mestre = (CS_VMM) mst;
-            System.out.println("VMM " + mst.getId() + " iniciando escalonador" + mestre.getEscalonador().toString());
+            janela.println(":: VMM " + mestre.getId() + " initializing scheduler");
             mestre.getEscalonador().iniciar();
             mestre.instanciarCaminhosVMs();
-            
         }
+        janela.println("OK (Schedulers)", Color.green);
     }
 
     public Metricas getMetricas() {
@@ -122,6 +123,7 @@ public abstract class Simulation {
         return metrica;
     }
 
+    // não usado em cloud
     public void criarRoteamento() {
         for (CS_Processamento mst : redeDeFilas.getMestres()) {
             Mestre temp = (Mestre) mst;

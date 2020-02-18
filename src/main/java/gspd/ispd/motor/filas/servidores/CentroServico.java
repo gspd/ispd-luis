@@ -51,4 +51,9 @@ public abstract class CentroServico {
      * @return número de tarefas
      */
     public abstract Integer getCargaTarefas();
+
+    @Override
+    public String toString() {
+        return "CS#" + getId();
+    }
 }

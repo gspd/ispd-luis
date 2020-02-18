@@ -200,7 +200,7 @@ public class SimulacaoGrafica extends Simulation {
                 case EventoFuturo.ATENDIMENTO:
                     eventoAtual.getServidor().atendimento(this, (Tarefa) eventoAtual.getCliente());
                     break;
-                case EventoFuturo.SAÍDA:
+                case EventoFuturo.SAIDA:
                     eventoAtual.getServidor().saidaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ESCALONAR:
@@ -262,7 +262,7 @@ public class SimulacaoGrafica extends Simulation {
                 case EventoFuturo.ATENDIMENTO:
                     eventoAtual.getServidor().atendimento(this, (Tarefa) eventoAtual.getCliente());
                     break;
-                case EventoFuturo.SAÍDA:
+                case EventoFuturo.SAIDA:
                     eventoAtual.getServidor().saidaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ESCALONAR:

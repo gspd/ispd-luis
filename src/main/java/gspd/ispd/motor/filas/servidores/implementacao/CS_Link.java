@@ -84,7 +84,7 @@ public class CS_Link extends CS_Comunicacao {
             //Gera evento para atender proximo cliente da lista
             EventoFuturo evtFut = new EventoFuturo(
                     simulacao.getTime(this) + tempoTransmitir(cliente.getTamComunicacao()),
-                    EventoFuturo.SAÍDA,
+                    EventoFuturo.SAIDA,
                     this, cliente);
             //Event adicionado a lista de evntos futuros
             simulacao.addEventoFuturo(evtFut);

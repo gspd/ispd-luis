@@ -40,6 +40,7 @@ public class SimulacaoSequencialCloud extends Simulation {
         this.time = 0;
         this.eventos = new PriorityQueue<EventoFuturo>();
 
+        // verifica possíveis erros no modelo
         if (redeDeFilas == null) {
             throw new IllegalArgumentException("The model has no icons.");
         } else if (redeDeFilas.getMestres() == null || redeDeFilas.getMestres().isEmpty()) {
@@ -49,15 +50,13 @@ public class SimulacaoSequencialCloud extends Simulation {
         }else if (redeDeFilas.getVMs() == null || redeDeFilas.getVMs().isEmpty())
             janela.println("The model has no virtual machines configured.", Color.orange);
         if (tarefas == null || tarefas.isEmpty()) {
-            throw new IllegalArgumentException("One or more  workloads have not been configured.");
+            throw new IllegalArgumentException("One or more workloads have not been configured.");
         }
         
-        janela.print("Creating routing.");
-        janela.print(" -> ");
-        /**
+        janela.println("Creating routing [master -> slaves]", Color.cyan);
+        /*
          * Trecho de código que implementa o roteamento entre os mestres e os seus respectivos escravos
          */
-         System.out.println("---------------------------------------");
         for (CS_Processamento mst : redeDeFilas.getMestres()) {
             VMM temp = (VMM) mst;
             MestreCloud aux = (MestreCloud) mst;
@@ -65,51 +64,46 @@ public class SimulacaoSequencialCloud extends Simulation {
             aux.setSimulacao(this);
             temp.setSimulacaoAlloc(this);
             //Encontra menor caminho entre o mestre e seus escravos
-            System.out.println("Mestre " + mst.getId() + " escontrando seus escravos");
-            
+            janela.println(":: Master " + mst.getId() + " determining paths to slaves");
             mst.determinarCaminhos(); //mestre encontra caminho para seus escravos
         }
         
         janela.incProgresso(5);
-        janela.println("OK", Color.green);
+        janela.println("OK [master -> slaves]", Color.green);
         
         if (redeDeFilas.getMaquinasCloud() == null || redeDeFilas.getMaquinasCloud().isEmpty()) {
             janela.println("The model has no phisical machines.", Color.orange);
         } else {
-             System.out.println("---------------------------------------");
+            janela.println("Creating rounting [slaves -> master]", Color.cyan);
             for (CS_MaquinaCloud maq : redeDeFilas.getMaquinasCloud()) {
                 //Encontra menor caminho entre o escravo e seu mestre
+                janela.println(":: Machine " + maq.getId() + " determining path to master");
                 maq.setStatus(CS_MaquinaCloud.LIGADO);
                 maq.determinarCaminhos();//escravo encontra caminhos para seu mestre
-                //System.out.println("Maquina " + maq.getId() + " encontrando seus mestres");
             }
         }
+        janela.println("OK [slaves -> master]", Color.green);
         //fim roteamento
+        janela.println("OK routing", Color.green);
         janela.incProgresso(5);
+        janela.println("Simulation constructed", Color.pink);
     }
 
     @Override
     public void simular() {
-        //inicia os escalonadores
-        System.out.println("---------------------------------------");
         iniciarEscalonadoresCloud();
-        System.out.println("---------------------------------------");
-        
         iniciarAlocadoresCloud();
-        System.out.println("---------------------------------------");
         addEventos(this.getTarefas());
-        System.out.println("---------------------------------------");
-        
-        
         if (atualizarEscalonadores()) {
+            getJanela().println("Scheduling update: ON");
             realizarSimulacaoAtualizaTime();
         } else {
+            getJanela().println("Scheduling update: OFF");
             realizarSimulacao();
         }
-        
         desligarMaquinas(this, this.getRedeDeFilasCloud());
         getJanela().incProgresso(30);
-        getJanela().println("Simulation completed.", Color.green);
+        getJanela().println("Simulation completed.", Color.pink);
         //Centralizando métricas de usuários
         //for (CS_Processamento mestre : redeDeFilas.getMestres()) {
             //CS_Mestre mst = (CS_Mestre) mestre;
@@ -125,11 +119,13 @@ public class SimulacaoSequencialCloud extends Simulation {
             EventoFuturo evt = new EventoFuturo(0.0, EventoFuturo.CHEGADA, vm.getVmmResponsavel(), vm);
             eventos.add(evt);
         }*/
-        System.out.println("Tarefas sendo adicionadas na lista de eventos futuros");
+        getJanela().println("Adding tasks as future events", Color.blue);
         for (Tarefa tarefa : tarefas) {
             EventoFuturo evt = new EventoFuturo(tarefa.getTimeCriacao(), EventoFuturo.CHEGADA, tarefa.getOrigem(), tarefa);
+            getJanela().println(":: " + evt);
             eventos.add(evt);
         }
+        getJanela().println("OK (future events)", Color.green);
     }
 
     private static PrintStream testEventStream;
@@ -180,6 +176,7 @@ public class SimulacaoSequencialCloud extends Simulation {
 
     
     private void realizarSimulacao() {
+        getJanela().println("Simulation started", Color.blue);
         while (!eventos.isEmpty()) {
         //recupera o próximo evento e o executa.
             //executa estes eventos de acordo com sua ordem de chegada
@@ -187,23 +184,30 @@ public class SimulacaoSequencialCloud extends Simulation {
             //que seria criado anteriormente
             EventoFuturo eventoAtual = eventos.poll();
             time = eventoAtual.getTempoOcorrencia();
+            getJanela().println(":: time: " + time + " | event " + eventoAtual);
             switch (eventoAtual.getTipo()) {
                 case EventoFuturo.CHEGADA:
+                    getJanela().println(":::: type CHEGADA");
                     eventoAtual.getServidor().chegadaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ATENDIMENTO:
+                    getJanela().println(":::: type ATENDIMENTO");
                     eventoAtual.getServidor().atendimento(this, (Tarefa) eventoAtual.getCliente());
                     break;
-                case EventoFuturo.SAÍDA:
+                case EventoFuturo.SAIDA:
+                    getJanela().println(":::: type SAIDA");
                     eventoAtual.getServidor().saidaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ESCALONAR:
+                    getJanela().println(":::: type ESCALONAR");
                     eventoAtual.getServidor().requisicao(this, null, EventoFuturo.ESCALONAR);
                     break;
                 case EventoFuturo.ALOCAR_VMS:
+                    getJanela().println(":::: type ALOCAR_VMS");
                     eventoAtual.getServidor().requisicao(this, null, EventoFuturo.ALOCAR_VMS);
                     break;
                 default:
+                    getJanela().println(":::: type MENSAGEM (default)");
                     eventoAtual.getServidor().requisicao(this, (Mensagem) eventoAtual.getCliente(), eventoAtual.getTipo());
                     break;
             }
@@ -249,7 +253,7 @@ public class SimulacaoSequencialCloud extends Simulation {
                 case EventoFuturo.ATENDIMENTO:
                     eventoAtual.getServidor().atendimento(this, (Tarefa) eventoAtual.getCliente());
                     break;
-                case EventoFuturo.SAÍDA:
+                case EventoFuturo.SAIDA:
                     eventoAtual.getServidor().saidaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ESCALONAR:
@@ -268,10 +272,11 @@ public class SimulacaoSequencialCloud extends Simulation {
     }
 
     private void desligarMaquinas(Simulation simulacao, RedeDeFilasCloud rdfCloud) {
+        getJanela().println("Turning machines off", Color.blue);
         for(CS_MaquinaCloud aux : rdfCloud.getMaquinasCloud()){
+            getJanela().println(":: Machine " + aux.getId() + " turning off");
             aux.desligar(simulacao);
-            
         }
-        
+        getJanela().println("OK (machines off)", Color.green);
     }
 }
