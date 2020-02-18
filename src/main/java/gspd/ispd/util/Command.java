@@ -1,6 +1,6 @@
 package gspd.ispd.util;
 
-public interface Command<C extends Command<C>> {
+public interface Command {
 
      void execute();
 }

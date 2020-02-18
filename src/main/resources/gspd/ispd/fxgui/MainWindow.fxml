@@ -31,7 +31,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.MainWindow">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.MainWindowController">
    <children>
       <VBox layoutX="157.0" layoutY="55.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -250,11 +250,7 @@
                                                       </ToggleButton>
                                                    </items>
                                                 </ToolBar>
-                                                <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                                                   <content>
-                                                      <Pane fx:id="hardwarePane" prefHeight="313.0" prefWidth="386.0" />
-                                                   </content>
-                                                </ScrollPane>
+                                                <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                              </children>
                                           </VBox>
                                        </children></AnchorPane>
@@ -262,7 +258,7 @@
                             </Tab>
                             <Tab text="Workload">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                <Pane fx:id="hardwarePane" />
                               </content>
                             </Tab>
                               <Tab text="VMs">

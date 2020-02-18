@@ -1,13 +1,18 @@
 package gspd.ispd;
 
 import com.sun.tools.javac.Main;
+import gspd.ispd.game.ISPDGame;
+import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
 
 import java.util.*;
 
 public class ISPD {
 
-    public static final ResourceBundle strings = ResourceBundle.getBundle("strings", new Locale("en", "US"));
+    /**
+     * This resource bundle loads all the strings for iSPD
+     */
+    public static final ResourceBundle strings = ResourceBundle.getBundle("gspd.ispd.strings", new Locale("pt", "BR"));
 
     public static void main(String[] args) {
         ArrayList<String> argsList = new ArrayList<>(Arrays.asList(args));
@@ -16,6 +21,11 @@ public class ISPD {
             args = new String[argsList.size()];
             args = argsList.toArray(args);
             MainSwing.main(args);
+        } else if (argsList.contains("--game")) {
+            argsList.remove("--game");
+            args = new String[argsList.size()];
+            args = argsList.toArray(args);
+            Application.launch(ISPDGame.class, args);
         } else {
             Application.launch(GUI.class, args);
         }

@@ -1,15 +1,12 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.util.structures.FixedStack;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
@@ -53,6 +50,11 @@ public class DrawPane extends Pane {
      * The grid background
      */
     private static Background gridBackground;
+
+    private Set<Node> pinned = new HashSet<>();
+
+    private EventHandler<MouseEvent> pinMouseMovedHandler = this::onPinMouseMoved;
+
 
     public DrawPane() {
         // initializes the statics background
@@ -120,6 +122,15 @@ public class DrawPane extends Pane {
         getChildren().add(node);
         selectionModel.watch(node);
     }
+
+    public void pinToAdd(Node node) {
+        node.setOpacity(0.5);
+        pinned.add(node);
+        getChildren().add(node);
+        setOnMouseMoved(this::onPinMouseMoved);
+        setOnMousePressed(this::onPinMousePressed);
+    }
+
     /**
      * Removes a given node from the drawing pane. If the node is not
      * in the drawing pane, nothing happens
@@ -151,6 +162,41 @@ public class DrawPane extends Pane {
             remove(selectionModel.getSelectedItems().iterator().next());
         }
     }
+
+    private void onPinMouseMoved(MouseEvent event) {
+        pinned.forEach(node -> followMouse(node, event));
+        event.consume();
+    }
+
+    private void followMouse(Node node, MouseEvent event) {
+        node.setLayoutX(event.getX() - node.getBoundsInLocal().getCenterX());
+        node.setLayoutY(event.getY() - node.getBoundsInLocal().getCenterY());
+    }
+
+    private void onPinMousePressed(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            pinned.forEach(this::finallyAdd);
+            setOnMousePressed(selectionModel::onBoxMousePressed);
+            event.consume();
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            pinned.forEach(this::cancelPinNode);
+            setOnMousePressed(selectionModel::onBoxMousePressed);
+            event.consume();
+        }
+    }
+
+    private void finallyAdd(Node node) {
+        node.setOpacity(1);
+        getChildren().remove(node);
+        add(node);
+        pinned.remove(node);
+    }
+
+    private void cancelPinNode(Node node) {
+        getChildren().remove(node);
+        pinned.remove(node);
+    }
+
     /**
      * @return The selection model
      */
@@ -191,7 +237,8 @@ public class DrawPane extends Pane {
         /**
          * Set that contains selected nodes
          */
-        private Set<Node> selected;
+        // private Set<Node> selected;
+        private Map<Node, Rectangle> selected;
         /**
          * Set that contains all the node the selection
          * model is able to see to select
@@ -215,85 +262,8 @@ public class DrawPane extends Pane {
          */
         private DragContext dragContext;
 
-        // box* handles the events that are responsible for drawing the
-        // selection box rectangle.
-
-        /**
-         * Handles the start of the selection box, it position its start and
-         * adds the rectangle to the drawing pane.
-         * <p>
-         * <b>Note</b> that if other events that intersects the drawing pane
-         * in JavaFX scene graph don't be correctly consumed, it can cause
-         * error by the rectangle trying to be added more than once
-         *
-         * @see Event#consume()
-         * @see Parent#getChildren()
-         */
-        private EventHandler<MouseEvent> boxMousePressedHandler = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                boxContext.setStartX(event.getX());
-                boxContext.setStartY(event.getY());
-                boxContext.setEndX(event.getX());
-                boxContext.setEndY(event.getY());
-                updateSelectionRectangle();
-                pane.getChildren().add(selectionBox);
-                event.consume();
-            }
-        };
-        private EventHandler<MouseEvent> boxMouseDraggedHandler = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                boxContext.setEndX(event.getX());
-                boxContext.setEndY(event.getY());
-                updateSelectionRectangle();
-                event.consume();
-            }
-        };
-        private EventHandler<MouseEvent> boxMouseReleasedHandler = event -> {
-            pane.getChildren().remove(selectionBox);
-            if (event.getButton() == MouseButton.PRIMARY) {
-                clearAndUpdateSelectedItems();
-                event.consume();
-            }
-        };
-        // group* handlers: handles event of moving the nodes that are already selected
-        private EventHandler<MouseEvent> groupMousePressedHandler = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                pane.takeSnapshot();
-                dragContext.setStartX(event.getX());
-                dragContext.setStartY(event.getY());
-                dragContext.setEndX(event.getX());
-                dragContext.setEndY(event.getY());
-                updateSelectedItemsPosition();
-                event.consume();
-            }
-        };
-        private EventHandler<MouseEvent> groupMouseDraggedHandler = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                dragContext.setEndX(event.getX());
-                dragContext.setEndY(event.getY());
-                updateSelectedItemsPosition();
-                event.consume();
-            }
-        };
-        private EventHandler<MouseEvent> groupMouseReleasedHandler = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                event.consume();
-            }
-        };
         // single* handlers: handle events to directly drag a node, indirectly selecting it
-        private EventHandler<MouseEvent> singleMousePressedEvent = event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                // clear the selection and selects only the pressed node.
-                // Note that in selection the event that node listen will be changed
-                // then it can be dragged
-                clearAndSelect((Node)event.getTarget());
-                // fires the event to the same target to respond with the new event handler
-                // set on clearAndSelect method
-                Event.fireEvent(event.getTarget(), event);
-                // consume the event to not propagate in event chain
-                event.consume();
-            }
-        };
+        private EventHandler<MouseEvent> singleMousePressedHandler = this::onSingleMousePressed;
 
         /**
          * Selection model constructor
@@ -302,23 +272,23 @@ public class DrawPane extends Pane {
         public SelectionModel(DrawPane pane) {
             super();
             this.pane = pane;
-            selected = new HashSet<>();
+            // selected = new HashSet<>();
+            selected = new HashMap<>();
             watching = new HashSet<>();
             selectionBox = new Rectangle(0, 0, 0, 0);
             boxContext = new SelectionBoxContext();
             dragContext = new DragContext();
-            pane.addEventHandler(MouseEvent.MOUSE_PRESSED, boxMousePressedHandler);
-            pane.addEventHandler(MouseEvent.MOUSE_DRAGGED, boxMouseDraggedHandler);
-            pane.addEventHandler(MouseEvent.MOUSE_RELEASED, boxMouseReleasedHandler);
+            pane.setOnMousePressed(this::onBoxMousePressed);
+            pane.setOnMouseDragged(this::onBoxMouseDragged);
+            pane.setOnMouseReleased(this::onBoxMouseReleased);
         }
-
 
         /**
          * Returns a set with all selected nodes
          * @return a set with all selected nodes
          */
         public Set<Node> getSelectedItems() {
-            return selected;
+            return selected.keySet();
         }
 
         public void selectAll() {
@@ -342,20 +312,29 @@ public class DrawPane extends Pane {
          * @see SelectionModel#watch(Node)
          */
         public void select(Node node) {
-            if (watching.contains(node)) {
-                // adds node to the selected set
-                selected.add(node);
+            if (watching.contains(node) && !isSelected(node)) {
+                // adds node to the selected map decorating it with a border rectangle
+                Rectangle border = createDecoration(node);
+                pane.getChildren().add(border);
+                selected.put(node, border);
                 // exchange the single handler by the group handler in order to respect selection
                 // events with other selected items
-                node.removeEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
-                node.addEventHandler(MouseEvent.MOUSE_PRESSED, groupMousePressedHandler);
-                node.addEventHandler(MouseEvent.MOUSE_DRAGGED, groupMouseDraggedHandler);
-                node.addEventHandler(MouseEvent.MOUSE_RELEASED, groupMouseReleasedHandler);
-                // changes the blend mode to change the visual when selected
-                node.setBlendMode(BlendMode.DIFFERENCE);
-            } else {
-                throw new IllegalArgumentException("Node is not being watched. Did you use watch(Node) before?");
+                node.setOnMousePressed(this::onGroupMousePressed);
+                node.setOnMouseDragged(this::onGroupMouseDragged);
+                node.setOnMouseReleased(this::onGroupMouseReleased);
             }
+        }
+
+        private Rectangle createDecoration(Node node) {
+            Rectangle border = new Rectangle();
+            border.setStroke(Color.GREEN);
+            border.setWidth(1.0);
+            border.setFill(null);
+            border.setLayoutX(node.getBoundsInParent().getMinX());
+            border.setLayoutY(node.getBoundsInParent().getMinY());
+            border.setWidth(node.getBoundsInLocal().getWidth());
+            border.setHeight(node.getBoundsInLocal().getHeight());
+            return border;
         }
 
         /**
@@ -368,10 +347,8 @@ public class DrawPane extends Pane {
          * @see SelectionModel#watch(Node)
          */
         public void clearSelection(Node node) {
-            if (watching.contains(node)) {
+            if (watching.contains(node) && isSelected(node)) {
                 unselect(node);
-            } else {
-                throw new IllegalArgumentException("Node is not being watched. Did you use watch(Node) before?");
             }
         }
 
@@ -386,7 +363,8 @@ public class DrawPane extends Pane {
         public void watch(Node node) {
             if (pane.getChildren().contains(node)) {
                 if (watching.add(node)) {
-                    node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
+                    // node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedHandler);
+                    node.setOnMousePressed(this::onSingleMousePressed);
                 }
             } else {
                 throw new IllegalArgumentException("Node is not one of the " + DrawPane.class.getName() + " children");
@@ -399,15 +377,15 @@ public class DrawPane extends Pane {
          * @param node the node to unselect
          */
         private void unselect(Node node) {
-            // removes the node from selected set
+            // removes decoration rectangle of the node in the pane
+            pane.getChildren().remove(selected.get(node));
+            // removes the node from selected map
             selected.remove(node);
             // exchange the group handler by the single handler in order to be able
             // to be indirectly selected alone
-            node.removeEventHandler(MouseEvent.MOUSE_PRESSED, groupMousePressedHandler);
-            node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
-            node.removeEventHandler(MouseEvent.MOUSE_DRAGGED, groupMouseDraggedHandler);
-            node.removeEventHandler(MouseEvent.MOUSE_RELEASED, groupMouseReleasedHandler);
-            node.setBlendMode(BlendMode.SRC_OVER);
+            node.setOnMousePressed(this::onSingleMousePressed);
+            node.setOnMouseDragged(null);
+            node.setOnMouseDragged(null);
         }
 
         /**
@@ -415,7 +393,7 @@ public class DrawPane extends Pane {
          */
         public void clearSelection() {
             while (!isEmpty()) {
-                unselect(selected.iterator().next());
+                unselect(selected.keySet().iterator().next());
             }
         }
 
@@ -438,7 +416,7 @@ public class DrawPane extends Pane {
          * @return true if node is selected
          */
         public boolean isSelected(Node node) {
-            return selected.contains(node);
+            return selected.containsKey(node);
         }
 
         /**
@@ -459,7 +437,7 @@ public class DrawPane extends Pane {
          */
         public void unwatch(Node node) {
             if (watching.remove(node)) {
-                node.removeEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedEvent);
+                node.setOnMousePressed(null);
             }
         }
 
@@ -526,11 +504,89 @@ public class DrawPane extends Pane {
          * Change all the selected items position accordingly with the drag context
          */
         private void updateSelectedItemsPosition() {
-            selected.forEach(node -> {
-                node.setLayoutX(Math.max(0, node.getLayoutX() + dragContext.getTranslateX()));
-                node.setLayoutY(Math.max(0, node.getLayoutY() + dragContext.getTranslateY()));
-            });
+            selected.keySet().forEach(this::updateSingleItem);
         }
+
+        private void updateSingleItem(Node node) {
+            node.setLayoutX(node.getLayoutX() + dragContext.getTranslateX());
+            node.setLayoutY(node.getLayoutY() + dragContext.getTranslateY());
+            Rectangle border = selected.get(node);
+            border.setLayoutX(node.getBoundsInParent().getMinX());
+            border.setLayoutY(node.getBoundsInParent().getMinY());
+            border.setWidth(node.getBoundsInLocal().getWidth());
+            border.setHeight(node.getBoundsInLocal().getHeight());
+        }
+        // event handlers methods
+        private void onBoxMousePressed(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                boxContext.setStartX(event.getX());
+                boxContext.setStartY(event.getY());
+                boxContext.setEndX(event.getX());
+                boxContext.setEndY(event.getY());
+                updateSelectionRectangle();
+                pane.getChildren().add(selectionBox);
+                event.consume();
+            }
+        }
+
+        private void onBoxMouseDragged(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                boxContext.setEndX(event.getX());
+                boxContext.setEndY(event.getY());
+                updateSelectionRectangle();
+                event.consume();
+            }
+        }
+
+        private void onBoxMouseReleased(MouseEvent event) {
+            pane.getChildren().remove(selectionBox);
+            if (event.getButton() == MouseButton.PRIMARY) {
+                clearAndUpdateSelectedItems();
+                event.consume();
+            }
+        }
+
+        private void onGroupMousePressed(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                pane.takeSnapshot();
+                dragContext.setStartX(event.getX());
+                dragContext.setStartY(event.getY());
+                dragContext.setEndX(event.getX());
+                dragContext.setEndY(event.getY());
+                updateSelectedItemsPosition();
+                event.consume();
+            }
+        }
+
+        private void onGroupMouseDragged(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                dragContext.setEndX(event.getX());
+                dragContext.setEndY(event.getY());
+                updateSelectedItemsPosition();
+                event.consume();
+            }
+        }
+
+        private void onGroupMouseReleased(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                event.consume();
+            }
+        }
+
+        private void onSingleMousePressed(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                // clear the selection and selects only the pressed node.
+                // Note that in selection the event that node listen will be changed
+                // then it can be dragged
+                clearAndSelect((Node)event.getTarget());
+                // fires the event to the same target to respond with the new event handler
+                // set on clearAndSelect method
+                Event.fireEvent(event.getTarget(), event);
+                // consume the event to not propagate in event chain
+                event.consume();
+            }
+        }
+
         /**
          * Selection Context automatic make correct changes to start and end
          * positions of the selection rectangle in order to maintain its

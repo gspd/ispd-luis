@@ -22,6 +22,7 @@ import java.util.List;
  *
  * @author denison_usuario
  */
+// Só no GRID
 public class CS_Mestre extends CS_Processamento implements Mestre, Mensagens, Vertice {
 
     private List<CS_Comunicacao> conexoesEntrada;

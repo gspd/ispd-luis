@@ -1,6 +1,6 @@
-package gspd.ispd.model;
+package gspd.ispd.model.data;
 
-public class Link {
+public class Switch {
 
     private User owner;
 

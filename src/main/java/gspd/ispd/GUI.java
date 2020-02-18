@@ -1,10 +1,13 @@
 package gspd.ispd;
 
 import gspd.ispd.fxgui.GUIUtil;
-import gspd.ispd.fxgui.MainWindow;
+import gspd.ispd.fxgui.MainWindowController;
+import gspd.ispd.fxgui.simples.DefaultWindowController;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.Properties;
@@ -43,8 +46,15 @@ public class GUI extends Application {
         });
         model = new ISPDModel();
         loader = new FXMLLoader();
+        loader.setLocation(DefaultWindowController.class.getResource("DefaultWindow.fxml"));
         loader.setResources(ISPD.strings);
-        MainWindow.create(mainStage, this);
+        Pane root = loader.load();
+        Scene scene = new Scene(root);
+        mainStage.setScene(scene);
+        mainStage.show();
+        loader = new FXMLLoader();
+        loader.setResources(ISPD.strings);
+        MainWindowController.create(mainStage, this);
     }
 
     /**
@@ -64,8 +74,8 @@ public class GUI extends Application {
      */
     @Override
     public void init() throws Exception {
-        loadSettings();
         super.init();
+        loadSettings();
     }
 
     public void setModel(ISPDModel model) {

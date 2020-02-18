@@ -1,4 +1,4 @@
-package gspd.ispd.model;
+package gspd.ispd.model.workload;
 
 import java.util.Set;
 

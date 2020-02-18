@@ -1,9 +1,7 @@
 package gspd.ispd.fxgui.util.converters;
 
-import gspd.ispd.model.User;
+import gspd.ispd.model.data.User;
 import javafx.util.StringConverter;
-
-import java.util.regex.Pattern;
 
 public class UserStringConverter extends StringConverter<User> {
 

@@ -13,6 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="292.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.VMDialog">
+   <fx:define>
+      <fx:include source="MainWindow.fxml" fx:id="mainWindow"/>
+   </fx:define>
    <children>
       <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="218.0" prefWidth="291.0" vgap="10.0" VBox.vgrow="ALWAYS">
          <columnConstraints>

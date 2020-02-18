@@ -1,4 +1,4 @@
-package gspd.ispd.model;
+package gspd.ispd.model.data;
 
 import javafx.beans.property.*;
 

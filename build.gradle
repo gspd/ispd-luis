@@ -59,6 +59,9 @@ dependencies {
     // styles sheets
     compile "org.aerofx:aerofx:0.2"
     compile "com.aquafx-project:aquafx:0.2"
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    compile "org.controlsfx:controlsfx:11.0.1"
+
 }
 
 javafx {

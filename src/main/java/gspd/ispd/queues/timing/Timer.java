@@ -1,6 +1,5 @@
 package gspd.ispd.queues.timing;
 
-import gspd.ispd.model.Machine;
 import gspd.ispd.queues.Handler;
 import gspd.ispd.queues.Simulation;
 import javafx.util.Pair;

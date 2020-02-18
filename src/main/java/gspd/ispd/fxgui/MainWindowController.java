@@ -3,8 +3,8 @@ package gspd.ispd.fxgui;
 import gspd.ispd.GUI;
 import gspd.ispd.ISPD;
 import gspd.ispd.model.ISPDModel;
-import gspd.ispd.model.User;
-import gspd.ispd.model.VM;
+import gspd.ispd.model.data.User;
+import gspd.ispd.model.data.VM;
 import gspd.ispd.fxgui.util.FormBuilder;
 import gspd.ispd.model.data.MachineData;
 import javafx.beans.binding.Bindings;
@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainWindow {
+public class MainWindowController {
     @FXML
     private TextArea terminalOutputArea;
     @FXML
@@ -108,6 +108,9 @@ public class MainWindow {
     @FXML
     private CheckMenuItem gridMenuItem;
 
+    @FXML
+    private DrawPane drawPane;
+
     // This ImageView is not present in FXML file. It represents
     // the image that follows cursor to help user remember what
     // he is up to add.
@@ -117,10 +120,22 @@ public class MainWindow {
     private Stage window;
     private ISPDModel model;
 
+    public MainWindowController() {
+        // try {
+        //     FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+        //     loader.setResources(ISPD.strings);
+        //     loader.setController(this);
+        //     loader.setRoot(this);
+        //     loader.load();
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e);
+        // }
+    }
+
     public static void create(Stage window, GUI main) {
         try {
             FXMLLoader loader;
-            MainWindow controller;
+            MainWindowController controller;
             Scene scene;
             loader = main.getLoader();
             loader.setLocation(GUIUtil.class.getResource("MainWindow.fxml"));
@@ -171,33 +186,23 @@ public class MainWindow {
             }
         }));
         propertiesScrollPane.setContent(FormBuilder.getInstance().makeForm(MachineData.class));
-        DrawPane dPane = new DrawPane();
-        Group group = new Group(dPane);
-        hardwareScrollPane.setContent(group);
-        dPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
-        dPane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.3));
+        drawPane = new DrawPane();
+        hardwareScrollPane.setContent(new Group(drawPane));
+        // drawPane.setMinWidth(Double.POSITIVE_INFINITY);
+        // drawPane.setMinHeight(Double.POSITIVE_INFINITY);
+        drawPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
+        drawPane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.3));
         Node n1 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
         Node n2 = new ImageView(new Image("/gspd/ispd/gui/images/botao_internet.gif"));
-        dPane.add(n1, 20.0, 20.0);
-        dPane.add(n2, 200.0, 200.0);
-        Line line = new Line();
-        line.setStartX(n1.getLayoutX() + n1.getBoundsInLocal().getCenterX());
-        line.setStartY(n1.getLayoutY() + n1.getBoundsInLocal().getCenterY());
-        line.setEndX(n2.getLayoutX() + n2.getBoundsInLocal().getCenterX());
-        line.setEndY(n2.getLayoutY() + n2.getBoundsInLocal().getCenterY());
-        line.setStroke(Color.BLUE);
-        line.setStrokeWidth(4.0);
-        dPane.add(line);
-        line.toBack();
-        line.startXProperty().bind(n1.layoutXProperty());
-        line.startYProperty().bind(n1.layoutYProperty());
-        line.endXProperty().bind(n2.layoutXProperty());
-        line.endYProperty().bind(n2.layoutYProperty());
-        undoMenuItem.setOnAction(event -> dPane.undo());
-        dPane.gridEnableProperty().bind(gridMenuItem.selectedProperty());
+        drawPane.add(n1, 20.0, 20.0);
+        drawPane.add(n2, 200.0, 200.0);
+        undoMenuItem.setOnAction(event -> drawPane.undo());
+        drawPane.gridEnableProperty().bind(gridMenuItem.selectedProperty());
         Text text = new Text("This is a text");
         text.setFill(Color.GRAY);
-        dPane.add(text, 100, 300);
+        drawPane.add(text, 100, 300);
+        Node n3 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
+        drawPane.pinToAdd(n3);
 //         hardwarePane.setOnMouseClicked(event -> {
 //             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
 //                 Image image = followImageView.getImage();
@@ -222,9 +227,9 @@ public class MainWindow {
         // the UID column of user table has the 'id' property of each user
         idUserColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         // the Name column of user table has the 'name' property of each user
-        nameUserColumn.setCellValueFactory(row -> row.getValue().nameProperty());
+        // nameUserColumn.setCellValueFactory(row -> row.getValue().nameProperty());
         // any change in the user table changes directly the users list in the model
-        userTable.setItems(main.getModel().getUsers());
+        // userTable.setItems(main.getModel().getUsers());
         // it is not possible to add VM if there is no users
         addVMButton.disableProperty().bind(Bindings.isEmpty(userTable.getItems()));
         // every time an user row is double clicked, open an user dialog to change its data
@@ -249,13 +254,13 @@ public class MainWindow {
         });
         // VMS TABLE
         idVMColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        userVMColumn.setCellValueFactory(row -> row.getValue().getOwner().nameProperty());
+        // userVMColumn.setCellValueFactory(row -> row.getValue().getOwner().nameProperty());
         hypervisorVMColumn.setCellValueFactory(row -> row.getValue().hypervisorProperty());
         coresVMColumn.setCellValueFactory(new PropertyValueFactory<>("cores"));
         memoryVMColumn.setCellValueFactory(new PropertyValueFactory<>("memory"));
         storageVMColumn.setCellValueFactory(new PropertyValueFactory<>("storage"));
         osVMColumn.setCellValueFactory(row -> row.getValue().osProperty());
-        vmTable.setItems(main.getModel().getVms());
+        // vmTable.setItems(main.getModel().getVms());
         vmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         vmTable.setRowFactory(tableView -> {
             TableRow<VM> row = new TableRow<>();
@@ -345,14 +350,14 @@ public class MainWindow {
     @FXML
     private void handleDuplicateVmClicked() {
         VM vm = vmTable.getSelectionModel().getSelectedItem();
-        main.getModel().duplicate(vm);
+        // main.getModel().duplicate(vm);
     }
 
     @FXML
     private void handleAddUserClicked() {
         User user = createUser();
         if (user != null) {
-            main.getModel().add(user);
+            // main.getModel().getUsers().add(user);
         }
     }
 

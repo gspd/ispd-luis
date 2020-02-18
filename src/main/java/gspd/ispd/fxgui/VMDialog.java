@@ -1,8 +1,8 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.GUI;
-import gspd.ispd.model.User;
-import gspd.ispd.model.VM;
+import gspd.ispd.model.data.User;
+import gspd.ispd.model.data.VM;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -34,7 +34,7 @@ public class VMDialog {
     }
 
     public void init() {
-        userField.setItems(main.getModel().getUsers());
+        // userField.setItems(main.getModel().getUsers());
         userField.setConverter(new StringConverter<User>() {
             @Override
             public String toString(User object) {

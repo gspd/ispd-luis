@@ -50,23 +50,17 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     private List<Double> recuperacao = new ArrayList<Double>();
     private boolean erroRecuperavel;
     private boolean falha = false;
-    
-    
-    
-    
+
+
     /**
-     * @author Diogo Tavares
-     * 
+     *
      * @param id
      * @param proprietario
-     * @param PoderComputacional
      * @param numeroProcessadores
-     * @param Ocupacao
-     * @param numeroMaquina
      * @param memoria
-     * @param disco 
-     */ 
-    
+     * @param disco
+     * @param OS
+     */
     public CS_VirtualMac(String id, String proprietario, int numeroProcessadores, double memoria, double disco, String OS) {
         super(id, proprietario, 0, numeroProcessadores, 0, 0);
         this.processadoresDisponiveis = numeroProcessadores;
@@ -141,6 +135,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
 
     @Override
     public void saidaDeCliente(Simulation simulacao, Tarefa cliente) {
+        //////////////////////////// DICA JOÃO: para toda tarefa dentro da lista de "sub"tarefas (dentro a tarefa cliente), cria evento futuro
         //Incrementa o número de Mbits transmitido por este link
         this.getMetrica().incMflopsProcessados(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
         //Incrementa o tempo de processamento

@@ -16,129 +16,134 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="380.0" prefWidth="355.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.SettingsWindow">
+
+<AnchorPane prefHeight="380.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.SettingsWindow">
    <children>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-         <tabs>
-            <Tab text="%settings.general">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="327.0" prefWidth="437.0">
-                     <children>
-                        <ScrollPane hbarPolicy="NEVER" layoutX="77.0" layoutY="45.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="382.0">
-                                 <children>
-                                    <VBox layoutX="20.0" layoutY="9.0" spacing="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <VBox prefHeight="380.0" prefWidth="355.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+               <tabs>
+                  <Tab text="%settings.general">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="327.0" prefWidth="437.0">
+                           <children>
+                              <ScrollPane hbarPolicy="NEVER" layoutX="77.0" layoutY="45.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="382.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                          <VBox layoutX="20.0" layoutY="9.0" spacing="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                              <children>
-                                                <Label text="%settings.general.language" />
-                                                <ChoiceBox fx:id="localeChoiceBox" prefHeight="26.0" prefWidth="114.0" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                             <children>
-                                                <Label disable="true" text="%settings.general.theme" />
-                                                <ChoiceBox disable="true" prefHeight="26.0" prefWidth="112.0" />
-                                             </children>
-                                          </HBox>
-                                          <VBox spacing="5.0">
-                                             <children>
-                                                <Label text="%settings.general.icon" />
-                                                <HBox spacing="15.0">
+                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
-                                                      <RadioButton mnemonicParsing="false" selected="true" text="%settings.general.icon.compact">
-                                                         <toggleGroup>
-                                                            <ToggleGroup fx:id="iconTypeToggleGroup" />
-                                                         </toggleGroup>
-                                                      </RadioButton>
-                                                      <RadioButton mnemonicParsing="false" text="%settings.general.icon.full" toggleGroup="$iconTypeToggleGroup" />
+                                                      <Label text="%settings.general.language" />
+                                                      <ChoiceBox fx:id="localeChoiceBox" prefHeight="26.0" prefWidth="114.0" />
                                                    </children>
                                                 </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="%settings.simulation">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="327.0" prefWidth="635.0">
-                     <children>
-                        <ScrollPane hbarPolicy="NEVER" layoutX="192.0" layoutY="64.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="383.0">
-                                 <children>
-                                    <VBox layoutX="-0.0380859375" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                                       <children>
-                                          <VBox spacing="10.0">
-                                             <children>
-                                                <Label text="%settings.simulation.type" />
-                                                <HBox spacing="15.0">
+                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
-                                                      <RadioButton mnemonicParsing="false" selected="true" text="Grid">
-                                                         <toggleGroup>
-                                                            <ToggleGroup fx:id="modelTypeToggleGroup" />
-                                                         </toggleGroup>
-                                                      </RadioButton>
-                                                      <RadioButton mnemonicParsing="false" text="IaaS" toggleGroup="$modelTypeToggleGroup" />
-                                                      <RadioButton disable="true" mnemonicParsing="false" text="PaaS" toggleGroup="$modelTypeToggleGroup" />
-                                                      <RadioButton disable="true" mnemonicParsing="false" text="SaaS" toggleGroup="$modelTypeToggleGroup" />
+                                                      <Label disable="true" text="%settings.general.theme" />
+                                                      <ChoiceBox disable="true" prefHeight="26.0" prefWidth="112.0" />
                                                    </children>
                                                 </HBox>
-                                             </children>
-                                          </VBox>
-                                          <Separator prefWidth="200.0" />
-                                          <VBox spacing="10.0">
-                                             <children>
-                                                <Label text="%settings.simulation.number" />
-                                                <Spinner fx:id="numberSimulationsSpinner" editable="true" />
-                                             </children>
-                                          </VBox>
-                                          <Separator prefWidth="200.0" />
-                                          <VBox spacing="10.0">
-                                             <children>
-                                                <Label text="%settings.simulation.charts" />
                                                 <VBox spacing="5.0">
                                                    <children>
-                                                      <CheckBox fx:id="computingPowerChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.computing" />
-                                                      <CheckBox fx:id="processingChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.processing" />
-                                                      <CheckBox fx:id="communicationChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.communication" />
-                                                      <CheckBox fx:id="resourcesChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.resources" />
-                                                      <CheckBox disable="true" mnemonicParsing="false" selected="true" text="%charts.virtualmachine" />
+                                                      <Label text="%settings.general.icon" />
+                                                      <HBox spacing="15.0">
+                                                         <children>
+                                                            <RadioButton mnemonicParsing="false" selected="true" text="%settings.general.icon.compact">
+                                                               <toggleGroup>
+                                                                  <ToggleGroup fx:id="iconTypeToggleGroup" />
+                                                               </toggleGroup>
+                                                            </RadioButton>
+                                                            <RadioButton mnemonicParsing="false" text="%settings.general.icon.full" toggleGroup="$iconTypeToggleGroup" />
+                                                         </children>
+                                                      </HBox>
                                                    </children>
                                                 </VBox>
                                              </children>
                                           </VBox>
                                        </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
-      <HBox alignment="CENTER_RIGHT" spacing="5.0">
-         <children>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="%button.ok" />
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="%settings.simulation">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="327.0" prefWidth="635.0">
+                           <children>
+                              <ScrollPane hbarPolicy="NEVER" layoutX="192.0" layoutY="64.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="383.0">
+                                       <children>
+                                          <VBox layoutX="-0.0380859375" spacing="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                             <children>
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <Label text="%settings.simulation.type" />
+                                                      <HBox spacing="15.0">
+                                                         <children>
+                                                            <RadioButton mnemonicParsing="false" selected="true" text="Grid">
+                                                               <toggleGroup>
+                                                                  <ToggleGroup fx:id="modelTypeToggleGroup" />
+                                                               </toggleGroup>
+                                                            </RadioButton>
+                                                            <RadioButton mnemonicParsing="false" text="IaaS" toggleGroup="$modelTypeToggleGroup" />
+                                                            <RadioButton disable="true" mnemonicParsing="false" text="PaaS" toggleGroup="$modelTypeToggleGroup" />
+                                                            <RadioButton disable="true" mnemonicParsing="false" text="SaaS" toggleGroup="$modelTypeToggleGroup" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                                <Separator prefWidth="200.0" />
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <Label text="%settings.simulation.number" />
+                                                      <Spinner fx:id="numberSimulationsSpinner" editable="true" />
+                                                   </children>
+                                                </VBox>
+                                                <Separator prefWidth="200.0" />
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <Label text="%settings.simulation.charts" />
+                                                      <VBox spacing="5.0">
+                                                         <children>
+                                                            <CheckBox fx:id="computingPowerChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.computing" />
+                                                            <CheckBox fx:id="processingChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.processing" />
+                                                            <CheckBox fx:id="communicationChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.communication" />
+                                                            <CheckBox fx:id="resourcesChartCheckBox" mnemonicParsing="false" selected="true" text="%charts.resources" />
+                                                            <CheckBox disable="true" mnemonicParsing="false" selected="true" text="%charts.virtualmachine" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <HBox alignment="CENTER_RIGHT" spacing="5.0">
+               <children>
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="%button.ok" />
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </HBox>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

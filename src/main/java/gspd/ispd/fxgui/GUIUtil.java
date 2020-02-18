@@ -82,11 +82,11 @@ public class GUIUtil {
 
     static public void closeMainWindow(Stage window, GUI main) {
         AnswerType answer;
-        if (main.getModel().isNotSaved()) {
+        if (/* main.getModel().isNotSaved() */ false) {
             answer = checkClosingWithoutSaving();
             if (answer == AnswerType.SAVE_AND_EXIT) {
                 // TODO: check out this file
-                main.getModel().saveToFile("test_file.imsx");
+                // main.getModel().saveToFile("test_file.imsx");
                 window.close();
             } else if (answer == AnswerType.EXIT_WITHOUT_SAVE) {
                 window.close();

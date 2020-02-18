@@ -20,6 +20,7 @@ import java.util.List;
  *
  * @author denison_usuario
  */
+// Só GRID
 public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
 
     private List<CS_Comunicacao> conexoesEntrada;

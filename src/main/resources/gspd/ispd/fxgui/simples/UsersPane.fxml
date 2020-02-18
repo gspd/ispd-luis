@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="17.0" prefWidth="184.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.simples.UsersPaneController">
+   <children>
+      <VBox layoutX="83.0" layoutY="42.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TitledPane collapsible="false" text="Users" VBox.vgrow="ALWAYS">
+               <content>
+                  <ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" />
+               </content>
+            </TitledPane>
+            <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="135.0" spacing="5.0" VBox.vgrow="NEVER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handleAddButton" text="Add" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#handleRemoveButton" text="Remove" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

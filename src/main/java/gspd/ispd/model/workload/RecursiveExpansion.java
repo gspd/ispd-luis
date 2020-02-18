@@ -1,6 +1,6 @@
 package gspd.ispd.model.workload;
 
-import gspd.ispd.model.Job;
+import gspd.ispd.model.data.Job;
 
 public class RecursiveExpansion extends Expansion {
 

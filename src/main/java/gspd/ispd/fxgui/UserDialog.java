@@ -1,7 +1,7 @@
 package gspd.ispd.fxgui;
 
 import gspd.ispd.GUI;
-import gspd.ispd.model.User;
+import gspd.ispd.model.data.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
