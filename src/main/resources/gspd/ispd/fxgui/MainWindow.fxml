@@ -250,7 +250,14 @@
                                                       </ToggleButton>
                                                    </items>
                                                 </ToolBar>
-                                                <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                                <ScrollPane fx:id="hardwareScrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                   <content>
+                                                      <AnchorPane prefHeight="308.0" prefWidth="523.0">
+                                                         <children>
+                                                            <fx:include fx:id="drawPane" source="simples/DrawPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </content></ScrollPane>
                                              </children>
                                           </VBox>
                                        </children></AnchorPane>
@@ -258,7 +265,7 @@
                             </Tab>
                             <Tab text="Workload">
                               <content>
-                                <Pane fx:id="hardwarePane" />
+                                <Pane />
                               </content>
                             </Tab>
                               <Tab text="VMs">

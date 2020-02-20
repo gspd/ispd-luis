@@ -1,5 +1,7 @@
 package gspd.ispd;
 
+import gspd.ispd.fxgui.DrawPaneController;
+import gspd.ispd.fxgui.DrawToolController;
 import gspd.ispd.fxgui.GUIUtil;
 import gspd.ispd.fxgui.MainWindowController;
 import gspd.ispd.fxgui.simples.DefaultWindowController;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -45,6 +48,21 @@ public class GUI extends Application {
             this.close();
         });
         model = new ISPDModel();
+        // Pane draw = FXMLLoader.load(MainWindowController.class.getResource("MainWindow.fxml"), ISPD.strings);
+        // Scene scene = new Scene(draw);
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
+        loadDefault();
+    }
+
+    private void loadDraw() throws IOException {
+        Pane root = FXMLLoader.load(DrawToolController.class.getResource("DrawTool.fxml"), ISPD.strings);
+        Scene scene = new Scene(root);
+        mainStage.setScene(scene);
+        mainStage.show();
+    }
+
+    private void loadDefault() throws IOException {
         loader = new FXMLLoader();
         loader.setLocation(DefaultWindowController.class.getResource("DefaultWindow.fxml"));
         loader.setResources(ISPD.strings);
@@ -52,9 +70,18 @@ public class GUI extends Application {
         Scene scene = new Scene(root);
         mainStage.setScene(scene);
         mainStage.show();
+    }
+
+    private void loadMain() throws IOException {
         loader = new FXMLLoader();
+        loader.setLocation(MainWindowController.class.getResource("MainWindow.fxml"));
         loader.setResources(ISPD.strings);
-        MainWindowController.create(mainStage, this);
+        Pane root = loader.load();
+        MainWindowController controller = loader.getController();
+        Scene scene = new Scene(root);
+        mainStage.setScene(scene);
+        controller.init();
+        mainStage.show();
     }
 
     /**

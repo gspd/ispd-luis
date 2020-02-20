@@ -10,7 +10,6 @@ import gspd.ispd.model.data.MachineData;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,9 +18,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -96,8 +95,6 @@ public class MainWindowController {
     @FXML
     private MenuItem undoMenuItem;
     @FXML
-    private Pane hardwarePane;
-    @FXML
     private ScrollPane hardwareScrollPane;
     @FXML
     private ToggleGroup hardwareToolboxToggle;
@@ -109,12 +106,9 @@ public class MainWindowController {
     private CheckMenuItem gridMenuItem;
 
     @FXML
-    private DrawPane drawPane;
-
-    // This ImageView is not present in FXML file. It represents
-    // the image that follows cursor to help user remember what
-    // he is up to add.
-    private ImageView followImageView;
+    private AnchorPane drawPane;
+    @FXML
+    private DrawPaneController drawPaneController;
 
     private GUI main;
     private Stage window;
@@ -134,11 +128,10 @@ public class MainWindowController {
 
     public static void create(Stage window, GUI main) {
         try {
-            FXMLLoader loader;
+            FXMLLoader loader = new FXMLLoader(MainWindowController.class.getResource("MainWindow.fxml"));
             MainWindowController controller;
             Scene scene;
-            loader = main.getLoader();
-            loader.setLocation(GUIUtil.class.getResource("MainWindow.fxml"));
+            loader.setResources(ISPD.strings);
             scene = new Scene(loader.load());
             window.setScene(scene);
             controller = loader.getController();
@@ -158,51 +151,20 @@ public class MainWindowController {
         MenuItem paste = new MenuItem("Paste");
         cmenu.getItems().addAll(copy, paste);
         terminalOutputArea.setContextMenu(cmenu);
-        followImageView = new ImageView();
-        followImageView.setOpacity(0.6);
-        hardwareToolboxToggle.selectedToggleProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue != linkIcon) {
-                ToggleButton selected = (ToggleButton) observable.getValue();
-                ImageView imageView = (ImageView) selected.getGraphic();
-                Image image = imageView.getImage();
-                followImageView.setImage(image);
-                GUIUtil.follow(followImageView, hardwarePane);
-                hardwarePane.setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.PRIMARY) {
-                        ImageView imvw = new ImageView();
-                        imvw.setImage(image);
-                        imvw.setLayoutX(followImageView.getLayoutX());
-                        imvw.setLayoutY(followImageView.getLayoutY());
-                        GUIUtil.makeDraggable(imvw);
-                        hardwarePane.getChildren().add(imvw);
-                    }
-                });
-            } else if (newValue == linkIcon) {
-                GUIUtil.unfollow(hardwarePane);
-                hardwarePane.setOnMouseClicked(event -> {});
-            } else {
-                GUIUtil.unfollow(hardwarePane);
-                hardwarePane.setOnMouseClicked(event -> {});
-            }
-        }));
         propertiesScrollPane.setContent(FormBuilder.getInstance().makeForm(MachineData.class));
-        drawPane = new DrawPane();
-        hardwareScrollPane.setContent(new Group(drawPane));
         // drawPane.setMinWidth(Double.POSITIVE_INFINITY);
         // drawPane.setMinHeight(Double.POSITIVE_INFINITY);
-        drawPane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.3));
-        drawPane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.3));
         Node n1 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
         Node n2 = new ImageView(new Image("/gspd/ispd/gui/images/botao_internet.gif"));
-        drawPane.add(n1, 20.0, 20.0);
-        drawPane.add(n2, 200.0, 200.0);
-        undoMenuItem.setOnAction(event -> drawPane.undo());
-        drawPane.gridEnableProperty().bind(gridMenuItem.selectedProperty());
+        drawPaneController.add(n1, 20.0, 20.0);
+        drawPaneController.add(n2, 200.0, 200.0);
+        undoMenuItem.setOnAction(event -> drawPaneController.undo());
+        drawPaneController.gridEnableProperty().bind(gridMenuItem.selectedProperty());
         Text text = new Text("This is a text");
         text.setFill(Color.GRAY);
-        drawPane.add(text, 100, 300);
+        drawPaneController.add(text, 100, 300);
         Node n3 = new ImageView(new Image("/gspd/ispd/gui/images/botao_no.gif"));
-        drawPane.pinToAdd(n3);
+        drawPaneController.pinToAdd(n3);
 //         hardwarePane.setOnMouseClicked(event -> {
 //             if (event.getButton() == MouseButton.PRIMARY && hardwareToolboxToggle.getSelectedToggle() != null) {
 //                 Image image = followImageView.getImage();
@@ -277,10 +239,6 @@ public class MainWindowController {
             return row;
         });
         vmTable.getSelectionModel();
-        // Hardware Pane
-        // the {width, height} of hardware pane (area that we draw hardware) is aways at least 1.5 times its parent scroll pane
-        hardwarePane.minWidthProperty().bind(hardwareScrollPane.widthProperty().multiply(1.5));
-        hardwarePane.minHeightProperty().bind(hardwareScrollPane.heightProperty().multiply(1.5));
         // the hardware scroll pane is pannable
         GUIUtil.makePannable(hardwareScrollPane);
     }

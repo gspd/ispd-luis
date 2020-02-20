@@ -16,24 +16,12 @@ public class EventoFuturo implements Comparable<EventoFuturo> {
     // Possíveis eventos
     public static final int CHEGADA = 1;
     public static final int ATENDIMENTO = 2;
-    public static final int SAÍDA = 3;
+    public static final int SAIDA = 3;
     public static final int ESCALONAR = 4;
     public static final int MENSAGEM = 5;
     public static final int SAIDA_MENSAGEM = 6;
     public static final int ALOCAR_VMS = 7;
 
-    // NEW (EVENT TYPE) -> SUBSTITUTE (int tipoDeEvento) [SOON]
-    public enum EventType {
-        CHEGADA,
-        ATENDIMENTO,
-        SAIDA,
-        ESCALONAR,
-        MENSAGEM,
-        SAIDA_MENSAGEM,
-        ALOCAR_VMS
-    }
-    private EventType eventType;
-    
     // instante em que o evento foi criado
     private Double tempoOcorrencia;
     // marca o tipo de evento
@@ -93,5 +81,15 @@ public class EventoFuturo implements Comparable<EventoFuturo> {
     @Override
     public int compareTo(EventoFuturo o) {
         return tempoOcorrencia.compareTo(o.tempoOcorrencia);
+    }
+
+    @Override
+    public String toString() {
+        return "EventoFuturo{" +
+                "tempoOcorrencia=" + tempoOcorrencia +
+                ", tipoDeEvento=" + tipoDeEvento +
+                ", recurso=" + recurso +
+                ", cliente=" + cliente +
+                '}';
     }
 }

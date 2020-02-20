@@ -61,6 +61,7 @@ public class UserCell extends ListCell<User> {
         editField.setMinWidth(1.0);
         setText(null);
         setGraphic(editField);
+        editField.requestFocus();
         setOnKeyPressed(this::handleKeys);
     }
 
