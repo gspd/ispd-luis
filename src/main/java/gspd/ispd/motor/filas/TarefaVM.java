@@ -29,6 +29,9 @@ public class TarefaVM extends Tarefa {
     public void setVM_enviada(CS_VirtualMac VM_enviada) {
         this.VM_enviada = VM_enviada;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "VM" + super.toString();
+    }
 }

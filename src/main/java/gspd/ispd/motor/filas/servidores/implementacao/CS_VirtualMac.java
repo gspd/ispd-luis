@@ -14,6 +14,8 @@ import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.motor.metricas.MetricasCusto;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,10 +46,11 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     private int status;
     private List<Tarefa> filaTarefas;
     private List<Tarefa> tarefaEmExecucao;
-    private List<CS_VMM> VMMsIntermediarios;
+    private List<CS_VMM> vmmsIntermediarios;
     private MetricasCusto metricaCusto;
     private List<Double> falhas = new ArrayList<Double>();
     private List<Double> recuperacao = new ArrayList<Double>();
+    private List<Tarefa> historicoProcessamento = new ArrayList<>();
     private boolean erroRecuperavel;
     private boolean falha = false;
 
@@ -70,7 +73,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
         this.metricaCusto = new MetricasCusto(id);
         this.maquinaHospedeira = null;
         this.caminhoVMM = null;
-        this.VMMsIntermediarios = new ArrayList<CS_VMM>();
+        this.vmmsIntermediarios = new ArrayList<CS_VMM>();
         this.caminhoIntermediarios = new ArrayList<List>();
         this.tempoDeExec = 0;
         this.status = LIVRE;
@@ -82,7 +85,11 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
      @Override
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
         if (cliente.getEstado() != Tarefa.CANCELADO) { //se a tarefa estiver parada ou executando
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Enter VM] Client: " + cliente);
+            }
             cliente.iniciarEsperaProcessamento(simulacao.getTime(this));
+            cliente.setEstado(Tarefa.PARADO);
             if (processadoresDisponiveis != 0) {
                 //indica que recurso está ocupado
                 processadoresDisponiveis--;
@@ -93,28 +100,43 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
                         this,
                         cliente);
                 simulacao.addEventoFuturo(novoEvt);
+                // Precisa cololcar no histórico ?
+                // historicoProcessamento.add(cliente);
             } else {
                 filaTarefas.add(cliente);
+            }
+        } else {
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Enter VM] task is cancelled", Color.red);
             }
         }
     }
 
     @Override
     public void atendimento(Simulation simulacao, Tarefa cliente) {
+        if (simulacao.isVerbose()) {
+            if(cliente == null)
+                simulacao.getJanela().println("[Attendance VM] null task", Color.red);
+            else
+                simulacao.getJanela().println("[Attendance VM] Client: " + cliente, Color.blue);
+        }
         cliente.finalizarEsperaProcessamento(simulacao.getTime(this));
         cliente.iniciarAtendimentoProcessamento(simulacao.getTime(this));
-        if(cliente == null)
-            System.out.println("cliente nao existe");
-        else
-            System.out.println("cliente é a tarefa " + cliente.getIdentificador());
         tarefaEmExecucao.add(cliente);
-        Double next = simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
+        cliente.setEstado(Tarefa.PROCESSANDO);
+        double next = simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
         if (!falhas.isEmpty() && next > falhas.get(0)) {
-            Double tFalha = falhas.remove(0);
+            falha = true;
+            double tFalha = falhas.remove(0);
             if (tFalha < simulacao.getTime(this)) {
                 tFalha = simulacao.getTime(this);
             }
             Mensagem msg = new Mensagem(this, Mensagens.FALHAR, cliente);
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance VM] failure occurrence", Color.blue);
+                simulacao.getJanela().println("[Attendance VM] :::: failure time: " + tFalha, Color.blue);
+                simulacao.getJanela().println("[Attendance VM] :::: message: " + msg, Color.blue);
+            }
             EventoFuturo evt = new EventoFuturo(
                     tFalha,
                     EventoFuturo.MENSAGEM,
@@ -123,6 +145,9 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
             simulacao.addEventoFuturo(evt);
         } else {
             falha = false;
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance VM] " + cliente + " finished", Color.blue);
+            }
             //Gera evento para atender proximo cliente da lista
             EventoFuturo evtFut = new EventoFuturo(
                     next,
@@ -135,7 +160,10 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
 
     @Override
     public void saidaDeCliente(Simulation simulacao, Tarefa cliente) {
-        //////////////////////////// DICA JOÃO: para toda tarefa dentro da lista de "sub"tarefas (dentro a tarefa cliente), cria evento futuro
+        /////////////// DICA JOÃO: para toda tarefa dentro da lista de "sub"tarefas (dentro da tarefa cliente), cria evento futuro
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Exit VM] Client: " + cliente, Color.blue);
+        }
         //Incrementa o número de Mbits transmitido por este link
         this.getMetrica().incMflopsProcessados(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
         //Incrementa o tempo de processamento
@@ -148,41 +176,47 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
         cliente.calcEficiencia(this.getPoderComputacional());
         //Devolve tarefa para o mestre
         
-        CentroServico Origem = cliente.getOrigem();
+        CentroServico origem = cliente.getOrigem();
         ArrayList<CentroServico> caminho;
-        if(Origem.equals(this.vmmResponsavel)){
+        if(origem.equals(this.vmmResponsavel)){
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Exit VM] path to VMM ok", Color.blue);
+            }
             caminho =  new ArrayList<CentroServico>(caminhoVMM);
-            
         }else{
-            System.out.println("A tarefa não saiu do vmm desta vm!!!!!");
-            int index = VMMsIntermediarios.indexOf((CS_VMM) Origem);
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Exit VM] recalculating VMM through intermediaries VMMs", Color.blue);
+            }
+            int index = vmmsIntermediarios.indexOf((CS_VMM) origem);
             if(index == -1){
                 CS_MaquinaCloud auxMaq = this.getMaquinaHospedeira();
-                ArrayList<CentroServico> caminhoInter = new ArrayList<CentroServico>(getMenorCaminhoIndiretoCloud(auxMaq, (CS_Processamento) Origem));
+                ArrayList<CentroServico> caminhoInter = new ArrayList<CentroServico>(getMenorCaminhoIndiretoCloud(auxMaq, (CS_Processamento) origem));
                 caminho = new ArrayList<CentroServico>(caminhoInter);
-                VMMsIntermediarios.add((CS_VMM) Origem);
-                int idx = VMMsIntermediarios.indexOf((CS_VMM) Origem);
+                vmmsIntermediarios.add((CS_VMM) origem);
+                int idx = vmmsIntermediarios.indexOf((CS_VMM) origem);
                 caminhoIntermediarios.add(idx, caminhoInter);
                 
             }else{
                 caminho = new ArrayList<CentroServico>(caminhoIntermediarios.get(index));
             }
         }
-            cliente.setCaminho(caminho);
-            System.out.println("Saida -"+ this.getId() +"- caminho size:" + caminho.size());
-           
-            //Gera evento para chegada da tarefa no proximo servidor
-            EventoFuturo evtFut = new EventoFuturo(
-                    simulacao.getTime(this),
-                    EventoFuturo.CHEGADA,
-                    cliente.getCaminho().remove(0),
-                    cliente);
-            //Event adicionado a lista de evntos futuros
-            simulacao.addEventoFuturo(evtFut);
-        
+        cliente.setCaminho(caminho);
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Exit VM] path to vmm size: " + caminho.size(), Color.blue);
+        }
+
+        //Gera evento para chegada da tarefa no proximo servidor
+        EventoFuturo evtFut = new EventoFuturo(
+                simulacao.getTime(this),
+                EventoFuturo.CHEGADA,
+                cliente.getCaminho().remove(0),
+                cliente);
+        //Event adicionado a lista de evntos futuros
+        simulacao.addEventoFuturo(evtFut);
+
         if (filaTarefas.isEmpty()) {
             //Indica que está livre
-            this.processadoresDisponiveis++;
+            this.processadoresDisponiveis++; // it is really here ?:?
         } else {
             //Gera evento para atender proximo cliente da lista
             Tarefa proxCliente = filaTarefas.remove(0);
@@ -417,8 +451,8 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
         return vmmResponsavel;
     }
     
-    public List<CS_VMM> getVMMsIntermediarios(){
-        return this.VMMsIntermediarios;
+    public List<CS_VMM> getVmmsIntermediarios(){
+        return this.vmmsIntermediarios;
     }
 
     public List<List> getCaminhoIntermediarios() {
@@ -428,7 +462,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     public void addIntermediario(CS_VMM aux){
        System.out.println(aux.getId());
               
-       this.VMMsIntermediarios.add(aux);
+       this.vmmsIntermediarios.add(aux);
     }
     
     public void addCaminhoIntermediario(int i, List<CentroServico> caminho){
@@ -515,6 +549,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     @Override
     public Integer getCargaTarefas() {
          if (falha) {
+             // QUESTION: pq '-100' ?
             return -100;
         } else {
             return (filaTarefas.size() + tarefaEmExecucao.size());

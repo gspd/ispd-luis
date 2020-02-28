@@ -162,8 +162,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
 
     //o VMM não irá processar tarefas... apenas irá escaloná-las..
     @Override
-    public void atendimento(Simulation simulacao, Tarefa cliente
-    ) {
+    public void atendimento(Simulation simulacao, Tarefa cliente) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

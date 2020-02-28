@@ -37,6 +37,7 @@ public class SimulacaoSequencialCloud extends Simulation {
     
     public SimulacaoSequencialCloud(SimulationProgress janela, RedeDeFilasCloud redeDeFilas, List<Tarefa> tarefas) throws IllegalArgumentException {
         super(janela, redeDeFilas,tarefas);
+        setVerbose(true);
         this.time = 0;
         this.eventos = new PriorityQueue<EventoFuturo>();
 
@@ -122,7 +123,9 @@ public class SimulacaoSequencialCloud extends Simulation {
         getJanela().println("Adding tasks as future events", Color.blue);
         for (Tarefa tarefa : tarefas) {
             EventoFuturo evt = new EventoFuturo(tarefa.getTimeCriacao(), EventoFuturo.CHEGADA, tarefa.getOrigem(), tarefa);
-            getJanela().println(":: " + evt);
+            if (isVerbose()) {
+                getJanela().println(":: " + evt);
+            }
             eventos.add(evt);
         }
         getJanela().println("OK (future events)", Color.green);
@@ -184,30 +187,53 @@ public class SimulacaoSequencialCloud extends Simulation {
             //que seria criado anteriormente
             EventoFuturo eventoAtual = eventos.poll();
             time = eventoAtual.getTempoOcorrencia();
-            getJanela().println(":: time: " + time + " | event " + eventoAtual);
+            if (isVerbose()) {
+                getJanela().println("time: " + time);
+            }
             switch (eventoAtual.getTipo()) {
                 case EventoFuturo.CHEGADA:
-                    getJanela().println(":::: type CHEGADA");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type CHEGADA");
+                        getJanela().println(":::: task " + eventoAtual.getCliente());
+                        getJanela().println(":::: service " + eventoAtual.getServidor());
+                    }
                     eventoAtual.getServidor().chegadaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ATENDIMENTO:
-                    getJanela().println(":::: type ATENDIMENTO");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type ATENDIMENTO");
+                        getJanela().println(":::: task " + eventoAtual.getCliente());
+                        getJanela().println(":::: service " + eventoAtual.getServidor());
+                    }
                     eventoAtual.getServidor().atendimento(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.SAIDA:
-                    getJanela().println(":::: type SAIDA");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type SAIDA");
+                        getJanela().println(":::: task " + eventoAtual.getCliente());
+                        getJanela().println(":::: service " + eventoAtual.getServidor());
+                    }
                     eventoAtual.getServidor().saidaDeCliente(this, (Tarefa) eventoAtual.getCliente());
                     break;
                 case EventoFuturo.ESCALONAR:
-                    getJanela().println(":::: type ESCALONAR");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type ESCALONAR");
+                        getJanela().println(":::: service " + eventoAtual.getServidor());
+                    }
                     eventoAtual.getServidor().requisicao(this, null, EventoFuturo.ESCALONAR);
                     break;
                 case EventoFuturo.ALOCAR_VMS:
-                    getJanela().println(":::: type ALOCAR_VMS");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type ALOCAR_VMS");
+                        getJanela().println(":::: service " + eventoAtual.getServidor());
+                    }
                     eventoAtual.getServidor().requisicao(this, null, EventoFuturo.ALOCAR_VMS);
                     break;
                 default:
-                    getJanela().println(":::: type MENSAGEM (default)");
+                    if (isVerbose()) {
+                        getJanela().println(":::: type MENSAGEM (default)");
+                        getJanela().println(":::: message " + eventoAtual.getCliente());
+                    }
                     eventoAtual.getServidor().requisicao(this, (Mensagem) eventoAtual.getCliente(), eventoAtual.getTipo());
                     break;
             }

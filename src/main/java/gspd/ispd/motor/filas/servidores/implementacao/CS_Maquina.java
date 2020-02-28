@@ -103,6 +103,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
         if (cliente.getEstado() != Tarefa.CANCELADO) {
             cliente.iniciarEsperaProcessamento(simulacao.getTime(this));
+            cliente.setEstado(Tarefa.PARADO);
             if (processadoresDisponiveis != 0) {
                 // indica que recurso está ocupado
                 processadoresDisponiveis--;
@@ -129,6 +130,7 @@ public class CS_Maquina extends CS_Processamento implements Mensagens, Vertice {
         } else {
             cliente.finalizarEsperaProcessamento(simulacao.getTime(this));
             cliente.iniciarAtendimentoProcessamento(simulacao.getTime(this));
+            cliente.setEstado(Tarefa.PROCESSANDO);
             tarefaEmExecucao.add(cliente);
             Double next = simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
             if (!falhas.isEmpty() && next > falhas.get(0)) {

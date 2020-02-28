@@ -28,6 +28,7 @@ public abstract class Simulation {
     private RedeDeFilasCloud redeDeFilasCloud;
     private List<Tarefa> tarefas;
     private SimulationProgress janela;
+    private boolean verbose;
     
     public Simulation(SimulationProgress janela, RedeDeFilas redeDeFilas, List<Tarefa> tarefas){
         this.tarefas = tarefas;
@@ -65,6 +66,14 @@ public abstract class Simulation {
     public abstract void addEventoFuturo(EventoFuturo ev);
     
     public abstract boolean removeEventoFuturo(int tipoEv, CentroServico servidorEv, Cliente clienteEv);
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
 
     public void addTarefa(Tarefa tarefa) {
         tarefas.add(tarefa);

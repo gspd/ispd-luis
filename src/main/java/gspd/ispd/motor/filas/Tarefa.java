@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class Tarefa implements Cliente {
     //Estados que a tarefa pode estar
-
     public static final int PARADO = 1;
     public static final int PROCESSANDO = 2;
     public static final int CANCELADO = 3;
@@ -339,6 +338,7 @@ public class Tarefa implements Cliente {
 
     @Override
     public String toString() {
-        return "Task " + this.getIdentificador();
+        return "Task " + this.getIdentificador() +
+            "{proprietario=" + proprietario + "}" ;
     }
 }
