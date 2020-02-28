@@ -86,7 +86,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
         if (cliente.getEstado() != Tarefa.CANCELADO) { //se a tarefa estiver parada ou executando
             if (simulacao.isVerbose()) {
-                simulacao.getJanela().println("[Enter VM] Client: " + cliente);
+                simulacao.getJanela().println("[Enter VM] Client: " + cliente, Color.blue);
             }
             cliente.iniciarEsperaProcessamento(simulacao.getTime(this));
             cliente.setEstado(Tarefa.PARADO);
@@ -101,7 +101,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
                         cliente);
                 simulacao.addEventoFuturo(novoEvt);
                 // Precisa cololcar no histórico ?
-                // historicoProcessamento.add(cliente);
+                historicoProcessamento.add(cliente);
             } else {
                 filaTarefas.add(cliente);
             }
@@ -555,7 +555,6 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
             return (filaTarefas.size() + tarefaEmExecucao.size());
         }
     }
-    
 
     @Override
     public double getTimeCriacao() {

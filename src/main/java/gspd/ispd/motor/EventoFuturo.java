@@ -85,7 +85,7 @@ public class EventoFuturo implements Comparable<EventoFuturo> {
 
     @Override
     public String toString() {
-        return "EventoFuturo{" +
+        return "EF{" +
                 "tempoOcorrencia=" + tempoOcorrencia +
                 ", tipoDeEvento=" + tipoDeEvento +
                 ", recurso=" + recurso +

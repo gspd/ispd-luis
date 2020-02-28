@@ -135,6 +135,9 @@ public class SimulacaoSequencialCloud extends Simulation {
     @Override
     public void addEventoFuturo(EventoFuturo ev) {
         eventos.offer(ev);
+        if (isVerbose()) {
+            getJanela().println("[Simulation] added future event " + ev, Color.orange);
+        }
         if (testEventStream == null) {
             try {
                 testEventStream = new PrintStream("trackSimu.csv");

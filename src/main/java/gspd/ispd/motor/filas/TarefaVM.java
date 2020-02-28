@@ -9,6 +9,7 @@ import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.motor.filas.servidores.implementacao.CS_VirtualMac;
 
 /**
+ * TarefaVM define uma VM que é enviada para alocação para um VMM
  *
  * @author Diogo Tavares
  */

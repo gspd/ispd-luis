@@ -17,6 +17,8 @@ import gspd.ispd.motor.filas.Tarefa;
 import gspd.ispd.motor.filas.servidores.CS_Comunicacao;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import gspd.ispd.alocacaoVM.CarregarAlloc;
@@ -69,33 +71,44 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     //Métodos do centro de serviços
     @Override
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
-        System.out.println("------------------------------------------");
-        System.out.println("Evento de chegada no vmm " + this.getId());
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Enter VMM " + getId() + "] Client: " + cliente, Color.blue);
+        }
         if (cliente instanceof TarefaVM) {
             TarefaVM trf = (TarefaVM) cliente;
             CS_VirtualMac vm = trf.getVM_enviada();
+            // se get caminho está vazio, então vm é a origem
             if (cliente.getCaminho().isEmpty()) {
                 //trecho dbg
                 if (this.maquinasVirtuais.contains(vm)) {
-                    System.out.println("VM duplicada");
-                    System.out.println("------------------------------------------");
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter VMM " + getId() + "] duplicated VM", Color.red);
+                    }
                 } else {
-                    System.out.println("vm " + vm.getId() + " adicionada no alocador do VMM " + this.getId());
-                    System.out.println("------------------------------------------");
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter VMM " + getId() + "] VM " + cliente + " added in allocator", Color.blue);
+                    }
                     maquinasVirtuais.add(vm); //adiciona na lista de maquinas virtuais
                     if (alocDisponivel) {
+                        if (simulacao.isVerbose()) {
+                            simulacao.getJanela().println("[Enter VMM " + getId() + "] allocator available", Color.blue);
+                        }
                         this.alocDisponivel = false;
                         alocadorVM.addVM(vm);
                         escalonador.addEscravo(vm);
                         executarAlocacao();
                     } else {
+                        if (simulacao.isVerbose()) {
+                            simulacao.getJanela().println("[Enter VMM " + getId() + "] allocator unavailable", Color.blue);
+                        }
                         alocadorVM.addVM(vm);
                         escalonador.addEscravo(vm);
                     }
                 }
             } else {//se não for ele a origem ele precisa encaminhá-la
-
-                System.out.println(this.getId() + ": sou VMM intermediario, encamininhando " + vm.getId());
+                if (simulacao.isVerbose()) {
+                    simulacao.getJanela().println("[Enter VMM " + getId() + "] intermediary VMM, sending " + vm.getId(), Color.blue);
+                }
                 EventoFuturo evtFut = new EventoFuturo(
                         simulacao.getTime(this),
                         EventoFuturo.CHEGADA,
@@ -104,12 +117,15 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                 simulacao.addEventoFuturo(evtFut);
             }
         } else { //cliente é tarefa comum
-            System.out.println("cliente é a tarefa " + cliente.getIdentificador() + " com status " + cliente.getEstado());
-
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Enter VMM " + getId() + "] :::: Status: " + cliente.getEstado(), Color.blue);
+            }
             if (cliente.getEstado() != Tarefa.CANCELADO) {
                 //Tarefas concluida possuem tratamento diferencial
                 if (cliente.getEstado() == Tarefa.CONCLUIDO) {
-                    System.out.println("cliente é o retorno de tarefa " + cliente.getIdentificador());
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter VMM " + getId() + "] Client is a return", Color.blue);
+                    }
                     //se não for origem da tarefa ela deve ser encaminhada
                     if (!cliente.getOrigem().equals(this)) {
                         //encaminhar tarefa!
@@ -123,19 +139,30 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                         simulacao.addEventoFuturo(evtFut);
                     }
                     //caso seja este o centro de serviço de origem
-                    System.out.println("Tarefa " + cliente.getIdentificador() + " adicionada na lista de concluídas");
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter VMM " + getId() + "] client " + cliente + " DONE", Color.blue);
+                    }
                     this.escalonador.addTarefaConcluida(cliente);
 
                     if (tipoEscalonamento == QUANDO_RECEBE_RESULTADO || tipoEscalonamento == AMBOS) {
                         if (this.escalonador.getFilaTarefas().isEmpty()) {
+                            if (simulacao.isVerbose()) {
+                                simulacao.getJanela().println("[Enter VMM " + getId() + "] empty task queue for scheduler", Color.red);
+                            }
                             this.escDisponivel = true;
                         } else {
+                            if (simulacao.isVerbose()) {
+                                simulacao.getJanela().println("[Enter VMM " + getId() + "] executing scheduler", Color.blue);
+                            }
                             executarEscalonamento();
                         }
                     }
                 } //Caso a tarefa está chegando pra ser escalonada
                 else {
-                    if (!(cliente.getCaminho() == null)) {
+                    if (cliente.getCaminho() != null) {
+                        if (simulacao.isVerbose()) {
+                            simulacao.getJanela().println("[Enter VMM " + getId() + "] client " + cliente + " goes to next path step", Color.blue);
+                        }
                         EventoFuturo evtFut = new EventoFuturo(
                                 simulacao.getTime(this),
                                 EventoFuturo.CHEGADA,
@@ -143,14 +170,25 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                                 cliente);
                         simulacao.addEventoFuturo(evtFut);
                     } else {
+                        if (simulacao.isVerbose()) {
+                            simulacao.getJanela().println("[Enter VMM " + getId() + "] No path for task ", Color.blue);
+                        }
                         if (escDisponivel) {
-                            System.out.println("Tarefa " + cliente.getIdentificador() + " chegando para ser escalonada");
+                            if (simulacao.isVerbose()) {
+                                simulacao.getJanela().println("[Enter VMM " + getId() + "] Task must be scheduled ", Color.blue);
+                            }
                             this.escDisponivel = false;
                             //escalonador adiciona nova tarefa
                             escalonador.adicionarTarefa(cliente);
                             //como o escalonador está disponível vai executar o escalonamento diretamente
+                            if (simulacao.isVerbose()) {
+                                simulacao.getJanela().println("[Enter VMM " + getId() + "] executing Scheduler ", Color.blue);
+                            }
                             executarEscalonamento();
                         } else {
+                            if (simulacao.isVerbose()) {
+                                simulacao.getJanela().println("[Enter VMM " + getId() + "] Schedule later", Color.blue);
+                            }
                             //escalonador apenas adiciona a tarefa
                             escalonador.adicionarTarefa(cliente);
                         }
@@ -163,16 +201,20 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     //o VMM não irá processar tarefas... apenas irá escaloná-las..
     @Override
     public void atendimento(Simulation simulacao, Tarefa cliente) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("VMM does not process clients.");
     }
 
     @Override
     public void saidaDeCliente(Simulation simulacao, Tarefa cliente) {
         //trecho de debbuging
-        System.out.println("Evento de Saída: VMM " + this.getId());
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Exit VMM " + getId() + "] Client: " + cliente, Color.blue);
+        }
         if (cliente instanceof TarefaVM) {
             TarefaVM trf = (TarefaVM) cliente;
-            System.out.println("cliente é a vm " + trf.getVM_enviada().getId());
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Exit VMM " + getId() + "] Sent VM: " + trf.getVM_enviada(), Color.blue);
+            }
             EventoFuturo evtFut = new EventoFuturo(
                     simulacao.getTime(this),
                     EventoFuturo.CHEGADA,
@@ -187,7 +229,6 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                 }
             }
         } else {
-            System.out.println("cliente é uma tarefa " + cliente.getIdentificador());
             EventoFuturo evtFut = new EventoFuturo(
                     simulacao.getTime(this),
                     EventoFuturo.CHEGADA,
@@ -206,8 +247,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     }
 
     @Override
-    public void requisicao(Simulation simulacao, Mensagem mensagem, int tipo
-    ) {
+    public void requisicao(Simulation simulacao, Mensagem mensagem, int tipo) {
         if (tipo == EventoFuturo.ESCALONAR) {
             System.out.println("Iniciando escalonamento...");
             escalonador.escalonar();
@@ -248,10 +288,12 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
 
     //métodos do Mestre
     @Override
-    public void enviarTarefa(Tarefa tarefa
-    ) {
+    public void enviarTarefa(Tarefa tarefa) {
         //Gera evento para atender proximo cliente da lista
-        System.out.println("Tarefa:" + tarefa.getIdentificador() + "escalonada para vm:" + tarefa.getLocalProcessamento().getId());
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[SendTask VMM " + getId() +"] Task: " + tarefa, Color.blue);
+            simulacao.getJanela().println("[SendTask VMM " + getId() +"] Processing: " + tarefa.getLocalProcessamento(), Color.blue);
+        }
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
                 EventoFuturo.SAIDA,
@@ -261,14 +303,15 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     }
 
     @Override
-    public void processarTarefa(Tarefa tarefa
-    ) {
+    public void processarTarefa(Tarefa tarefa) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void executarEscalonamento() {
-        System.out.println(this.getId() + " solicitando escalonamento");
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Scheduling VMM " + getId() + "] requesting scheduling", Color.blue);
+        }
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
                 EventoFuturo.ESCALONAR,
@@ -279,9 +322,12 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
 
     @Override
     public void enviarVM(CS_VirtualMac vm) {
-        System.out.println("Enviar VM: alocando VM " + vm.getId());
-        System.out.println("------------------------------------------");
         TarefaVM tarefa = new TarefaVM(vm.getVmmResponsavel(), vm, 300.0, 0.0);
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[SendVM VMM " + getId() + "] VM: " + vm, Color.blue);
+            simulacao.getJanela().println("[SendVM VMM " + getId() + "] VMM: " + vm.getVmmResponsavel(), Color.blue);
+            simulacao.getJanela().println("[SendVM VMM " + getId() + "] Task generated: " + tarefa, Color.blue);
+        }
         tarefa.setCaminho(vm.getCaminho());
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
@@ -302,8 +348,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     }
 
     @Override
-    public void enviarMensagem(Tarefa tarefa, CS_Processamento escravo, int tipo
-    ) {
+    public void enviarMensagem(Tarefa tarefa, CS_Processamento escravo, int tipo) {
         Mensagem msg = new Mensagem(this, tipo, tarefa);
         msg.setCaminho(escalonador.escalonarRota(escravo));
         EventoFuturo evtFut = new EventoFuturo(
@@ -316,8 +361,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     }
 
     @Override
-    public void atualizar(CS_Processamento escravo
-    ) {
+    public void atualizar(CS_Processamento escravo) {
         Mensagem msg = new Mensagem(this, 0.011444091796875, Mensagens.ATUALIZAR);
         msg.setCaminho(escalonador.escalonarRota(escravo));
         EventoFuturo evtFut = new EventoFuturo(
