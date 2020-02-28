@@ -20,9 +20,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.util.Builder;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * {@code DrawingPane} is a basic JavaFX pane that allows positioning, selecting,
@@ -33,7 +35,7 @@ import java.util.*;
 public class DrawPaneController implements Initializable {
 
     @FXML
-    private Pane pane;
+    private Pane rootPane;
 
     /**
      * Selection Model automatic takes care of the selecting system.
@@ -66,6 +68,14 @@ public class DrawPaneController implements Initializable {
     private Set<Node> pinned = new HashSet<>();
 
     private EventHandler<MouseEvent> pinMouseMovedHandler = this::onPinMouseMoved;
+
+    enum DrawState {
+        NONE,
+        SELECTING,
+        MOVING,
+    }
+
+    private DrawState state;
 
     /**
      * Initializes the static fields of the class if they weren't yet
@@ -126,18 +136,58 @@ public class DrawPaneController implements Initializable {
      */
     public void add(Node node) {
         takeSnapshot();
-        pane.getChildren().add(node);
+        rootPane.getChildren().add(node);
         selectionModel.watch(node);
-        pane.requestFocus();
+        rootPane.requestFocus();
     }
 
-    public void pinToAdd(Node node) {
-        node.setOpacity(0.5);
-        pinned.add(node);
-        pane.getChildren().add(node);
-        pane.setOnMouseMoved(this::onPinMouseMoved);
-        pane.setOnMousePressed(this::onPinMousePressed);
+    private Callable<Node> pinToAddCallable;
+    public Node pinToAdd(Node node) {
+        try {
+            node.setOpacity(0.5);
+            pinned.add(node);
+            rootPane.getChildren().add(node);
+            pinToAddCallable = () -> node;
+            rootPane.setOnMouseMoved(this::onPinMouseMoved);
+            rootPane.setOnMousePressed(this::onPinMousePressed);
+            Future<Node> futureResult = new FutureTask<>(pinToAddCallable);
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+
+    //////////////
+    private void onNodeMousePressed(MouseEvent event) {
+        Node target = (Node) event.getTarget();
+        if (state == DrawState.NONE) {
+            if (!selectionModel.isSelected(target)) {
+                selectionModel.clearAndSelect(target);
+            }
+            state = DrawState.MOVING;
+            event.consume();
+        }
+    }
+
+    private void onPaneMousePressed(MouseEvent event) {
+        // start box
+        state = DrawState.SELECTING;
+    }
+
+    private void onPaneMouseDragged(MouseEvent event) {
+        if (state == DrawState.SELECTING) {
+            // resize the box
+        } else if (state == DrawState.MOVING) {
+            // moves the selection
+        }
+    }
+
+    private void onPaneMouseRelease(MouseEvent event) {
+        state = DrawState.NONE;
+    }
+    //////////////
 
     /**
      * Removes a given node from the drawing pane. If the node is not
@@ -149,7 +199,7 @@ public class DrawPaneController implements Initializable {
         takeSnapshot();
         selectionModel.clearSelection(node);
         selectionModel.unwatch(node);
-        pane.getChildren().remove(node);
+        rootPane.getChildren().remove(node);
     }
     /**
      * Undo the last change
@@ -182,27 +232,38 @@ public class DrawPaneController implements Initializable {
     }
 
     private void onPinMousePressed(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            pinned.forEach(this::finallyAdd);
-            pane.setOnMousePressed(selectionModel::onBoxMousePressed);
-            event.consume();
-        } else if (event.getButton() == MouseButton.SECONDARY) {
-            pinned.forEach(this::cancelPinNode);
-            pane.setOnMousePressed(selectionModel::onBoxMousePressed);
-            event.consume();
+        try {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                pinned.forEach(this::finallyAdd);
+                rootPane.setOnMousePressed(selectionModel::onBoxMousePressed);
+                pinToAddCallable.call();
+                event.consume();
+            } else if (event.getButton() == MouseButton.SECONDARY) {
+                cancelPinning();
+                rootPane.setOnMousePressed(selectionModel::onBoxMousePressed);
+                event.consume();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void finallyAdd(Node node) {
         node.setOpacity(1);
-        pane.getChildren().remove(node);
+        rootPane.getChildren().remove(node);
         add(node);
         pinned.remove(node);
     }
 
     private void cancelPinNode(Node node) {
-        pane.getChildren().remove(node);
+        rootPane.getChildren().remove(node);
         pinned.remove(node);
+    }
+
+    public void cancelPinning() {
+        while (!pinned.isEmpty()) {
+            cancelPinNode(pinned.iterator().next());
+        }
     }
 
     /**
@@ -226,11 +287,11 @@ public class DrawPaneController implements Initializable {
      * @param snapshot the snapshot to restore
      */
     private void restoreSnapshot(Snapshot snapshot) {
-        pane.getChildren().clear();
+        rootPane.getChildren().clear();
         snapshot.getChildren().forEach((node, point) -> {
             node.setLayoutX(point.getX());
             node.setLayoutY(point.getY());
-            pane.getChildren().add(node);
+            rootPane.getChildren().add(node);
         });
         selectionModel.clearSelection();
         selectionModel.selectAll(snapshot.getSelected());
@@ -242,11 +303,11 @@ public class DrawPaneController implements Initializable {
         initStatic();
         selectionModel = new SelectionModel(this);
         gridEnable.addListener(this::updateBackground);
-        pane.scaleXProperty().bind(zoom);
-        pane.scaleYProperty().bind(zoom);
-        pane.setBackground(blankBackground);
-        pane.setFocusTraversable(true);
-        pane.setOnKeyPressed(this::handleKeys);
+        rootPane.scaleXProperty().bind(zoom);
+        rootPane.scaleYProperty().bind(zoom);
+        rootPane.setBackground(blankBackground);
+        rootPane.setFocusTraversable(true);
+        rootPane.setOnKeyPressed(this::handleKeys);
     }
 
     private void handleKeys(KeyEvent event) {
@@ -258,9 +319,9 @@ public class DrawPaneController implements Initializable {
 
     private void updateBackground(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
         if (newValue)
-            pane.setBackground(gridBackground);
+            rootPane.setBackground(gridBackground);
         else
-            pane.setBackground(blankBackground);
+            rootPane.setBackground(blankBackground);
     }
 
     /**
@@ -314,9 +375,9 @@ public class DrawPaneController implements Initializable {
             selectionBox = new Rectangle(0, 0, 0, 0);
             boxContext = new SelectionBoxContext();
             dragContext = new DragContext();
-            draw.pane.setOnMousePressed(this::onBoxMousePressed);
-            draw.pane.setOnMouseDragged(this::onBoxMouseDragged);
-            draw.pane.setOnMouseReleased(this::onBoxMouseReleased);
+            draw.rootPane.setOnMousePressed(this::onBoxMousePressed);
+            draw.rootPane.setOnMouseDragged(this::onBoxMouseDragged);
+            draw.rootPane.setOnMouseReleased(this::onBoxMouseReleased);
         }
 
         /**
@@ -328,7 +389,7 @@ public class DrawPaneController implements Initializable {
         }
 
         public void selectAll() {
-            draw.pane.getChildren().forEach(this::select);
+            draw.rootPane.getChildren().forEach(this::select);
         }
 
         public void selectAll(Collection<Node> collection) {
@@ -351,7 +412,7 @@ public class DrawPaneController implements Initializable {
             if (watching.contains(node) && !isSelected(node)) {
                 // adds node to the selected map decorating it with a border rectangle
                 Rectangle border = createDecoration(node);
-                draw.pane.getChildren().add(border);
+                draw.rootPane.getChildren().add(border);
                 selected.put(node, border);
                 // exchange the single handler by the group handler in order to respect selection
                 // events with other selected items
@@ -397,7 +458,7 @@ public class DrawPaneController implements Initializable {
          * @param node the node to watch
          */
         public void watch(Node node) {
-            if (draw.pane.getChildren().contains(node)) {
+            if (draw.rootPane.getChildren().contains(node)) {
                 if (watching.add(node)) {
                     // node.addEventHandler(MouseEvent.MOUSE_PRESSED, singleMousePressedHandler);
                     node.setOnMousePressed(this::onSingleMousePressed);
@@ -414,7 +475,7 @@ public class DrawPaneController implements Initializable {
          */
         private void unselect(Node node) {
             // removes decoration rectangle of the node in the pane
-            draw.pane.getChildren().remove(selected.get(node));
+            draw.rootPane.getChildren().remove(selected.get(node));
             // removes the node from selected map
             selected.remove(node);
             // exchange the group handler by the single handler in order to be able
@@ -522,20 +583,20 @@ public class DrawPaneController implements Initializable {
         private void updateSelectedItems() {
             Set<Node> set = new HashSet<>();
             if (boxContext.getPolicy() == SelectionPolicy.CONTAINS) {
-                for (Node node : draw.pane.getChildren()) {
+                for (Node node : draw.rootPane.getChildren()) {
                     if (selectionBox.getBoundsInParent().contains(node.getBoundsInParent())) {
                         set.add(node);
                     }
                 }
             } else if (boxContext.getPolicy() == SelectionPolicy.INTERSECTS) {
-                for (Node node : draw.pane.getChildren()) {
+                for (Node node : draw.rootPane.getChildren()) {
                     if (node.getBoundsInParent().intersects(selectionBox.getBoundsInParent())) {
                         set.add(node);
                     }
                 }
             } else if (boxContext.getPolicy() == SelectionPolicy.SINGLE) {
                 // iterates the list in reverse order to get the 'up-layer' nodes first
-                ListIterator<Node> iterator = draw.pane.getChildren().listIterator(draw.pane.getChildren().size());
+                ListIterator<Node> iterator = draw.rootPane.getChildren().listIterator(draw.rootPane.getChildren().size());
                 while (iterator.hasPrevious()) {
                     Node node = iterator.previous();
                     if (node.getBoundsInParent().contains(boxContext.getStartX(), boxContext.getStartY())) {
@@ -592,8 +653,8 @@ public class DrawPaneController implements Initializable {
                 boxContext.setEndX(event.getX());
                 boxContext.setEndY(event.getY());
                 updateSelectionRectangle();
-                draw.pane.getChildren().add(selectionBox);
-                draw.pane.requestFocus();
+                draw.rootPane.getChildren().add(selectionBox);
+                draw.rootPane.requestFocus();
                 event.consume();
             }
         }
@@ -608,7 +669,7 @@ public class DrawPaneController implements Initializable {
         }
 
         private void onBoxMouseReleased(MouseEvent event) {
-            draw.pane.getChildren().remove(selectionBox);
+            draw.rootPane.getChildren().remove(selectionBox);
             if (event.getButton() == MouseButton.PRIMARY) {
                 clearAndUpdateSelectedItems();
                 event.consume();
@@ -623,7 +684,7 @@ public class DrawPaneController implements Initializable {
                 dragContext.setEndX(event.getX());
                 dragContext.setEndY(event.getY());
                 updateSelectedItemsPosition();
-                draw.pane.requestFocus();
+                draw.rootPane.requestFocus();
                 event.consume();
             }
         }
@@ -645,7 +706,7 @@ public class DrawPaneController implements Initializable {
 
         private void onSingleMousePressed(MouseEvent event) {
             if (event.getButton() == MouseButton.PRIMARY) {
-                draw.pane.requestFocus();
+                draw.rootPane.requestFocus();
                 // clear the selection and selects only the pressed node.
                 // Note that in selection the event that node listen will be changed
                 // then it can be dragged
@@ -810,7 +871,7 @@ public class DrawPaneController implements Initializable {
             // Linked hash map is used here to guarantee the order of keys is in the same order
             // they were added. It is important in the later snapshot restoring process
             this.children = new LinkedHashMap<>();
-            draw.pane.getChildren().forEach(node -> {
+            draw.rootPane.getChildren().forEach(node -> {
                 Point2D point = new Point2D(node.getLayoutX(), node.getLayoutY());
                 children.put(node, point);
             });

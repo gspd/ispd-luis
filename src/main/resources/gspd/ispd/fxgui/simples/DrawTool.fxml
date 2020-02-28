@@ -8,6 +8,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,13 +17,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.DrawToolController">
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gspd.ispd.fxgui.DrawToolController">
    <children>
       <VBox layoutX="168.0" layoutY="53.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0">
                <items>
-                  <Hyperlink>
+                  <Hyperlink onAction="#handlePointerAction">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -30,7 +32,7 @@
                         </ImageView>
                      </graphic>
                   </Hyperlink>
-                  <Hyperlink onAction="#handleAddText">
+                  <ToggleButton fx:id="textToggleButton" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -38,7 +40,10 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </Hyperlink>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toolBarToggle" />
+                     </toggleGroup>
+                  </ToggleButton>
                   <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
                </items>
             </ToolBar>

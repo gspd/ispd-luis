@@ -1,4 +1,4 @@
-package gspd.ispd.fxgui.simples;
+package gspd.ispd.fxgui.util;
 
 import gspd.ispd.fxgui.GUIUtil;
 import gspd.ispd.model.ModelService;

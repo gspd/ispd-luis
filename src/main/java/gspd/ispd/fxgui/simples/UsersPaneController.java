@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.simples;
 
+import gspd.ispd.fxgui.util.UserCell;
 import gspd.ispd.model.ISPDModel;
 import gspd.ispd.model.ModelService;
 import gspd.ispd.model.data.User;
@@ -9,7 +10,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
