@@ -1,7 +1,7 @@
 package gspd.ispd.queues;
 
-import gspd.ispd.queues.events.FutureEvent;
 import gspd.ispd.queues.events.FutureEventType;
+import gspd.ispd.util.Handler;
 
 import java.util.*;
 

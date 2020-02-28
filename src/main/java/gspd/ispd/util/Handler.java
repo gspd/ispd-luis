@@ -1,4 +1,4 @@
-package gspd.ispd.queues;
+package gspd.ispd.util;
 
 import java.util.EventListener;
 import java.util.EventObject;
