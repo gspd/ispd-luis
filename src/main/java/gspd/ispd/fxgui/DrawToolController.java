@@ -1,18 +1,12 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.fxgui.util.EditableText;
+import gspd.ispd.fxgui.custom.EditableText;
 import gspd.ispd.fxgui.util.ToggleActionCancel;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.adapter.JavaBeanBooleanProperty;
-import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;

@@ -4,12 +4,16 @@ import gspd.ispd.fxgui.DrawPaneController;
 import gspd.ispd.fxgui.DrawToolController;
 import gspd.ispd.fxgui.GUIUtil;
 import gspd.ispd.fxgui.MainWindowController;
+import gspd.ispd.fxgui.custom.EditableText;
 import gspd.ispd.fxgui.simples.DefaultWindowController;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,11 +52,7 @@ public class GUI extends Application {
             this.close();
         });
         model = new ISPDModel();
-        // Pane draw = FXMLLoader.load(MainWindowController.class.getResource("MainWindow.fxml"), ISPD.strings);
-        // Scene scene = new Scene(draw);
-        // primaryStage.setScene(scene);
-        // primaryStage.show();
-        loadDefault();
+        loadTest(primaryStage);
     }
 
     private void loadDraw() throws IOException {
@@ -82,6 +82,18 @@ public class GUI extends Application {
         mainStage.setScene(scene);
         controller.init();
         mainStage.show();
+    }
+
+    private void loadTest(Stage primaryStage) {
+
+        StackPane root = new StackPane();
+
+        EditableText text = new EditableText("new text");
+
+        root.getChildren().add(text);
+
+        primaryStage.setScene(new Scene(root, 460, 340));
+        primaryStage.show();
     }
 
     /**

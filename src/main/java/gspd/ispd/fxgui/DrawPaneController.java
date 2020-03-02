@@ -141,21 +141,12 @@ public class DrawPaneController implements Initializable {
         rootPane.requestFocus();
     }
 
-    private Callable<Node> pinToAddCallable;
-    public Node pinToAdd(Node node) {
-        try {
-            node.setOpacity(0.5);
-            pinned.add(node);
-            rootPane.getChildren().add(node);
-            pinToAddCallable = () -> node;
-            rootPane.setOnMouseMoved(this::onPinMouseMoved);
-            rootPane.setOnMousePressed(this::onPinMousePressed);
-            Future<Node> futureResult = new FutureTask<>(pinToAddCallable);
-            return futureResult.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void pinToAdd(Node node) {
+        node.setOpacity(0.5);
+        pinned.add(node);
+        rootPane.getChildren().add(node);
+        rootPane.setOnMouseMoved(this::onPinMouseMoved);
+        rootPane.setOnMousePressed(this::onPinMousePressed);
     }
 
 
@@ -236,7 +227,6 @@ public class DrawPaneController implements Initializable {
             if (event.getButton() == MouseButton.PRIMARY) {
                 pinned.forEach(this::finallyAdd);
                 rootPane.setOnMousePressed(selectionModel::onBoxMousePressed);
-                pinToAddCallable.call();
                 event.consume();
             } else if (event.getButton() == MouseButton.SECONDARY) {
                 cancelPinning();

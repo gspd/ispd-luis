@@ -1,4 +1,4 @@
-package gspd.ispd.fxgui.util;
+package gspd.ispd.fxgui.custom;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -22,10 +22,9 @@ public class EditableText extends Group {
         this.text = new Text(text);
         this.text.setFill(Color.GRAY);
         this.textField = new TextField();
-        this.text.setOnMousePressed(this::handleMousePressed);
-        this.text.setOnMouseClicked(this::handleMouseEdit);
+        setOnMouseClicked(this::handleMouseClicked);
         this.textField.setOnKeyReleased(this::handleKeys);
-        this.textField.setOnMousePressed(this::handleMousePressed);
+        // this.textField.setOnMousePressed(this::handleMousePressed);
         // cancels editing aways the field loose focus
         this.textField.focusedProperty().addListener(this::focusChanged);
         this.text.setVisible(true);
@@ -39,25 +38,21 @@ public class EditableText extends Group {
         }
     }
 
-    private void handleMouseEdit(MouseEvent event) {
+    private void handleMouseClicked(MouseEvent event) {
         if (event.getClickCount() == 2) {
-            textField.setText(text.getText());
-            textField.setLayoutX(text.getBoundsInLocal().getMinX());
-            textField.setLayoutY(text.getBoundsInLocal().getMinY());
-            // exchange the text and the textfield visibility
-            text.setVisible(false);
-            textField.setVisible(true);
-            textField.requestFocus();
+            startEdit();
             event.consume();
         }
     }
 
-    private void handleMousePressed(MouseEvent event) {
-        // redirects mouse pressed event target to 'this' (Group) in order
-        // to avoid event loop in events chain, which could cause
-        // StackOverflow exception
-        Event.fireEvent(this, event);
-        event.consume();
+    private void startEdit() {
+        textField.setText(text.getText());
+        textField.setLayoutX(text.getBoundsInLocal().getMinX());
+        textField.setLayoutY(text.getBoundsInLocal().getMinY());
+        // exchange the text and the textfield visibility
+        text.setVisible(false);
+        textField.setVisible(true);
+        textField.requestFocus();
     }
 
     private void handleKeys(KeyEvent event) {
@@ -80,7 +75,7 @@ public class EditableText extends Group {
     }
 
     private void finalizeEdit() {
-        getParent().requestFocus();
+        text.requestFocus();
         // exchange the text and the textfield visibility
         textField.setVisible(false);
         text.setVisible(true);

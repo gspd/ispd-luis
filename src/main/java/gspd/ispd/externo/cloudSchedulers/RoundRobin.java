@@ -58,24 +58,21 @@ public class RoundRobin extends EscalonadorCloud{
 
     @Override
     public void escalonar() {
-        System.out.println("---------------------------");
         Tarefa trf = escalonarTarefa();
         usuario = trf.getProprietario();
         EscravosUsuario = (LinkedList<CS_Processamento>) getVMsAdequadas(usuario, escravos);
         if(!EscravosUsuario.isEmpty()){
-        
-        CS_Processamento rec = escalonarRecurso();
-        System.out.println("escalonando tarefa " + trf.getIdentificador() + " para:" + rec.getId());
-        trf.setLocalProcessamento(rec);
-        trf.setCaminho(escalonarRota(rec));
-        mestre.enviarTarefa(trf);
+
+            CS_Processamento rec = escalonarRecurso();
+            System.out.println("escalonando tarefa " + trf.getIdentificador() + " para:" + rec.getId());
+            trf.setLocalProcessamento(rec);
+            trf.setCaminho(escalonarRota(rec));
+            mestre.enviarTarefa(trf);
+        } else{
+            System.out.println("Não existem VMs alocadas ainda, devolvendo tarefa " + trf.getIdentificador());
+            adicionarTarefa(trf);
+            mestre.liberarEscalonador();
         }
-        else{
-        System.out.println("Não existem VMs alocadas ainda, devolvendo tarefa " + trf.getIdentificador());    
-        adicionarTarefa(trf);
-        mestre.liberarEscalonador();
-        }
-        System.out.println("---------------------------");
     }
 
     @Override

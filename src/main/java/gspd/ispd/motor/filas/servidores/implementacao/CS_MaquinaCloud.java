@@ -14,6 +14,8 @@ import gspd.ispd.motor.filas.servidores.CS_Comunicacao;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.motor.metricas.MetricasAlocacao;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,17 +111,21 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
 
     @Override
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
-        System.out.println("----------------------------------------------");
-        System.out.println("Chegada de evento na  máquina " + this.getId());
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Enter Machine " + this.getId() + "] Client: " + cliente, Color.blue);
+        }
         if (cliente instanceof TarefaVM) {
             TarefaVM trf = (TarefaVM) cliente;
             CS_VirtualMac vm = trf.getVM_enviada();
             if (vm.getMaquinaHospedeira().equals(this)) {
                 if (this.VMs.contains(vm)) {
-                    System.out.println("Cliente duplicado!");
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter Machine " + this.getId() + "] Duplicated VM", Color.red);
+                    }
                 } else {
-                    System.out.println(vm.getId() + " enviada para evento de atendimento nesta máquina");
-                    System.out.println("----------------------------------------------");
+                    if (simulacao.isVerbose()) {
+                        simulacao.getJanela().println("[Enter Machine " + this.getId() + "] " + cliente + " will be allocated in this machine", Color.blue);
+                    }
                     EventoFuturo evtFut = new EventoFuturo(
                             simulacao.getTime(this),
                             EventoFuturo.ATENDIMENTO,
@@ -128,8 +134,9 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
                     simulacao.addEventoFuturo(evtFut);
                 }
             } else {
-                System.out.println(vm.getId() + " encaminhada para seu destino, esta máquina é intermediária");
-                System.out.println("----------------------------------------------");
+                if (simulacao.isVerbose()) {
+                    simulacao.getJanela().println("[Enter Machine " + this.getId() + "] :: INTERMEDIARY MACHINE :: " + cliente + " will be sent forward", Color.blue);
+                }
                 EventoFuturo evtFut = new EventoFuturo(
                         simulacao.getTime(this),
                         EventoFuturo.CHEGADA,
@@ -141,8 +148,9 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
             //procedimento caso cliente seja uma tarefa!
             CS_VirtualMac vm = (CS_VirtualMac) cliente.getLocalProcessamento();
             if (vm.getMaquinaHospedeira().equals(this)) {//se a tarefa é endereçada pra uma VM qu está alocada nessa máquina
-                System.out.println(this.getId() + ": Tarefa " + cliente.getIdentificador() + " sendo enviada para execução na vm " + vm.getId());
-                System.out.println("----------------------------------------------");
+                if (simulacao.isVerbose()) {
+                    simulacao.getJanela().println("[Enter Machine " + this.getId() + "] VM to execute found inside: " + vm, Color.blue);
+                }
                 EventoFuturo evtFut = new EventoFuturo(
                         simulacao.getTime(this),
                         EventoFuturo.CHEGADA,
@@ -150,8 +158,6 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
                         cliente);
                 simulacao.addEventoFuturo(evtFut);
             } else {
-                System.out.println(this.getId() + ": Tarefa " + cliente.getIdentificador() + " sendo encaminhada para próximo CS");
-                System.out.println("----------------------------------------------");
                 EventoFuturo evtFut = new EventoFuturo(
                         simulacao.getTime(this),
                         EventoFuturo.SAIDA,
@@ -169,17 +175,15 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
 
         TarefaVM trf = (TarefaVM) cliente;
         CS_VirtualMac vm = trf.getVM_enviada();
-        System.out.println("--------------------------------------------------");
-        System.out.println("atendimento da vm:" + vm.getId() + "na maquina:" + this.getId());
-
-            //vm.setStatus(CS_VirtualMac.ALOCADA);
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] Client: " + cliente, Color.blue);
+            simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] :::: VM expected: " + vm, Color.blue);
+        }
+        //vm.setStatus(CS_VirtualMac.ALOCADA);
         this.addVM(vm); //incluir a VM na lista de VMs
         getMetricaAloc().incVMsAlocadas();
         //Setar o caminho da vm para o VMM e o caminho do ACK da mensagem >>>
         CS_VMM vmm = vm.getVmmResponsavel();
-            //trecho de teste
-        //
-        //fim teste
         int index = mestres.indexOf(vmm);
         Mensagem msg = new Mensagem(this, Mensagens.ALOCAR_ACK, cliente);
 
@@ -187,9 +191,9 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
             ArrayList<CentroServico> caminhoVMM = new ArrayList<CentroServico>(getMenorCaminhoIndiretoCloud(this, vmm));
             ArrayList<CentroServico> caminhoMsg = new ArrayList<CentroServico>(getMenorCaminhoIndiretoCloud(this, vmm));
 
-            System.out.println("Imprimindo caminho para o mestre:");
-            for (CentroServico cs : caminhoVMM) {
-                System.out.println(cs.getId());
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] Path to master: ", Color.blue);
+                simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] :::: " + caminhoVMM, Color.blue);
             }
 
             vm.setCaminhoVMM(caminhoVMM);
@@ -198,14 +202,17 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
             ArrayList<CentroServico> caminhoVMM = new ArrayList<CentroServico>(caminhoMestre.get(index));
             ArrayList<CentroServico> caminhoMsg = new ArrayList<CentroServico>(caminhoMestre.get(index));
 
-            System.out.println("Imprimindo caminho para o mestre:");
-            for (CentroServico cs : caminhoVMM) {
-                System.out.println(cs.getId());
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] Path to master: ", Color.blue);
+                simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] :::: " + caminhoVMM, Color.blue);
             }
             vm.setCaminhoVMM(caminhoVMM);
             msg.setCaminho(caminhoMsg);
         }
 
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] Sending Ack to VMM", Color.blue);
+        }
         //enviar mensagem de ACK para o VMM
         EventoFuturo NovoEvt = new EventoFuturo(
                 simulacao.getTime(this),
@@ -213,6 +220,9 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
                 this,
                 msg);
         simulacao.addEventoFuturo(NovoEvt);
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Attendance Machine " + this.getId() + "] Request for VMM schedule", Color.blue);
+        }
 
         //Gerenciamento de custos
         custoTotalProc = custoTotalProc + (vm.getProcessadoresDisponiveis() * custoProc);
@@ -220,7 +230,6 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
         custoTotalDisco = custoTotalDisco + (vm.getDiscoDisponivel() * custoDisco);
         //setar o poder de processamento da VM.
         vm.setPoderProcessamentoPorNucleo(this.getPoderComputacional());
-        System.out.println("----------------------------------------------------");
         /*
          //setar o caminho da vm para o mestre
          CS_VMM vmm = vm.getVmmResponsavel();
@@ -244,14 +253,15 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
 
     @Override
     public void saidaDeCliente(Simulation simulacao, Tarefa cliente) {
-        System.out.println("--------------------------------------");
-        System.out.println(this.getId() + ": Saída de cliente");
-        System.out.println("--------------------------------------");
+        if (simulacao.isVerbose()) {
+            simulacao.getJanela().println("[Exit Machine " + this.getId() + "] Client: " + cliente, Color.blue);
+        }
         EventoFuturo evtFut = new EventoFuturo(
                 simulacao.getTime(this),
                 EventoFuturo.CHEGADA,
                 cliente.getCaminho().remove(0),
                 cliente);
+        simulacao.addEventoFuturo(evtFut);
     }
 
     @Override

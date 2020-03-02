@@ -157,8 +157,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                             executarEscalonamento();
                         }
                     }
-                } //Caso a tarefa está chegando pra ser escalonada
-                else {
+                } else {
                     if (cliente.getCaminho() != null) {
                         if (simulacao.isVerbose()) {
                             simulacao.getJanela().println("[Enter VMM " + getId() + "] client " + cliente + " goes to next path step", Color.blue);
@@ -249,7 +248,9 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
     @Override
     public void requisicao(Simulation simulacao, Mensagem mensagem, int tipo) {
         if (tipo == EventoFuturo.ESCALONAR) {
-            System.out.println("Iniciando escalonamento...");
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Request VMM " + this.getId() + "] executing scheduler", Color.blue);
+            }
             escalonador.escalonar();
         } else if (tipo == EventoFuturo.ALOCAR_VMS) {
             System.out.println("Iniciando Alocação...");
@@ -625,6 +626,9 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                 this.vmsAlocadas = true;
                 this.escDisponivel = true;
             }
+            // como a alocação da VM foi confirmada, então é necessário executar o escalonamento das tarefas
+            // que ficaram esperando
+            executarEscalonamento();
         } else {//passar adiante, encontrando antes o caminho intermediário para poder escalonar tarefas desse VMM tbm para a vm hierarquica
             System.out.println(this.getId() + ": VMM intermediário, definindo caminho intermediário para " + auxVM.getId());
             if (this.escalonador.getEscravos().contains(auxVM)) {
@@ -645,6 +649,11 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
                     mensagem);
             simulacao.addEventoFuturo(evt);
         }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " (VMM)";
     }
 
     @Override

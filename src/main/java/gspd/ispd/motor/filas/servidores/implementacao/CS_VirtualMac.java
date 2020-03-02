@@ -11,6 +11,7 @@ import gspd.ispd.motor.Simulation;
 import gspd.ispd.motor.filas.Cliente;
 import gspd.ispd.motor.filas.Mensagem;
 import gspd.ispd.motor.filas.Tarefa;
+import gspd.ispd.motor.filas.TarefaDAG;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.motor.metricas.MetricasCusto;
@@ -82,7 +83,7 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     }
 
     
-     @Override
+    @Override
     public void chegadaDeCliente(Simulation simulacao, Tarefa cliente) {
         if (cliente.getEstado() != Tarefa.CANCELADO) { //se a tarefa estiver parada ou executando
             if (simulacao.isVerbose()) {
@@ -121,6 +122,23 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
                 simulacao.getJanela().println("[Attendance VM] Client: " + cliente, Color.blue);
         }
         cliente.finalizarEsperaProcessamento(simulacao.getTime(this));
+        // se for tarefa DAG, deve poder criar os eventos futuros de suas tarefas sufixas
+        if (cliente instanceof TarefaDAG) {
+            TarefaDAG tarefaDAG = (TarefaDAG) cliente;
+            tarefaDAG.notifySuffixes();
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance VM] Creating " + tarefaDAG.getSuffixes().size() + " suffixes tasks");
+            }
+            for (TarefaDAG tDAG : tarefaDAG.getSuffixes()) {
+                EventoFuturo eventoFuturo = new EventoFuturo(
+                        simulacao.getTime(this),
+                        EventoFuturo.CHEGADA,
+                        tDAG.getOrigem(),
+                        tDAG
+                );
+                simulacao.addEventoFuturo(eventoFuturo);
+            }
+        }
         cliente.iniciarAtendimentoProcessamento(simulacao.getTime(this));
         tarefaEmExecucao.add(cliente);
         cliente.setEstado(Tarefa.PROCESSANDO);
@@ -611,7 +629,9 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
     public void setTempoDeExec(double tempoDestruir) {
         this.tempoDeExec = tempoDestruir - getInstanteAloc();
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "VM#" + this.getId();
+    }
 }

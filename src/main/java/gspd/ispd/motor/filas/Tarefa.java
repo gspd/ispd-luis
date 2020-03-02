@@ -31,15 +31,6 @@ public class Tarefa implements Cliente {
     private List<CS_Processamento> historicoProcessamento = new ArrayList<CS_Processamento>();
 
     /**
-     * The list of tasks that depends on this task
-     */
-    private List<Tarefa> dependencyTriggerTasks;
-    /**
-     * The number of tasks this task depends on
-     */
-    private int dependenciesCounter;
-
-    /**
      * Indica a quantidade de mflops já processados no momento de um bloqueio
      */
     private double mflopsProcessado;
@@ -83,23 +74,7 @@ public class Tarefa implements Cliente {
     private double tamComunicacao;
 
     public Tarefa(int id, String proprietario, String aplicacao, CentroServico origem, double arquivoEnvio, double tamProcessamento, double tempoCriacao) {
-        this.proprietario = proprietario;
-        this.aplicacao = aplicacao;
-        this.identificador = id;
-        this.copia = false;
-        this.origem = origem;
-        this.tamComunicacao = arquivoEnvio;
-        this.arquivoEnvio = arquivoEnvio;
-        this.arquivoRecebimento = 0;
-        this.tamProcessamento = tamProcessamento;
-        this.metricas = new MetricasTarefa();
-        this.tempoCriacao = tempoCriacao;
-        this.estado = PARADO;
-        this.mflopsProcessado = 0;
-        this.tempoInicial = new ArrayList<Double>();
-        this.tempoFinal = new ArrayList<Double>();
-        this.dependenciesCounter = 0;
-        this.dependencyTriggerTasks = new ArrayList<>();
+        this(id, proprietario, aplicacao, origem, arquivoEnvio, 0, tamProcessamento, tempoCriacao);
     }
 
     public Tarefa(int id, String proprietario, String aplicacao, CentroServico origem, double arquivoEnvio, double arquivoRecebimento, double tamProcessamento, double tempoCriacao) {
@@ -121,21 +96,8 @@ public class Tarefa implements Cliente {
     }
 
     public Tarefa(Tarefa tarefa) {
-        this.proprietario = tarefa.proprietario;
-        this.aplicacao = tarefa.getAplicacao();
-        this.identificador = tarefa.identificador;
+        this(tarefa.identificador, tarefa.proprietario, tarefa.getAplicacao(), tarefa.getOrigem(), tarefa.getArquivoEnvio(), tarefa.arquivoRecebimento, tarefa.getTamProcessamento(), tarefa.getTimeCriacao());
         this.copia = true;
-        this.origem = tarefa.getOrigem();
-        this.tamComunicacao = tarefa.arquivoEnvio;
-        this.arquivoEnvio = tarefa.arquivoEnvio;
-        this.arquivoRecebimento = tarefa.arquivoRecebimento;
-        this.tamProcessamento = tarefa.getTamProcessamento();
-        this.metricas = new MetricasTarefa();
-        this.tempoCriacao = tarefa.getTimeCriacao();
-        this.estado = PARADO;
-        this.mflopsProcessado = 0;
-        this.tempoInicial = new ArrayList<Double>();
-        this.tempoFinal = new ArrayList<Double>();
     }
 
     public double getTamComunicacao() {
@@ -203,15 +165,6 @@ public class Tarefa implements Cliente {
         this.inicioEspera = tempo;
         this.tempoInicial.add(tempo);
         this.historicoProcessamento.add((CS_Processamento) localProcessamento);
-    }
-
-    /**
-     * Notify all tasks those depends on this one, that they are free
-     */
-    private void triggerDependentsTasks() {
-        for (Tarefa task : dependencyTriggerTasks) {
-            task.dependenciesCounter -= 1;
-        }
     }
 
     public void finalizarAtendimentoProcessamento(double tempo) {
@@ -338,7 +291,7 @@ public class Tarefa implements Cliente {
 
     @Override
     public String toString() {
-        return "Task " + this.getIdentificador() +
+        return "Task#" + this.getIdentificador() +
             "{proprietario=" + proprietario + "}" ;
     }
 }

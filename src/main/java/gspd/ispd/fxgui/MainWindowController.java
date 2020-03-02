@@ -106,7 +106,7 @@ public class MainWindowController {
     private CheckMenuItem gridMenuItem;
 
     @FXML
-    private AnchorPane drawPane;
+    private Pane drawPane;
     @FXML
     private DrawPaneController drawPaneController;
 
