@@ -5,11 +5,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 
-public class IconMenu extends VBox {
+public class IconMenu extends ScrollPane {
 
 
     ///////////////////////////////////////////////
@@ -30,8 +31,13 @@ public class IconMenu extends VBox {
      */
     private ToggleGroup iconsGroup;
     private void createContent() {
-        VBox nodesBox = new VBox();
 
+        VBox miscBox = new VBox();
+        miscBox.getChildren().add(new Label("Text"));
+
+        TitledPane miscPane = new TitledPane("Misc", miscBox);
+
+        VBox nodesBox = new VBox();
         nodesBox.getChildren().add(new IconMenuItem("Task", new NodeIcon(NodeIcon.TASK_BUILDER), iconsGroup));
         nodesBox.getChildren().add(new IconMenuItem("Activation", new NodeIcon(NodeIcon.ACTIVATION_BUILDER), iconsGroup));
         nodesBox.getChildren().add(new IconMenuItem("Synchronize", new NodeIcon(NodeIcon.SYNCHRONIZE_BUILDER), iconsGroup));
@@ -54,9 +60,16 @@ public class IconMenu extends VBox {
 
         TitledPane expansionPane = new TitledPane("Expansions", expansionBox);
 
-        super.getChildren().setAll(nodesPane, edgesPane, expansionPane);
-        super.setMinWidth(100.0);
-        super.setMaxHeight(Double.MAX_VALUE);
+        VBox content = new VBox();
+        content.getChildren().setAll(miscPane, nodesPane, edgesPane, expansionPane);
+        content.setMinWidth(100.0);
+        content.setMaxWidth(Double.MAX_VALUE);
+        content.setMaxWidth(Double.MAX_VALUE);
+        content.minWidthProperty().bind(super.widthProperty());
+
+        super.setContent(content);
+        super.setHbarPolicy(ScrollBarPolicy.NEVER);
+        super.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
     }
 
     ///////////////////////////////////////////////////

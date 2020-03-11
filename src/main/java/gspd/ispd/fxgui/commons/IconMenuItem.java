@@ -85,7 +85,11 @@ public class IconMenuItem extends Label implements Toggle {
 
     private void onClick(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            getToggleGroup().selectToggle(this);
+            if (getToggleGroup().getSelectedToggle() == this) {
+                getToggleGroup().selectToggle(null);
+            } else {
+                getToggleGroup().selectToggle(this);
+            }
             event.consume();
         }
     }
