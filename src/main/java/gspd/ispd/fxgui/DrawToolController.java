@@ -1,7 +1,8 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.fxgui.custom.EditableText;
+import gspd.ispd.fxgui.commons.EditableText;
 import gspd.ispd.fxgui.util.ToggleActionCancel;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -117,19 +118,25 @@ public class DrawToolController implements Initializable {
         }
     }
 
+    private static final String KEY = "eventLoop";
     private void handleToggleChange(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
         // cancel old selected toggle if any
         if (oldValue != null) {
             ToggleActionCancel trigger = toggleActions.get(oldValue);
             if (trigger != null) {
                 trigger.cancel(oldValue);
+                Platform.exitNestedEventLoop(KEY, Boolean.FALSE);
             }
         }
         // make action with the current selected toggle if any
         if (newValue != null) {
             ToggleActionCancel trigger = toggleActions.get(newValue);
             if (trigger != null) {
-                trigger.action(newValue);
+                Boolean result = true;
+                do {
+                    result = (Boolean)Platform.enterNestedEventLoop(KEY);
+                    trigger.action(newValue);
+                } while (result);
             }
         }
     }

@@ -20,11 +20,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.util.Builder;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.*;
 
 /**
  * {@code DrawingPane} is a basic JavaFX pane that allows positioning, selecting,

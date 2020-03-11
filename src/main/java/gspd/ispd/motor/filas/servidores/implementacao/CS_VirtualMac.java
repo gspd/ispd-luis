@@ -8,10 +8,7 @@ package gspd.ispd.motor.filas.servidores.implementacao;
 import gspd.ispd.motor.EventoFuturo;
 import gspd.ispd.motor.Mensagens;
 import gspd.ispd.motor.Simulation;
-import gspd.ispd.motor.filas.Cliente;
-import gspd.ispd.motor.filas.Mensagem;
-import gspd.ispd.motor.filas.Tarefa;
-import gspd.ispd.motor.filas.TarefaDAG;
+import gspd.ispd.motor.filas.*;
 import gspd.ispd.motor.filas.servidores.CS_Processamento;
 import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.motor.metricas.MetricasCusto;
@@ -122,33 +119,49 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
                 simulacao.getJanela().println("[Attendance VM] Client: " + cliente, Color.blue);
         }
         cliente.finalizarEsperaProcessamento(simulacao.getTime(this));
-        // se for tarefa DAG, deve poder criar os eventos futuros de suas tarefas sufixas
+        // se for tarefa DAG, deve poder criar os eventos futuros de suas tarefas SUFIXAS
         if (cliente instanceof TarefaDAG) {
             TarefaDAG tarefaDAG = (TarefaDAG) cliente;
+            // notifica todos os seus SUFIXOS que essa tarefa já foi INICIADA
             tarefaDAG.notifySuffixes();
             if (simulacao.isVerbose()) {
-                simulacao.getJanela().println("[Attendance VM] Creating " + tarefaDAG.getSuffixes().size() + " suffixes tasks");
+                simulacao.getJanela().println("[Attendance VM] Notifying " + tarefaDAG.getSuffixes().size() + " suffixes tasks", Color.blue);
             }
+            // para cada tarefa SUFIXA
             for (TarefaDAG tDAG : tarefaDAG.getSuffixes()) {
-                EventoFuturo eventoFuturo = new EventoFuturo(
-                        simulacao.getTime(this),
-                        EventoFuturo.CHEGADA,
-                        tDAG.getOrigem(),
-                        tDAG
-                );
-                simulacao.addEventoFuturo(eventoFuturo);
+                // se a tarefa notificada pode ser executada, então cria um evento para ela
+                if (tDAG.canExecute()) {
+                    EventoFuturo eventoFuturo = new EventoFuturo(
+                            simulacao.getTime(this),
+                            EventoFuturo.CHEGADA,
+                            tDAG.getOrigem(),
+                            tDAG
+                    );
+                    simulacao.addEventoFuturo(eventoFuturo);
+                }
             }
+            // limpa as tarefas da lista de SUFIXOS
+            tarefaDAG.clearSuffixes();
         }
         cliente.iniciarAtendimentoProcessamento(simulacao.getTime(this));
         tarefaEmExecucao.add(cliente);
         cliente.setEstado(Tarefa.PROCESSANDO);
-        double next = simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
-        if (!falhas.isEmpty() && next > falhas.get(0)) {
+        // tempo do próximo evento depois do atendimento
+        double nextTime;
+        // se a tarefa é uma tarefa de espera, então utiliza seu tempo de espera. Se não é necessário calcular o tempo de espera
+        if (cliente instanceof EsperaDAG) {
+            nextTime = simulacao.getTime(this) + ((EsperaDAG)cliente).getTime();
+        } else {
+            nextTime = simulacao.getTime(this) + tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
+        }
+        // se tem falhas previstas para ocorrer na simulação
+        if (!falhas.isEmpty() && nextTime > falhas.get(0)) {
             falha = true;
             double tFalha = falhas.remove(0);
             if (tFalha < simulacao.getTime(this)) {
                 tFalha = simulacao.getTime(this);
             }
+            cliente.setEstado(Tarefa.FALHA);
             Mensagem msg = new Mensagem(this, Mensagens.FALHAR, cliente);
             if (simulacao.isVerbose()) {
                 simulacao.getJanela().println("[Attendance VM] failure occurrence", Color.blue);
@@ -166,9 +179,10 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
             if (simulacao.isVerbose()) {
                 simulacao.getJanela().println("[Attendance VM] " + cliente + " finished", Color.blue);
             }
+            cliente.setEstado(Tarefa.CONCLUIDO);
             //Gera evento para atender proximo cliente da lista
             EventoFuturo evtFut = new EventoFuturo(
-                    next,
+                    nextTime,
                     EventoFuturo.SAIDA,
                     this, cliente);
             //Event adicionado a lista de evntos futuros
@@ -187,6 +201,32 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
         //Incrementa o tempo de processamento
         double tempoProc = this.tempoProcessar(cliente.getTamProcessamento() - cliente.getMflopsProcessado());
         this.getMetrica().incSegundosDeProcessamento(tempoProc);
+
+        // se for tarefa DAG, deve poder criar os eventos futuros de suas tarefas SUCESSORAS
+        if (cliente instanceof TarefaDAG) {
+            TarefaDAG tarefaDAG = (TarefaDAG) cliente;
+            // notifica todos as suas SUCESSORAS que essa tarefa já foi CONCLUÍDA
+            tarefaDAG.notifySuccessors();
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Exit VM] Notifying " + tarefaDAG.getSuffixes().size() + " successors tasks", Color.blue);
+            }
+            // para cada tarefa SUCESSORA
+            for (TarefaDAG tDAG : tarefaDAG.getSuccessors()) {
+                // se a tarefa notificada pode ser executada, então cria um evento para ela
+                if (tDAG.canExecute()) {
+                    EventoFuturo eventoFuturo = new EventoFuturo(
+                            simulacao.getTime(this),
+                            EventoFuturo.CHEGADA,
+                            tDAG.getOrigem(),
+                            tDAG
+                    );
+                    simulacao.addEventoFuturo(eventoFuturo);
+                }
+            }
+            // limpa as tarefas da lista de SUCESSORAS
+            tarefaDAG.clearSuccessors();
+        }
+
         //Incrementa o tempo de transmissão no pacote
         cliente.finalizarAtendimentoProcessamento(simulacao.getTime(this));
         tarefaEmExecucao.remove(cliente);
@@ -429,6 +469,33 @@ public class CS_VirtualMac extends CS_Processamento implements Cliente, Mensagen
 
     @Override
     public void atenderFalha(Simulation simulacao, Mensagem mensagem) {
+
+        Tarefa tarefa = mensagem.getTarefa();
+        // se for tarefa DAG, deve poder criar os eventos futuros de suas tarefas TRATAMENTOS_FALHAS (CATCHES)
+        if (tarefa instanceof TarefaDAG) {
+            TarefaDAG tarefaDAG = (TarefaDAG) tarefa;
+            // notifica todos as suas TRATAMENTOS_FALHAS (CATCHES) que essa tarefa FALHOU
+            tarefaDAG.notifyCatches();
+            if (simulacao.isVerbose()) {
+                simulacao.getJanela().println("[Attendance FAIL VM] Notifying " + tarefaDAG.getSuffixes().size() + " catch tasks", Color.blue);
+            }
+            // para cada tarefa TRATAMENTOS_FALHAS (CATCHES)
+            for (TarefaDAG tDAG : tarefaDAG.getCatches()) {
+                // se a tarefa notificada pode ser executada, então cria um evento para ela
+                if (tDAG.canExecute()) {
+                    EventoFuturo eventoFuturo = new EventoFuturo(
+                            simulacao.getTime(this),
+                            EventoFuturo.CHEGADA,
+                            tDAG.getOrigem(),
+                            tDAG
+                    );
+                    simulacao.addEventoFuturo(eventoFuturo);
+                }
+            }
+            // limpa as tarefas da lista de TRATAMENTOS_FALHAS (CATCHES)
+            tarefaDAG.clearCatches();
+        }
+
        double tempoRec = recuperacao.remove(0);
         for (Tarefa tar : tarefaEmExecucao) {
             if (tar.getEstado() == Tarefa.PROCESSANDO) {

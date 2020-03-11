@@ -8,6 +8,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -102,5 +103,9 @@ public class GUIUtil {
 
     static public void makePannable(ScrollPane pane) {
         panner.makePannable(pane);
+    }
+
+    static public Shape copyShape(Shape shape) {
+        return Shape.union(shape, shape);
     }
 }

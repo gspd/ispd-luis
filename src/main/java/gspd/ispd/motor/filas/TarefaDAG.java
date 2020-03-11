@@ -52,6 +52,14 @@ public class TarefaDAG extends Tarefa {
      * Those this task is a catch of
      */
     private int throwers;
+    /**
+     * The lock of the task
+     * <p>
+     * DAG tasks in the same lock could never happens at same time
+     * <p>
+     * If it is null, then it is assumed this task has no lock restrictions
+     */
+    private LockDAG lock;
 
     public TarefaDAG(int id, String proprietario, String aplicacao, CentroServico origem, double arquivoEnvio, double tamProcessamento, double tempoCriacao) {
         this(id, proprietario, aplicacao, origem, arquivoEnvio, 0, tamProcessamento, tempoCriacao);
@@ -82,16 +90,56 @@ public class TarefaDAG extends Tarefa {
         tarefa.throwers += 1;
     }
 
+    public void setLock(LockDAG lock) {
+        this.lock = lock;
+    }
+
+    public LockDAG getLock() {
+        return lock;
+    }
+
+    public boolean hasLock() {
+        return lock != null;
+    }
+
+    public void acquireLock() {
+        lock.acquire();
+    }
+
+    public void releaseLock() {
+        lock.release();
+    }
+
+    public boolean lockAvailable() {
+        return lock.isAvailable();
+    }
+
     public void notifySuffixes() {
-        suffixes.forEach(task -> task.prefixes -= 1);
+        for (TarefaDAG task : suffixes) {
+            if (task.prefixes > 0) {
+                task.prefixes -= 1;
+            }
+        }
     }
 
     public void notifySuccessors() {
-        successors.forEach(task -> task.predecessors -= 1);
+        for (TarefaDAG task : successors) {
+            if (task.predecessors > 0) {
+                task.predecessors -= 1;
+            }
+        }
     }
 
     public void notifyCatches() {
-        catches.forEach(task -> task.throwers += 1);
+        for (TarefaDAG task : catches) {
+            if (task.throwers > 0) {
+                task.throwers -= 1;
+            }
+        }
+    }
+
+    public boolean canExecute() {
+        return prefixes == 0 && predecessors == 0 && throwers == 0;
     }
 
     public List<TarefaDAG> getSuccessors() {
@@ -102,8 +150,24 @@ public class TarefaDAG extends Tarefa {
         return suffixes;
     }
 
+    public List<TarefaDAG> getCatches() {
+        return catches;
+    }
+
     @Override
     public String toString() {
         return "TaskDAG#" + getIdentificador() + "{proprietario=" + getProprietario() + "}";
+    }
+
+    public void clearSuffixes() {
+        suffixes.clear();
+    }
+
+    public void clearSuccessors() {
+        successors.clear();
+    }
+
+    public void clearCatches() {
+        catches.clear();
     }
 }

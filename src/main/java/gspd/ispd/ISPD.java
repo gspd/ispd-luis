@@ -16,18 +16,23 @@ public class ISPD {
 
     public static void main(String[] args) {
         ArrayList<String> argsList = new ArrayList<>(Arrays.asList(args));
-        if (argsList.contains("--swing")) {
-            argsList.remove("--swing");
+        if (argsList.contains("--javafx")) {
+            argsList.remove("--javafx");
             args = new String[argsList.size()];
             args = argsList.toArray(args);
-            MainSwing.main(args);
+            Application.launch(GUI.class, args);
         } else if (argsList.contains("--game")) {
             argsList.remove("--game");
             args = new String[argsList.size()];
             args = argsList.toArray(args);
             Application.launch(ISPDGame.class, args);
         } else {
-            Application.launch(GUI.class, args);
+            if (argsList.contains("--swing")) {
+                argsList.remove("--swing");
+                args = new String[argsList.size()];
+                args = argsList.toArray(args);
+            }
+            MainSwing.main(args);
         }
     }
 }

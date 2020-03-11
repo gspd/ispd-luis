@@ -84,7 +84,6 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
         this.custoTotalMemoria = 0;
         this.custoTotalDisco = 0;
         this.status = DESLIGADO;
-        
 
     }
 
@@ -106,7 +105,6 @@ public class CS_MaquinaCloud extends CS_Processamento implements Mensagens, Vert
         this.custoTotalDisco = 0;
         this.tarefaEmExecucao = new ArrayList<Tarefa>(numeroProcessadores);
         this.status = DESLIGADO;
-
     }
 
     @Override

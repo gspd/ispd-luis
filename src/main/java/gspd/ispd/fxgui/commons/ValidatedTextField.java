@@ -1,4 +1,4 @@
-package gspd.ispd.fxgui.custom;
+package gspd.ispd.fxgui.commons;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

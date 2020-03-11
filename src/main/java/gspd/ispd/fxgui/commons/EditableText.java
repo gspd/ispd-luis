@@ -1,7 +1,6 @@
-package gspd.ispd.fxgui.custom;
+package gspd.ispd.fxgui.commons;
 
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;

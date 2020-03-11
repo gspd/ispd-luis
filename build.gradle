@@ -68,7 +68,8 @@ javafx {
     version '13'
     modules = [
         'javafx.controls',
-        'javafx.fxml'
+        'javafx.fxml',
+        'javafx.swing'
     ]
 }
 
