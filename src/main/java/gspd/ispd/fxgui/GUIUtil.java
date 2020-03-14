@@ -18,7 +18,6 @@ import java.util.Optional;
  */
 public class GUIUtil {
     static private DragUtil dragger = new DragUtil();
-    static private DrawerUtil drawer = new DrawerUtil();
     static private LightningUtil lighter = new LightningUtil();
     static private FollowUtil follower = new FollowUtil();
     static private PanUtil panner = new PanUtil();

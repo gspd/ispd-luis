@@ -1,7 +1,7 @@
 package gspd.ispd;
 
 import gspd.ispd.fxgui.*;
-import gspd.ispd.fxgui.dag.DagArea;
+import gspd.ispd.fxgui.dag.DagEditor;
 import gspd.ispd.fxgui.simples.DefaultWindowController;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;
@@ -80,7 +80,7 @@ public class GUI extends Application {
 
     private void loadTest(Stage primaryStage) {
 
-        primaryStage.setScene(new Scene(new DagArea(), 300, 300));
+        primaryStage.setScene(new Scene(new DagEditor(), 300, 300));
         primaryStage.show();
     }
 

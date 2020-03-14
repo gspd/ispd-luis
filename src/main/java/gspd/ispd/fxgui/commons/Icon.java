@@ -1,23 +1,43 @@
 package gspd.ispd.fxgui.commons;
 
+import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventTarget;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Builder;
 
 public abstract class Icon extends Group {
+
+    public final static IconType ICON_TYPE = IconType.type("ICON_TYPE");
 
     ///////////////////////////////////////////////
     ///////////////// CONSTRUCTOR /////////////////
     ///////////////////////////////////////////////
 
     public Icon(Builder<? extends Node> nodeBuilder, boolean selected) {
+        selectedProperty().addListener(this::updateIcon);
+        hoveredProperty().addListener(this::updateIcon);
         nodeBuilderProperty().addListener(this::builderChanged);
-        selectedProperty().addListener(this::selectionChanged);
         contentProperty().addListener(this::contentChanged);
+        // EVENTS
+        // redirects all events that targets its children as
+        // an event that targets itself
+        addEventHandler(Event.ANY, event -> {
+            EventTarget target = event.getTarget();
+            if (target != this && ! (target instanceof Icon)) {
+                Event.fireEvent(this, event);
+                event.consume();
+            }
+        });
+        // SETs
         setNodeBuilder(nodeBuilder);
         setSelected(selected);
+        setIconType(ICON_TYPE);
     }
 
     public Icon(Builder<? extends Node> nodeBuilder) {
@@ -29,7 +49,7 @@ public abstract class Icon extends Group {
     ////////////////////////////////////////////////
 
     /**
-     * Chages the content when changes the builder
+     * Changes the content when changes the builder
      */
     protected void builderChanged(ObservableValue<? extends Builder<? extends Node>> observable, Builder<? extends Node> oldValue, Builder<? extends Node> newValue) {
         setContent(newValue.build());
@@ -43,14 +63,17 @@ public abstract class Icon extends Group {
         super.getChildren().add(newValue);
     }
 
-    /**
-     * Decorate the node whether it is marked as selected or not
-     */
-    private void selectionChanged(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-        updateSelection(newValue);
+    private void updateIcon(Observable observable) {
+        updateIcon();
     }
 
-    protected abstract void updateSelection(boolean selected);
+    ///////////////////////////////////////////////////
+    //////////////// ABSTRACT /////////////////////////
+    ///////////////////////////////////////////////////
+
+    public abstract Builder<? extends Icon> iconBuilder();
+
+    protected abstract void updateIcon();
 
     ///////////////////////////////////////////////////
     //////////////// PROPERTIES ///////////////////////
@@ -74,6 +97,23 @@ public abstract class Icon extends Group {
     }
 
     /**
+     * Whether this icon is hovered ot not
+     */
+    private BooleanProperty hovered;
+    public boolean isHovered() {
+        return hoveredProperty().get();
+    }
+    public BooleanProperty hoveredProperty() {
+        if (hovered == null) {
+            hovered = new SimpleBooleanProperty(this, "hovered", false);
+        }
+        return hovered;
+    }
+    public void setHovered(boolean hovered) {
+        hoveredProperty().set(hovered);
+    }
+
+    /**
      * The shape builder of the icon
      */
     private ObjectProperty<Builder<? extends Node>> nodeBuilder;
@@ -90,7 +130,6 @@ public abstract class Icon extends Group {
         nodeBuilderProperty().set(nodeBuilder);
     }
 
-
     /**
      * The content node of the icon
      */
@@ -106,5 +145,19 @@ public abstract class Icon extends Group {
     }
     public void setContent(Node content) {
         contentProperty().set(content);
+    }
+
+    /**
+     * The icon type
+     */
+    private ObjectProperty<IconType> iconType = new SimpleObjectProperty<>(null, "iconType", ICON_TYPE);
+    public IconType getIconType() {
+        return iconType.get();
+    }
+    public ObjectProperty<IconType> iconTypeProperty() {
+        return iconType;
+    }
+    public void setIconType(IconType iconType) {
+        this.iconType.set(iconType);
     }
 }

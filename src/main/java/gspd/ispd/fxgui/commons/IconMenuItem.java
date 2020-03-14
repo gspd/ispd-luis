@@ -3,20 +3,11 @@ package gspd.ispd.fxgui.commons;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.util.Builder;
 
-public class IconMenuItem extends Label implements Toggle {
+public class IconMenuItem extends ToggleButton implements Toggle {
 
     ///////////////////////////////////////////////
     ///////////////// CONSTRUCTOR /////////////////
@@ -26,16 +17,12 @@ public class IconMenuItem extends Label implements Toggle {
         super("", graphic);
         // LISTENERS
         textProperty().addListener(this::textChanged);
-        selectedProperty().addListener(this::selectionChanged);
-        // EVENTS
-        setOnMouseClicked(this::onClick);
-        // toggleGroupProperty().addListener(this::toggleGroupChanged);
-        // BINDINGS
-        nodeBuilder.bind(((Icon)getGraphic()).nodeBuilderProperty());
         // UI
         setPadding(new Insets(4, 4, 4, 4));
         setMaxWidth(Double.MAX_VALUE);
+        setAlignment(Pos.CENTER_LEFT);
         // SETs
+        iconBuilder.set(graphic.iconBuilder());
         setText(text);
         setToggleGroup(toggleGroup);
         setSelected(false);
@@ -69,31 +56,6 @@ public class IconMenuItem extends Label implements Toggle {
         super.setTooltip(new Tooltip(newValue));
     }
 
-    private void selectionChanged(ObservableValue<? extends Boolean> observable, boolean oldValue, boolean newValue) {
-        if (getToggleGroup() != null) {
-            getToggleGroup().selectToggle(null);
-            if (newValue) {
-                getToggleGroup().selectToggle(this);
-            }
-        }
-        Background back = null;
-        if (newValue) {
-            back = new Background(new BackgroundFill(Color.DEEPSKYBLUE, CornerRadii.EMPTY, Insets.EMPTY));
-        }
-        super.setBackground(back);
-    }
-
-    private void onClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            if (getToggleGroup().getSelectedToggle() == this) {
-                getToggleGroup().selectToggle(null);
-            } else {
-                getToggleGroup().selectToggle(this);
-            }
-            event.consume();
-        }
-    }
-
     ///////////////////////////////////////////////////
     //////////////// PROPERTIES ///////////////////////
     ///////////////////////////////////////////////////
@@ -101,45 +63,12 @@ public class IconMenuItem extends Label implements Toggle {
     /**
      * The node builder of the inner icon
      */
-    private ObjectProperty<Builder<? extends Node>> nodeBuilder = new SimpleObjectProperty<>(this, "nodeBuilder", null);
-    public Builder<? extends Node> getNodeBuilder() {
-        return nodeBuilder.get();
+    private ObjectProperty<Builder<? extends Icon>> iconBuilder = new SimpleObjectProperty<>(this, "iconBuilder", null);
+    public Builder<? extends Icon> getIconBuilder() {
+        return iconBuilder.get();
     }
-    public ReadOnlyObjectProperty<Builder<? extends Node>> nodeBuilderProperty() {
-        return nodeBuilder;
-    }
-
-    /**
-     * The selected property
-     */
-    private BooleanProperty selected = new SimpleBooleanProperty(this, "selected", false);
-    @Override
-    public boolean isSelected() {
-        return selected.get();
-    }
-    @Override
-    public BooleanProperty selectedProperty() {
-        return selected;
-    }
-    @Override
-    public void setSelected(boolean selected) {
-        this.selected.set(selected);
+    public ReadOnlyObjectProperty<Builder<? extends Icon>> iconBuilderProperty() {
+        return iconBuilder;
     }
 
-    /**
-     * The icon toggle group
-     */
-    private ObjectProperty<ToggleGroup> toggleGroup = new SimpleObjectProperty<>(null, "toggleGroup", null);
-    @Override
-    public ToggleGroup getToggleGroup() {
-        return toggleGroup.get();
-    }
-    @Override
-    public ObjectProperty<ToggleGroup> toggleGroupProperty() {
-        return toggleGroup;
-    }
-    @Override
-    public void setToggleGroup(ToggleGroup toggleGroup) {
-        this.toggleGroup.set(toggleGroup);
-    }
 }
