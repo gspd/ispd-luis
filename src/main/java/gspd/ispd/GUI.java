@@ -1,6 +1,7 @@
 package gspd.ispd;
 
 import gspd.ispd.fxgui.*;
+import gspd.ispd.fxgui.dag.DAGParser;
 import gspd.ispd.fxgui.dag.DagEditor;
 import gspd.ispd.fxgui.simples.DefaultWindowController;
 import gspd.ispd.model.ISPDModel;
@@ -79,7 +80,8 @@ public class GUI extends Application {
     }
 
     private void loadTest(Stage primaryStage) {
-
+        System.out.println("XML...");
+        new DAGParser().load("/home/luis/Documents/IniciacaoCientifica/IMSX/DAG.wmsx");
         primaryStage.setScene(new Scene(new DagEditor(), 300, 300));
         primaryStage.show();
     }

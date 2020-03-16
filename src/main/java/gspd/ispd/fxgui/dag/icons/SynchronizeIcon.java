@@ -18,7 +18,7 @@ public class SynchronizeIcon extends NodeIcon {
     public SynchronizeIcon(boolean selected, double centerX, double centerY) {
         super(SynchronizeShape::new, selected, centerX, centerY);
 
-        setIconType(SYNCHRONIZE_TYPE);
+        setType(SYNCHRONIZE_TYPE);
     }
 
     public SynchronizeIcon(double centerX, double centerY) {

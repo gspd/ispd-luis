@@ -7,8 +7,6 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Builder;
 
 public abstract class Icon extends Group {
@@ -37,7 +35,7 @@ public abstract class Icon extends Group {
         // SETs
         setNodeBuilder(nodeBuilder);
         setSelected(selected);
-        setIconType(ICON_TYPE);
+        setType(ICON_TYPE);
     }
 
     public Icon(Builder<? extends Node> nodeBuilder) {
@@ -78,6 +76,17 @@ public abstract class Icon extends Group {
     ///////////////////////////////////////////////////
     //////////////// PROPERTIES ///////////////////////
     ///////////////////////////////////////////////////
+
+    /**
+     * The icon id
+     */
+    private String iconID;
+    public String getIconID() {
+        return iconID;
+    }
+    public void setIconID(String iconID) {
+        this.iconID = iconID;
+    }
 
     /**
      * Whether this icon is selected or not
@@ -150,14 +159,14 @@ public abstract class Icon extends Group {
     /**
      * The icon type
      */
-    private ObjectProperty<IconType> iconType = new SimpleObjectProperty<>(null, "iconType", ICON_TYPE);
-    public IconType getIconType() {
-        return iconType.get();
+    private ObjectProperty<IconType> type = new SimpleObjectProperty<>(null, "iconType", ICON_TYPE);
+    public IconType getType() {
+        return type.get();
     }
-    public ObjectProperty<IconType> iconTypeProperty() {
-        return iconType;
+    public ObjectProperty<IconType> typeProperty() {
+        return type;
     }
-    public void setIconType(IconType iconType) {
-        this.iconType.set(iconType);
+    public void setType(IconType type) {
+        this.type.set(type);
     }
 }

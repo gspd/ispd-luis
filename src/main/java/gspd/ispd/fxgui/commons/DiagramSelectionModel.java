@@ -1,7 +1,18 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.util.Handler;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 
 public class DiagramSelectionModel {
 
@@ -75,7 +86,7 @@ public class DiagramSelectionModel {
     public void translateSelectedIcons(double x, double y) {
         getSelectedIcons()
             .stream()
-            .filter(icon -> icon.getIconType().isTypeOf(NodeIcon.NODE_TYPE))
+            .filter(icon -> icon.getType().isTypeOf(NodeIcon.NODE_TYPE))
             .forEach(icon -> {
                 NodeIcon ni = (NodeIcon) icon;
                 ni.setCenterX(ni.getCenterX() + x);
@@ -83,6 +94,63 @@ public class DiagramSelectionModel {
             });
     }
 
+    /**
+     * The box used to select
+     */
+    private SelectionRectangle box = new SelectionRectangle();
+    public void startSelecting(MouseEvent event) {
+        box.startX.set(event.getX());
+        box.startY.set(event.getY());
+        box.endX.set(event.getX());
+        box.endY.set(event.getY());
+        diagramPane.getChildren().add(box);
+        diagramPane.startFullDrag();
+        diagramPane.setOnMouseDragOver(e -> {
+            box.endX.set(e.getX());
+            box.endY.set(e.getY());
+        });
+        diagramPane.setOnMouseDragReleased(e -> stopSelecting());
+    }
+
+    private void stopSelecting() {
+        diagramPane.getChildren().remove(box);
+        // selects the nodes
+        diagramPane.setOnMouseDragOver(null);
+        diagramPane.setOnMouseDragReleased(null);
+    }
+
+    private static class SelectionRectangle extends Rectangle {
+
+        SelectionRectangle() {
+            layoutXProperty().bind(Bindings.min(startX, endX));
+            layoutYProperty().bind(Bindings.min(startY, endY));
+            widthProperty().bind(Bindings.createDoubleBinding(() -> Math.abs(endX.get() - startX.get()), startX, endX));
+            heightProperty().bind(Bindings.createDoubleBinding(() -> Math.abs(endY.get() - startY.get()), startY, endY));
+            mode.bind(Bindings.when(endX.greaterThan(startX)).then(CONTAINS).otherwise(INTERSECTS));
+            setOpacity(0.6);
+            mode.addListener((obs, o, n) -> {
+                if (n.intValue() == CONTAINS) {
+                    setFill(Color.LIGHTBLUE);
+                    setStroke(Color.BLUE);
+                    getStrokeDashArray().clear();
+                } else if (n.intValue() == INTERSECTS) {
+                    setFill(Color.LIGHTGREEN);
+                    setStroke(Color.BLACK);
+                    getStrokeDashArray().setAll(8.0, 5.0, 8.0, 5.0);
+                }
+            });
+        }
+
+        DoubleProperty startX = new SimpleDoubleProperty(0.0);
+        DoubleProperty startY = new SimpleDoubleProperty(0.0);
+        DoubleProperty endX = new SimpleDoubleProperty(0.0);
+        DoubleProperty endY = new SimpleDoubleProperty(0.0);
+
+        static final int CONTAINS = 0;
+        static final int INTERSECTS = 1;
+        IntegerProperty mode = new SimpleIntegerProperty(0);
+
+    }
 
     //////////////////////////////////////////////////
     ///////////////// PROPERTIES /////////////////////

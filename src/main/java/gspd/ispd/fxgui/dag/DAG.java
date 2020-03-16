@@ -12,9 +12,9 @@ public class DAG extends Diagram {
     @Override
     public boolean add(Icon icon) {
         boolean added = false;
-        if (icon.getIconType().isTypeOf(NodeIcon.NODE_TYPE)) {
+        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
             added = super.add(icon);
-        } else if (icon.getIconType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+        } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
             if (allowed((EdgeIcon) icon)) {
                 added = super.add(icon);
             }

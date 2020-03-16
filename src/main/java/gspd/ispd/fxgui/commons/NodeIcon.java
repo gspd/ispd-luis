@@ -28,7 +28,7 @@ public abstract class NodeIcon extends Icon {
         setCenterX(centerX);
         setCenterY(centerY);
 
-        setIconType(NODE_TYPE);
+        setType(NODE_TYPE);
     }
 
     public NodeIcon(Builder<? extends Node> nodeBuilder, double centerX, double centerY) {

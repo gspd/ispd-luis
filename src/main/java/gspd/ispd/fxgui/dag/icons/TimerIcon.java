@@ -3,7 +3,6 @@ package gspd.ispd.fxgui.dag.icons;
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconType;
 import gspd.ispd.fxgui.commons.NodeIcon;
-import gspd.ispd.fxgui.dag.shapes.TaskShape;
 import gspd.ispd.fxgui.dag.shapes.TimerShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
@@ -19,7 +18,7 @@ public class TimerIcon extends NodeIcon {
     public TimerIcon(boolean selected, double centerX, double centerY) {
         super(TimerShape::new, selected, centerX, centerY);
 
-        setIconType(TIMER_TYPE);
+        setType(TIMER_TYPE);
     }
 
     public TimerIcon(double centerX, double centerY) {

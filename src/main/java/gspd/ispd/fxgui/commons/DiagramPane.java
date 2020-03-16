@@ -3,6 +3,7 @@ package gspd.ispd.fxgui.commons;
 import gspd.ispd.fxgui.dag.icons.ExpansionIcon;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,13 +28,12 @@ public class DiagramPane extends Pane {
         diagramProperty().addListener(this::diagramChanged);
         // EVENTS
         // MOUSE EVENTS
-        addEventHandler(MouseEvent.MOUSE_CLICKED, this::mouseClicked);
-        addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, this::contextMenuRequested);
         addEventHandler(MouseEvent.DRAG_DETECTED, e -> {
             if (e.getButton() == MouseButton.PRIMARY) {
                 EventTarget target = e.getTarget();
                 if (target == this) {
                     System.out.println("Dragging in pane");
+                    getSelectionModel().startSelecting(e);
                 } else if (target instanceof Icon) {
                     Icon icon = (Icon) target;
                     if (!getSelectionModel().isSelected(icon)) {
@@ -49,14 +49,6 @@ public class DiagramPane extends Pane {
                     System.out.println("Dragging something else");
                 }
                 e.consume();
-            }
-        });
-        // KEY EVENTS
-        addEventHandler(KeyEvent.KEY_RELEASED, e -> {
-            if (e.getCode() == KeyCode.ESCAPE) {
-                if (!getSelectionModel().isEmpty()) {
-                    getSelectionModel().clear();
-                }
             }
         });
         // SETs
@@ -117,38 +109,17 @@ public class DiagramPane extends Pane {
         return false;
     }
 
+    public void removeSelected() {
+        while (!getSelectionModel().isEmpty()) {
+            Icon icon = getSelectionModel().getSelectedIcons().iterator().next();
+            getDiagram().remove(icon);
+            getSelectionModel().unselect(icon);
+        }
+    }
+
     ////////////////////////////////////
     ////////// EVENT HANDLERS //////////
     ////////////////////////////////////
-
-    private void mouseClicked(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            EventTarget target = event.getTarget();
-            if (target instanceof Icon) {
-                Icon icon = (Icon) target;
-                if (event.isControlDown()) {
-                    getSelectionModel().toggle(icon);
-                } else {
-                    getSelectionModel().clearAndSelect(icon);
-                }
-                event.consume();
-            }
-        }
-    }
-
-    private void contextMenuRequested(ContextMenuEvent event) {
-        if (event.getTarget() == this) {
-            System.out.println("Context requested in pane");
-        } else if (event.getTarget() instanceof Icon) {
-            Icon icon = (Icon) event.getTarget();
-            if (getSelectionModel().isSelected(icon)) {
-                System.out.println("Context requested in selection");
-            } else {
-                getSelectionModel().clearAndSelect(icon);
-                System.out.println("Context requested by an unselected icon");
-            }
-        }
-    }
 
     private void diagramChanged(ObservableValue<? extends Diagram> observable, Diagram oldValue, Diagram newValue) {
         super.getChildren().remove(oldValue);

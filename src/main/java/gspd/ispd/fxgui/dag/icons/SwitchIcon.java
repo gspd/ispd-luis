@@ -4,7 +4,6 @@ import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.dag.shapes.SwitchShape;
-import gspd.ispd.fxgui.dag.shapes.SynchronizeShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
 
@@ -19,7 +18,7 @@ public class SwitchIcon extends NodeIcon {
     public SwitchIcon(boolean selected, double centerX, double centerY) {
         super(SwitchShape::new, selected, centerX, centerY);
 
-        setIconType(SWITCH_TYPE);
+        setType(SWITCH_TYPE);
     }
 
     public SwitchIcon(double centerX, double centerY) {

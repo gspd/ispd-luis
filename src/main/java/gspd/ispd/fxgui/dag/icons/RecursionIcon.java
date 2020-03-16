@@ -18,7 +18,7 @@ public class RecursionIcon extends NodeIcon {
     public RecursionIcon(boolean selected, double centerX, double centerY) {
         super(RecursionShape::new, selected, centerX, centerY);
 
-        setIconType(RECURSION_TYPE);
+        setType(RECURSION_TYPE);
     }
 
     public RecursionIcon(double centerX, double centerY) {

@@ -1,9 +1,11 @@
 package gspd.ispd.fxgui.dag.icons;
 
 import gspd.ispd.fxgui.commons.EdgeIcon;
+import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.dag.shapes.FailShape;
+import javafx.util.Builder;
 
 public class FailIcon extends EdgeIcon {
 
@@ -15,7 +17,7 @@ public class FailIcon extends EdgeIcon {
 
     public FailIcon(boolean selected, double startX, double startY, double endX, double endY) {
         super(FailShape::new, selected, startX, startY, endX, endY);
-        setIconType(FAIL_TYPE);
+        setType(FAIL_TYPE);
     }
 
     public FailIcon(double startX, double startY, double endX, double endY) {
@@ -32,5 +34,14 @@ public class FailIcon extends EdgeIcon {
 
     public FailIcon(NodeIcon startIcon, NodeIcon endIcon) {
         this(false, startIcon, endIcon);
+    }
+
+    /////////////////////////////////////////
+    //////////// OVERRIDES //////////////////
+    /////////////////////////////////////////
+
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return FailIcon::new;
     }
 }

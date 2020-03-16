@@ -2,44 +2,203 @@ package gspd.ispd.fxgui.dag;
 
 import gspd.ispd.fxgui.commons.*;
 import gspd.ispd.fxgui.dag.icons.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 public class DagEditor extends HBox {
 
-    private NodeIcon hoverNode;
+    private DiagramPane diagramPane;
+    private DagIconMenu dagMenu;
 
     public DagEditor() {
 
-        DagIconMenu menu = new DagIconMenu();
-        HBox.setHgrow(menu, Priority.NEVER);
-        DiagramPane pane = new DiagramPane();
-        pane.setDiagram(cyclical());
-        HBox.setHgrow(pane, Priority.ALWAYS);
+        dagMenu = new DagIconMenu();
+        HBox.setHgrow(dagMenu, Priority.NEVER);
+        diagramPane = new DiagramPane();
+        diagramPane.setDiagram(createDAG());
+        HBox.setHgrow(diagramPane, Priority.ALWAYS);
 
-        pane.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
-            if (e.getButton() == MouseButton.PRIMARY) {
-                if (e.getTarget() == pane) {
-                    if (menu.getSelectedItem() != null) {
-                        Icon newIcon = menu.getSelectedItem().getIconBuilder().build();
-                        if (newIcon != null && newIcon.getIconType().isTypeOf(NodeIcon.NODE_TYPE)) {
-                            NodeIcon node = (NodeIcon) newIcon;
-                            node.setCenterX(e.getX());
-                            node.setCenterY(e.getY());
-                            pane.getDiagram().add(newIcon);
-                            pane.getSelectionModel().clearAndSelect(newIcon);
-                        }
-                        e.consume();
-                    }
+        diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
+        diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
+        diagramPane.setGridEnable(true);
+
+        addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                diagramPane.removeSelected();
+                e.consume();
+            } else if (e.getCode() == KeyCode.ESCAPE) {
+                if (isFlag(ADD_EDGE)) {
+
                 }
             }
         });
-        pane.setGridEnable(true);
 
-        super.getChildren().setAll(menu, pane);
+        super.getChildren().setAll(dagMenu, diagramPane);
     }
+
+    private EdgeIcon tempEdge;
+    private void startAddEdge(MouseEvent event, EdgeIcon edge, NodeIcon startIcon) {
+        tempEdge = edge;
+        tempEdge.setStartIcon(startIcon);
+        tempEdge.setEndX(event.getX());
+        tempEdge.setEndY(event.getY());
+        tempEdge.setMouseTransparent(true);
+        diagramPane.getDiagram().add(tempEdge);
+        diagramPane.removeEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
+        diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, addEdgeMouseClickedEvent);
+        diagramPane.addEventHandler(MouseEvent.MOUSE_MOVED, addEdgeMouseMovedHandler);
+        diagramPane.removeEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
+    }
+
+    private void stopAddEdge(boolean success) {
+        diagramPane.getDiagram().remove(tempEdge);
+        if (success) {
+            diagramPane.getDiagram().add(tempEdge);
+            tempEdge.setMouseTransparent(false);
+        }
+        tempEdge = null;
+        diagramPane.removeEventHandler(MouseEvent.MOUSE_CLICKED, addEdgeMouseClickedEvent);
+        diagramPane.removeEventHandler(MouseEvent.MOUSE_MOVED, addEdgeMouseMovedHandler);
+        diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
+        diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
+    }
+
+    //////////////////////////////////////////////////////////////
+    ////////////////////////// FLAGS /////////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    private static final int NONE = 0;
+    private static final int ADD_EDGE = 1;
+    private static final int ADD_NODE = 2;
+
+    private int flags = NONE;
+    private void setFlags(int flags) {
+        this.flags = flags;
+    }
+    private void addFlags(int state) {
+        this.flags |= state;
+    }
+    private void removeFlags(int state) {
+        this.flags &= (~state);
+    }
+    private int getFlags() {
+        return flags;
+    }
+    private boolean isFlag(int state) {
+        return (this.flags & state) != 0;
+    }
+
+    //////////////////////////////////////////////////////////////
+    ///////////////////// EVENT HANDLERS /////////////////////////
+    //////////////////////////////////////////////////////////////
+
+    private final EventHandler<MouseEvent> generalMouseClickedHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                EventTarget target = event.getTarget();
+                if (target == diagramPane) {
+                    diagramPane.getSelectionModel().clear();
+                    if (dagMenu.getSelectedItem() != null) {
+                        Icon newIcon = dagMenu.getSelectedItem().getIconBuilder().build();
+                        if (newIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+                            if (newIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+                                NodeIcon node = (NodeIcon) newIcon;
+                                node.setCenterX(event.getX());
+                                node.setCenterY(event.getY());
+                                diagramPane.getDiagram().add(newIcon);
+                                diagramPane.getSelectionModel().clearAndSelect(newIcon);
+                            }
+                        }
+                        event.consume();
+                    }
+                } else if (target instanceof Icon) {
+                    Icon targetIcon = (Icon) target;
+                    if (dagMenu.getSelectedItem() != null) {
+                        Icon newIcon = dagMenu.getSelectedItem().getIconBuilder().build();
+                        if (newIcon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+                            EdgeIcon edge = (EdgeIcon) newIcon;
+                            if (targetIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+                                System.out.println("You clicked a node do add an edge");
+                                NodeIcon startIcon = (NodeIcon) target;
+                                startAddEdge(event, edge, startIcon);
+                                event.consume();
+                            }
+                        }
+                    }
+                    if (event.isControlDown()) {
+                        diagramPane.getSelectionModel().toggle(targetIcon);
+                    } else {
+                        diagramPane.getSelectionModel().clearAndSelect(targetIcon);
+                    }
+                    event.consume();
+                }
+            }
+        }
+    };
+
+    private EventHandler<MouseEvent> addEdgeMouseMovedHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            tempEdge.setEndX(event.getX());
+            tempEdge.setEndY(event.getY());
+        }
+    };
+
+    private final EventHandler<ContextMenuEvent> contextMenuHandler = new EventHandler<ContextMenuEvent>() {
+        @Override
+        public void handle(ContextMenuEvent event) {
+            if (event.getTarget() == diagramPane) {
+                System.out.println("Context requested in pane");
+            } else if (event.getTarget() instanceof Icon) {
+                Icon icon = (Icon) event.getTarget();
+                if (diagramPane.getSelectionModel().isSelected(icon)) {
+                    System.out.println("Context requested in selection");
+                } else {
+                    diagramPane.getSelectionModel().clearAndSelect(icon);
+                    System.out.println("Context requested by an unselected icon");
+                }
+            }
+        }
+    };
+
+    private EventHandler<MouseEvent> addEdgeMouseClickedEvent = new EventHandler<>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                EventTarget target = event.getTarget();
+                if (target == diagramPane) {
+                    System.out.println("You must click a node to stop");
+                } else if (target instanceof Icon) {
+                    Icon targetIcon = (Icon) target;
+                    if (targetIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+                        NodeIcon node = (NodeIcon) targetIcon;
+                        if (node != tempEdge.getStartIcon()) {
+                            tempEdge.setEndIcon(node);
+                            stopAddEdge(true);
+                        } else {
+                            System.out.println("You must select another icon");
+                        }
+                    } else {
+                        System.out.println("You must select a node");
+                        diagramPane.getDiagram().remove(tempEdge);
+                        stopAddEdge(false);
+                    }
+                    event.consume();
+                }
+            } else if (event.getButton() == MouseButton.SECONDARY) {
+                diagramPane.getDiagram().remove(tempEdge);
+                stopAddEdge(false);
+            }
+        }
+    };
+
+    /////////////////////////////////////////////////////////////////////
+    //////////////////////// TEMPORARY //////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
 
     private Diagram createSimpleDAG() {
         Diagram diagram = new DAG();

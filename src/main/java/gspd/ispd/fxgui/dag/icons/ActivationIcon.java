@@ -18,7 +18,7 @@ public class ActivationIcon extends NodeIcon {
     public ActivationIcon(boolean selected, double centerX, double centerY) {
         super(ActivationShape::new, selected, centerX, centerY);
 
-        setIconType(ACTIVATION_TYPE);
+        setType(ACTIVATION_TYPE);
     }
 
     public ActivationIcon(double centerX, double centerY) {

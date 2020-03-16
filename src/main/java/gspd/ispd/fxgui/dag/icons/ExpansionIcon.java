@@ -24,7 +24,7 @@ public abstract class ExpansionIcon extends NodeIcon {
         diagramProperty().addListener(this::contentDagChanged);
         setDiagram(diagram);
 
-        setIconType(EXPANSION_TYPE);
+        setType(EXPANSION_TYPE);
     }
 
     //////////////////////////////////////////////////

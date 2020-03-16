@@ -1,9 +1,11 @@
 package gspd.ispd.fxgui.dag.icons;
 
 import gspd.ispd.fxgui.commons.EdgeIcon;
+import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.dag.shapes.PrefixShape;
+import javafx.util.Builder;
 
 public class PrefixIcon extends EdgeIcon {
 
@@ -16,7 +18,7 @@ public class PrefixIcon extends EdgeIcon {
     public PrefixIcon(boolean selected, double startX, double startY, double endX, double endY) {
         super(PrefixShape::new, selected, startX, startY, endX, endY);
 
-        setIconType(PREFIX_TYPE);
+        setType(PREFIX_TYPE);
     }
 
     public PrefixIcon(double startX, double startY, double endX, double endY) {
@@ -33,5 +35,15 @@ public class PrefixIcon extends EdgeIcon {
 
     public PrefixIcon(NodeIcon startIcon, NodeIcon endIcon) {
         this(false, startIcon, endIcon);
+    }
+
+    ////////////////////////////////////////
+    ////////////// OVERRIDES ///////////////
+    ////////////////////////////////////////
+
+
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return PrefixIcon::new;
     }
 }

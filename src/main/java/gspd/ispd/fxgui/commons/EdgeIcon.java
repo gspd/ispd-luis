@@ -36,7 +36,7 @@ public abstract class EdgeIcon extends Icon {
         setEndX(endX);
         setEndY(endY);
         // TYPE
-        setIconType(EDGE_TYPE);
+        setType(EDGE_TYPE);
     }
 
     public EdgeIcon(Builder<? extends EdgeShape> arrowBuilder, double startX, double startY, double endX, double endY) {

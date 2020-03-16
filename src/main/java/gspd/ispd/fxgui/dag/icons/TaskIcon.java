@@ -17,7 +17,7 @@ public class TaskIcon extends NodeIcon {
 
     public TaskIcon(boolean selected, double centerX, double centerY) {
         super(TaskShape::new, selected, centerX, centerY);
-        setIconType(TASK_TYPE);
+        setType(TASK_TYPE);
     }
 
     public TaskIcon(double centerX, double centerY) {
