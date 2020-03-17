@@ -2,41 +2,64 @@ package gspd.ispd.fxgui.dag;
 
 import gspd.ispd.fxgui.commons.*;
 import gspd.ispd.fxgui.dag.icons.*;
+import javafx.beans.InvalidationListener;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.geometry.Orientation;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class DagEditor extends HBox {
 
     private DiagramPane diagramPane;
     private DagIconMenu dagMenu;
+    private IconConfigPane iconConfig;
 
     public DagEditor() {
 
-        dagMenu = new DagIconMenu();
-        HBox.setHgrow(dagMenu, Priority.NEVER);
-        diagramPane = new DiagramPane();
-        diagramPane.setDiagram(createDAG());
-        HBox.setHgrow(diagramPane, Priority.ALWAYS);
+        createContent();
 
         diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
         diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
-        diagramPane.setGridEnable(true);
+        diagramPane.getSelectionModel().getSelectedIcons().addListener((InvalidationListener) e -> {
+            iconConfig.setIcon(diagramPane.getSelectionModel().getSelectedIcon());
+        });
 
         addEventHandler(KeyEvent.KEY_RELEASED, e -> {
             if (e.getCode() == KeyCode.DELETE) {
                 diagramPane.removeSelected();
                 e.consume();
-            } else if (e.getCode() == KeyCode.ESCAPE) {
-                if (isFlag(ADD_EDGE)) {
-
-                }
             }
         });
 
-        super.getChildren().setAll(dagMenu, diagramPane);
+    }
+
+    private void createContent() {
+        dagMenu = new DagIconMenu();
+        iconConfig = new IconConfigPane();
+
+        SplitPane leftSplit = new SplitPane();
+        leftSplit.setOrientation(Orientation.VERTICAL);
+        leftSplit.getItems().setAll(dagMenu, iconConfig);
+        HBox.setHgrow(leftSplit, Priority.NEVER);
+
+        ToolBar bottomToolbar = new ToolBar();
+        CheckBox gridCheckBox = new CheckBox("Grid");
+        bottomToolbar.getItems().setAll(gridCheckBox);
+        VBox.setVgrow(bottomToolbar, Priority.NEVER);
+
+        diagramPane = new DiagramPane();
+        VBox.setVgrow(diagramPane, Priority.ALWAYS);
+        diagramPane.setDiagram(createDAG());
+        diagramPane.gridEnableProperty().bind(gridCheckBox.selectedProperty());
+        VBox rightPane = new VBox();
+        rightPane.getChildren().setAll(diagramPane, bottomToolbar);
+        HBox.setHgrow(rightPane, Priority.ALWAYS);
+        super.getChildren().setAll(leftSplit, rightPane);
+
     }
 
     private EdgeIcon tempEdge;

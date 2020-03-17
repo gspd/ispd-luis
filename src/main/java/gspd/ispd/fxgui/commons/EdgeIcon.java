@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.fxgui.dag.editor.EdgeEditor;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -108,6 +109,13 @@ public abstract class EdgeIcon extends Icon {
     ////////////////////////////////////////////////////////
     /////////////////// OVERRIDE ///////////////////////////
     ////////////////////////////////////////////////////////
+
+    private static final EdgeEditor EDGE_EDITOR = new EdgeEditor();
+    @Override
+    protected IconEditor editor() {
+        EDGE_EDITOR.setIcon(this);
+        return EDGE_EDITOR;
+    }
 
     @Override
     public Builder<? extends Icon> iconBuilder() {
@@ -218,4 +226,17 @@ public abstract class EdgeIcon extends Icon {
         endIconProperty().set(endIcon);
     }
 
+    /**
+     * The message size
+     */
+    private DoubleProperty messageSize = new SimpleDoubleProperty(this, "messageSize", 0.0);
+    public double getMessageSize() {
+        return messageSize.get();
+    }
+    public DoubleProperty messageSizeProperty() {
+        return messageSize;
+    }
+    public void setMessageSize(double messageSize) {
+        this.messageSize.set(messageSize);
+    }
 }

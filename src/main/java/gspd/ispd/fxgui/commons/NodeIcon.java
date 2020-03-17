@@ -55,26 +55,15 @@ public abstract class NodeIcon extends Icon {
         }
     }
 
-    private double dragX;
-    private double dragY;
-    private void dragDetected(MouseEvent event) {
-        dragX = event.getX();
-        dragY = event.getY();
-        event.consume();
-    }
-
-    protected void mouseDragged(MouseEvent event) {
-        double dx = event.getX() - dragX;
-        double dy = event.getY() - dragY;
-        setCenterX(getCenterX() + dx);
-        setCenterY(getCenterY() + dy);
-        event.consume();
-    }
-
     ///////////////////////////////////////////////////
     //////////////// OVERRIDES ////////////////////////
     ///////////////////////////////////////////////////
 
+
+    @Override
+    protected IconEditor editor() {
+        return null;
+    }
 
     public Builder<? extends Icon> iconBuilder() {
         return null;

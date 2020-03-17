@@ -1,11 +1,11 @@
 package gspd.ispd.fxgui.dag.icons;
 
-import gspd.ispd.fxgui.commons.IconType;
-import gspd.ispd.fxgui.commons.NodeIcon;
-import gspd.ispd.fxgui.commons.Diagram;
-import gspd.ispd.fxgui.commons.OuterBox;
+import gspd.ispd.fxgui.commons.*;
+import gspd.ispd.fxgui.dag.editor.ExpansionEditor;
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
@@ -58,6 +58,13 @@ public abstract class ExpansionIcon extends NodeIcon {
     ///////////// OVERRIDES ////////////////
     ////////////////////////////////////////
 
+    private static final ExpansionEditor EXPANSION_EDITOR = new ExpansionEditor();
+    @Override
+    protected IconEditor editor() {
+        EXPANSION_EDITOR.setIcon(this);
+        return EXPANSION_EDITOR;
+    }
+
     @Override
     protected void updateIcon() {
         OuterBox box = (OuterBox) getContent();
@@ -75,6 +82,9 @@ public abstract class ExpansionIcon extends NodeIcon {
     ////////////// PROPERTIES ////////////////
     //////////////////////////////////////////
 
+    /**
+     * The inner diagram
+     */
     private ObjectProperty<Diagram> diagram;
     public Diagram getDiagram() {
         return (diagram == null) ? null : diagramProperty().get();
@@ -89,4 +99,17 @@ public abstract class ExpansionIcon extends NodeIcon {
         diagramProperty().set(diagram);
     }
 
+    /**
+     * The expansion operation number
+     */
+    private IntegerProperty number = new SimpleIntegerProperty(this, "number", 0);
+    public int getNumber() {
+        return number.get();
+    }
+    public IntegerProperty numberProperty() {
+        return number;
+    }
+    public void setNumber(int number) {
+        this.number.set(number);
+    }
 }

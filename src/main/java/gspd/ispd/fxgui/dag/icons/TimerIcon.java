@@ -1,9 +1,13 @@
 package gspd.ispd.fxgui.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.IconType;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.dag.editor.TimerEditor;
 import gspd.ispd.fxgui.dag.shapes.TimerShape;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
 
@@ -37,6 +41,13 @@ public class TimerIcon extends NodeIcon {
     ///////////// OVERRIDES //////////////////
     //////////////////////////////////////////
 
+    private static final TimerEditor TIMER_EDITOR = new TimerEditor();
+    @Override
+    protected IconEditor editor() {
+        TIMER_EDITOR.setIcon(this);
+        return TIMER_EDITOR;
+    }
+
     @Override
     public Builder<? extends Icon> iconBuilder() {
         return TimerIcon::new;
@@ -55,5 +66,23 @@ public class TimerIcon extends NodeIcon {
             shape.setStroke(Color.BLACK);
             shape.setFill(Color.LIGHTYELLOW);
         }
+    }
+
+    ////////////////////////////////////////////
+    ////////////// PROPERTIES //////////////////
+    ////////////////////////////////////////////
+
+    /**
+     * The time of this timer
+     */
+    private DoubleProperty time = new SimpleDoubleProperty(this, "time", 0.0);
+    public double getTime() {
+        return time.get();
+    }
+    public DoubleProperty timeProperty() {
+        return time;
+    }
+    public void setTime(double time) {
+        this.time.set(time);
     }
 }

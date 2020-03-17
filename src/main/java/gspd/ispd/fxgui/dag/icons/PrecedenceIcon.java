@@ -40,7 +40,6 @@ public class PrecedenceIcon extends EdgeIcon {
     ////////////// OVERRIDES ////////////////
     /////////////////////////////////////////
 
-
     @Override
     public Builder<? extends Icon> iconBuilder() {
         return PrecedenceIcon::new;

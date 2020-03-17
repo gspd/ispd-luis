@@ -32,7 +32,7 @@ public class DiagramPane extends Pane {
             if (e.getButton() == MouseButton.PRIMARY) {
                 EventTarget target = e.getTarget();
                 if (target == this) {
-                    System.out.println("Dragging in pane");
+                    // Dragging in pane
                     getSelectionModel().startSelecting(e);
                 } else if (target instanceof Icon) {
                     Icon icon = (Icon) target;
@@ -131,11 +131,11 @@ public class DiagramPane extends Pane {
             setBackground(
                 new Background(
                     new BackgroundImage(
-                        new Rectangle(32, 32, Color.WHITE) {
+                        new Rectangle(31.5, 31.5, Color.WHITE) {
                             {
                                 setStroke(Color.LIGHTGRAY);
                                 setStrokeType(StrokeType.CENTERED);
-                                setStrokeWidth(0.5);
+                                setStrokeWidth(0.9);
                             }
                         }.snapshot(new SnapshotParameters(), null),
                         BackgroundRepeat.REPEAT,

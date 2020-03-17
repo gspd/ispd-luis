@@ -41,7 +41,6 @@ public class PrefixIcon extends EdgeIcon {
     ////////////// OVERRIDES ///////////////
     ////////////////////////////////////////
 
-
     @Override
     public Builder<? extends Icon> iconBuilder() {
         return PrefixIcon::new;

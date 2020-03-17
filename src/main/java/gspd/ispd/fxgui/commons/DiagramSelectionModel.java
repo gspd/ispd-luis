@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.input.MouseDragEvent;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -98,6 +98,12 @@ public class DiagramSelectionModel {
      * The box used to select
      */
     private SelectionRectangle box = new SelectionRectangle();
+    private EventHandler<MouseEvent> selectingMouseReleased = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            stopSelecting();
+        }
+    };
     public void startSelecting(MouseEvent event) {
         box.startX.set(event.getX());
         box.startY.set(event.getY());
@@ -110,10 +116,12 @@ public class DiagramSelectionModel {
             box.endY.set(e.getY());
         });
         diagramPane.setOnMouseDragReleased(e -> stopSelecting());
+        diagramPane.addEventHandler(MouseEvent.MOUSE_RELEASED, selectingMouseReleased);
     }
 
     private void stopSelecting() {
         diagramPane.getChildren().remove(box);
+        diagramPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, selectingMouseReleased);
         // selects the nodes
         diagramPane.setOnMouseDragOver(null);
         diagramPane.setOnMouseDragReleased(null);
@@ -161,7 +169,15 @@ public class DiagramSelectionModel {
      */
     private ObservableList<Icon> selectedIcons = FXCollections.observableArrayList();
     public ObservableList<Icon> getSelectedIcons() {
-        return FXCollections.unmodifiableObservableList(selectedIcons);
+        return selectedIcons;
+    }
+
+    public Icon getSelectedIcon() {
+        Icon active = null;
+        if (getSelectedIcons().size() > 0) {
+            active = getSelectedIcons().get(selectedIcons.size() - 1);
+        }
+        return active;
     }
 
 }

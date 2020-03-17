@@ -37,7 +37,6 @@ public class SynchronizeIcon extends NodeIcon {
     /////////////// OVERRIDE /////////////////////
     //////////////////////////////////////////////
 
-
     @Override
     public Builder<? extends Icon> iconBuilder() {
         return SynchronizeIcon::new;

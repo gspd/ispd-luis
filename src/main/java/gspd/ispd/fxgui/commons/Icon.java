@@ -73,6 +73,8 @@ public abstract class Icon extends Group {
 
     protected abstract void updateIcon();
 
+    protected abstract IconEditor editor();
+
     ///////////////////////////////////////////////////
     //////////////// PROPERTIES ///////////////////////
     ///////////////////////////////////////////////////
@@ -103,6 +105,20 @@ public abstract class Icon extends Group {
     }
     public void setSelected(boolean selected) {
         selectedProperty().set(selected);
+    }
+
+    /**
+     * Whether this icon is active or not
+     */
+    private BooleanProperty active = new SimpleBooleanProperty(this, "active", false);
+    public boolean isActive() {
+        return active.get();
+    }
+    public BooleanProperty activeProperty() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active.set(active);
     }
 
     /**
