@@ -1,6 +1,5 @@
 package gspd.ispd.fxgui.commons;
 
-import gspd.ispd.fxgui.dag.icons.TaskIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

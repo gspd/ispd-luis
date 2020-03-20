@@ -4,12 +4,23 @@ import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 public abstract class IconEditor extends GridPane {
 
     public IconEditor() {
         iconProperty().addListener(this::iconChanged);
+        setPadding(new Insets(5, 5, 5, 5));
+        setVgap(5.0);
+        setHgap(2.0);
+        ColumnConstraints col0 = new ColumnConstraints();
+        col0.setHgrow(Priority.ALWAYS);
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setHgrow(Priority.NEVER);
+        getColumnConstraints().setAll(col0, col1);
     }
 
     private void iconChanged(ObservableValue<? extends Icon> observable, Icon oldValue, Icon newValue) {

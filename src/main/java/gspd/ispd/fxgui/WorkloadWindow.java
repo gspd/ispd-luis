@@ -1,12 +1,6 @@
 package gspd.ispd.fxgui;
 
-import gspd.ispd.ISPD;
-import gspd.ispd.gui.JConfigForNode;
-import gspd.ispd.gui.JPrincipal;
-import gspd.ispd.gui.SelecionaCargas;
-import gspd.ispd.gui.configuracao.JPanelConfigIcon;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

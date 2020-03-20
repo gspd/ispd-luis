@@ -7,7 +7,9 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.util.Builder;
+import org.controlsfx.control.textfield.CustomTextField;
 
 public abstract class Icon extends Group {
 

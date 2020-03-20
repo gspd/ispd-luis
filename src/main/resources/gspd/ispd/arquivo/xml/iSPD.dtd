@@ -92,7 +92,8 @@ and open the template in the editor.
 <!ATTLIST virtualMac disk_alloc CDATA "0.0">
 <!ATTLIST virtualMac op_system CDATA "0.0" >
 
-<!ELEMENT load (trace|random|node+|dag+)>
+<!-- <!ELEMENT load (trace|random|node+|dag+)> -->
+<!ELEMENT load (trace|random|node+)>
 
 <!ELEMENT trace EMPTY>
 <!ATTLIST trace file_path CDATA #REQUIRED>
@@ -116,13 +117,18 @@ and open the template in the editor.
 <!ATTLIST size average CDATA "0">
 <!ATTLIST size minimum CDATA "0">
 <!ATTLIST size probability CDATA "0.0">
-
+<!--
 <!ELEMENT dag EMPTY>
 <!ATTLIST dag application CDATA "app0">
 <!ATTLIST dag owner CDATA "user1">
 <!ATTLIST dag id_master CDATA "???">
 <!ATTLIST dag tasks CDATA "0">
 <!ATTLIST dag file_path CDATA #REQUIRED>
+-->
+
+<!-- DAG -->
+
+<!-- END DAG -->
 
 <!ELEMENT file_system (file+)>
 

@@ -1,6 +1,6 @@
 package gspd.ispd.imsx.fxgui.dag;
 
-import gspd.ispd.fxgui.dag.icons.TaskIcon;
+import gspd.ispd.fxgui.workload.dag.icons.TaskIcon;
 import gspd.ispd.imsx.IMSXParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

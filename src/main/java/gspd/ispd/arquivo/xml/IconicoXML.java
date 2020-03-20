@@ -986,8 +986,7 @@ public class IconicoXML {
         }
     }
 
-    public void addInternet(int x, int y, int idLocal, int idGlobal, String nome,
-            double banda, double ocupacao, double latencia) {
+    public void addInternet(int x, int y, int idLocal, int idGlobal, String nome, double banda, double ocupacao, double latencia) {
         Element aux;
         Element posicao = descricao.createElement("position");
         posicao.setAttribute("x", Integer.toString(x));
@@ -1144,8 +1143,7 @@ public class IconicoXML {
         system.appendChild(aux);
     }
 
-    public void addLink(int x0, int y0, int x1, int y1, int idLocal, int idGlobal, String nome,
-            double banda, double taxaOcupacao, double latencia, int origem, int destino) {
+    public void addLink(int x0, int y0, int x1, int y1, int idLocal, int idGlobal, String nome, double banda, double taxaOcupacao, double latencia, int origem, int destino) {
         Element aux = null;
         Element posicao = descricao.createElement("position");
         posicao.setAttribute("x", Integer.toString(x0));
@@ -1173,8 +1171,7 @@ public class IconicoXML {
         system.appendChild(aux);
     }
 
-    public void addVirtualMachines(String id, String user, String VMM, int poderComputacional,
-            double memAlocada, double discoAlocado, String OS) {
+    public void addVirtualMachines(String id, String user, String VMM, int poderComputacional, double memAlocada, double discoAlocado, String OS) {
         Element aux;
         aux = descricao.createElement("virtualMac");
         aux.setAttribute("id", id);

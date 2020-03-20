@@ -1,9 +1,8 @@
 package gspd.ispd.fxgui.commons;
 
-import gspd.ispd.fxgui.dag.icons.ExpansionIcon;
+import gspd.ispd.fxgui.workload.dag.icons.ExpansionIcon;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.geometry.Insets;
 import javafx.scene.Node;

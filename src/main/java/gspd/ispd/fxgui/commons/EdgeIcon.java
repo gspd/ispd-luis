@@ -1,6 +1,6 @@
 package gspd.ispd.fxgui.commons;
 
-import gspd.ispd.fxgui.dag.editor.EdgeEditor;
+import gspd.ispd.fxgui.workload.dag.editor.EdgeEditor;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
