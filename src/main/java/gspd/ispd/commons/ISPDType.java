@@ -1,30 +1,30 @@
-package gspd.ispd.fxgui.commons;
+package gspd.ispd.commons;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-public class IconType {
+public class ISPDType {
 
-    private static final HashMap<String, IconType> map = new HashMap<>();
+    private static final HashMap<String, ISPDType> map = new HashMap<>();
 
-    private IconType(IconType parent, String name) {
+    private ISPDType(ISPDType parent, String name) {
         this.parent = parent;
         this.name = name;
     }
 
-    public static IconType type(IconType parent, String name) {
+    public static ISPDType type(ISPDType parent, String name) {
         if (!map.containsKey(name)) {
-            map.put(name, new IconType(parent, name));
+            map.put(name, new ISPDType(parent, name));
         }
         return map.get(name);
     }
 
-    public static IconType type(String name) {
+    public static ISPDType type(String name) {
         return type(null, name);
     }
 
-    private IconType parent;
-    public IconType getParent() {
+    private ISPDType parent;
+    public ISPDType getParent() {
         return parent;
     }
 
@@ -33,8 +33,8 @@ public class IconType {
         return name;
     }
 
-    public boolean isTypeOf(IconType type) {
-        IconType currentType = this;
+    public boolean isTypeOf(ISPDType type) {
+        ISPDType currentType = this;
         boolean success = false;
         while (currentType != null) {
             if (currentType == type) {
@@ -50,7 +50,7 @@ public class IconType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IconType iconType = (IconType) o;
+        ISPDType iconType = (ISPDType) o;
         return Objects.equals(parent, iconType.parent) &&
                 name.equals(iconType.name);
     }

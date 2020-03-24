@@ -2,7 +2,7 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconEditor;
-import gspd.ispd.fxgui.commons.IconType;
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.editor.TimerEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.TimerShape;
@@ -13,7 +13,7 @@ import javafx.util.Builder;
 
 public class TimerIcon extends NodeIcon {
 
-    public static final IconType TIMER_TYPE = IconType.type(NODE_TYPE, "TIMER_TYPE");
+    public static final ISPDType TIMER_TYPE = ISPDType.type(NODE_TYPE, "TIMER_TYPE");
 
     //////////////////////////////////////
     //////////// CONSTRUCTOR /////////////

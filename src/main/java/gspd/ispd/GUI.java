@@ -2,8 +2,6 @@ package gspd.ispd;
 
 import gspd.ispd.fxgui.*;
 import gspd.ispd.fxgui.workload.WorkloadPane;
-import gspd.ispd.fxgui.workload.dag.DAGParser;
-import gspd.ispd.fxgui.workload.dag.DagEditor;
 import gspd.ispd.fxgui.simples.DefaultWindowController;
 import gspd.ispd.model.ISPDModel;
 import javafx.application.Application;

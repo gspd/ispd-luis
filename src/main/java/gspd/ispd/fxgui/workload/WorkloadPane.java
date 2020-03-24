@@ -1,14 +1,11 @@
 package gspd.ispd.fxgui.workload;
 
 import gspd.ispd.fxgui.commons.SlidePane;
-import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.DagEditor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class WorkloadPane extends SlidePane {
 
@@ -25,8 +22,7 @@ public class WorkloadPane extends SlidePane {
         traceOrRandom = new TraceOrRandomPane();
         tracePane = new TracePane();
         traceFilePane = new TraceFilePane();
-        dagStage = new Stage();
-        dagStage.initModality(Modality.WINDOW_MODAL);
+        generatePane = new GenerateWorkloadPane();
         nextButton = new Button("Next");
         cancelButton = new Button("Cancel");
         okButton = new Button("OK");
@@ -41,7 +37,7 @@ public class WorkloadPane extends SlidePane {
             if (traceOrRandom.getChoice() == TraceOrRandomPane.TRACE) {
                 loadTracePane();
             } else if (traceOrRandom.getChoice() == TraceOrRandomPane.GENERATE) {
-                openEditor();
+                loadGeneratePane();
             }
         });
         setRightButton(nextButton);
@@ -77,10 +73,16 @@ public class WorkloadPane extends SlidePane {
         setLeftButton(previousButton);
     }
 
-    private Stage dagStage;
-    private void openEditor() {
-        DagEditor dagEditor = new DagEditor();
-        dagStage.setScene(new Scene(dagEditor));
-        dagStage.showAndWait();
+    private GenerateWorkloadPane generatePane;
+    private void loadGeneratePane() {
+        setContent(generatePane);
+        okButton.setOnAction(e -> {
+            System.out.println("You finished your configuration!");
+        });
+        setRightButton(okButton);
+        previousButton.setOnAction(e -> {
+            loadFirstPane();
+        });
+        setLeftButton(previousButton);
     }
 }

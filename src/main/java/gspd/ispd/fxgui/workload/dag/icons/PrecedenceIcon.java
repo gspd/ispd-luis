@@ -2,14 +2,14 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.EdgeIcon;
 import gspd.ispd.fxgui.commons.Icon;
-import gspd.ispd.fxgui.commons.IconType;
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.shapes.PrecedenceShape;
 import javafx.util.Builder;
 
 public class PrecedenceIcon extends EdgeIcon {
 
-    public static final IconType PRECEDENCE_TYPE = IconType.type(EDGE_TYPE, "PRECEDENCE_TYPE");
+    public static final ISPDType PRECEDENCE_TYPE = ISPDType.type(EDGE_TYPE, "PRECEDENCE_TYPE");
 
     /////////////////////////////////////
     ////////// CONSTRUCTOR //////////////
@@ -30,6 +30,7 @@ public class PrecedenceIcon extends EdgeIcon {
 
     public PrecedenceIcon(boolean selected, NodeIcon startIcon, NodeIcon endIcon) {
         super(PrecedenceShape::new, selected, startIcon, endIcon);
+        setType(PRECEDENCE_TYPE);
     }
 
     public PrecedenceIcon(NodeIcon startIcon, NodeIcon endIcon) {

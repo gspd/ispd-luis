@@ -28,7 +28,7 @@ public class TraceFilePane extends GridPane {
                     new FileChooser.ExtensionFilter("iSPD Traces", "*.wmsx")
             );
             setFile(fileChooser.showOpenDialog(null));
-            if (file != null) {
+            if (getFile() != null) {
                 fileInput.setText(getFile().getAbsolutePath());
             } else {
                 fileInput.setText("");

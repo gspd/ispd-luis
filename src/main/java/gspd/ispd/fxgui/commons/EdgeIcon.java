@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.workload.dag.editor.EdgeEditor;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
@@ -16,7 +17,7 @@ import static java.lang.Math.*;
 
 public abstract class EdgeIcon extends Icon {
 
-    public static final IconType EDGE_TYPE = IconType.type(ICON_TYPE, "ARROW_TYPE");
+    public static final ISPDType EDGE_TYPE = ISPDType.type(ICON_TYPE, "EDGE_TYPE");
 
     ///////////////////////////////////////////////
     ///////////////// CONSTRUCTOR /////////////////

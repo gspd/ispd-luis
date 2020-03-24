@@ -5,6 +5,7 @@ import javafx.scene.Node;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DAG extends Diagram {
@@ -72,4 +73,13 @@ public class DAG extends Diagram {
         return false;
     }
 
+    private static final Map<String, DAG> map = new HashMap<>();
+    public static DAG getDAG(String name) {
+        return map.get(name);
+    }
+
+    @Override
+    public String toString() {
+        return "dag:" + getName();
+    }
 }

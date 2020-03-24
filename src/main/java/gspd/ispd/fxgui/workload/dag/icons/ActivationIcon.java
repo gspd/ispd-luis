@@ -1,7 +1,7 @@
 package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
-import gspd.ispd.fxgui.commons.IconType;
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.shapes.ActivationShape;
 import javafx.scene.paint.Color;
@@ -9,7 +9,7 @@ import javafx.util.Builder;
 
 public class ActivationIcon extends NodeIcon {
 
-    public static final IconType ACTIVATION_TYPE = IconType.type(NODE_TYPE, "ACTIVATION_TYPE");
+    public static final ISPDType ACTIVATION_TYPE = ISPDType.type(NODE_TYPE, "ACTIVATION_TYPE");
 
     ///////////////////////////////////////////
     //////////////// CONSTRUCTOR //////////////

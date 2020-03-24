@@ -2,42 +2,51 @@ package gspd.ispd.fxgui.workload.dag;
 
 import gspd.ispd.fxgui.commons.*;
 import gspd.ispd.fxgui.workload.dag.icons.*;
+import gspd.ispd.imsx.DAGParser;
 import javafx.beans.InvalidationListener;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-public class DagEditor extends HBox {
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+public class DagEditor extends VBox {
+
+    public DagEditor() {
+        createContent();
+        initHandlers();
+    }
 
     private DiagramPane diagramPane;
     private DagIconMenu dagMenu;
     private IconConfigPane iconConfig;
-
-    public DagEditor() {
-
-        createContent();
-
-        diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
-        diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
-        diagramPane.getSelectionModel().getSelectedIcons().addListener((InvalidationListener) e -> {
-            iconConfig.setIcon(diagramPane.getSelectionModel().getSelectedIcon());
-        });
-
-        addEventHandler(KeyEvent.KEY_RELEASED, e -> {
-            if (e.getCode() == KeyCode.DELETE) {
-                diagramPane.removeSelected();
-                e.consume();
-            }
-        });
-
-    }
-
+    private TextField dagNameField;
+    private Button saveButton;
     private void createContent() {
+
+        HBox topBar = new HBox();
+        saveButton = new Button("Save");
+        dagNameField = new TextField();
+        topBar.getChildren().addAll(dagNameField, saveButton);
+        topBar.setSpacing(5.0);
+        topBar.setPadding(new Insets(5.0));
+
+        HBox mainContent = new HBox();
+
         dagMenu = new DagIconMenu();
         iconConfig = new IconConfigPane();
 
@@ -56,9 +65,53 @@ public class DagEditor extends HBox {
         diagramPane.setDiagram(createDAG());
         diagramPane.gridEnableProperty().bind(gridCheckBox.selectedProperty());
         VBox rightPane = new VBox();
-        rightPane.getChildren().setAll(diagramPane, bottomToolbar);
+        rightPane.getChildren().setAll(diagramPane, new Separator(), bottomToolbar);
         HBox.setHgrow(rightPane, Priority.ALWAYS);
-        super.getChildren().setAll(leftSplit, rightPane);
+        mainContent.getChildren().setAll(leftSplit, rightPane);
+
+        VBox.setVgrow(topBar, Priority.NEVER);
+        VBox.setVgrow(mainContent, Priority.ALWAYS);
+        getChildren().addAll(topBar, new Separator(), mainContent);
+
+    }
+
+    private void initHandlers() {
+        dagNameField.textProperty().addListener((obs, o, n) -> {
+            diagramPane.getDiagram().setName(n);
+        });
+        diagramPane.diagramProperty().addListener((obs, o, n) -> {
+            dagNameField.setText(n.getName());
+        });
+        saveButton.setOnAction(e -> {
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.newDocument();
+                DAGParser parser = new DAGParser(document);
+                Element dagElement = parser.parse((DAG) diagramPane.getDiagram());
+                TransformerFactory tfac = TransformerFactory.newInstance();
+                Transformer transformer = tfac.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                parser.getDocument().appendChild(dagElement);
+                DOMSource source = new DOMSource(parser.getDocument());
+                StreamResult result = new StreamResult(System.out);
+                transformer.transform(source, result);
+                System.out.println("OK!");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                diagramPane.removeSelected();
+                e.consume();
+            }
+        });
+        diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
+        diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
+        diagramPane.getSelectionModel().getSelectedIcons().addListener((InvalidationListener) e -> {
+            iconConfig.setIcon(diagramPane.getSelectionModel().getSelectedIcon());
+        });
 
     }
 
@@ -87,31 +140,6 @@ public class DagEditor extends HBox {
         diagramPane.removeEventHandler(MouseEvent.MOUSE_MOVED, addEdgeMouseMovedHandler);
         diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
         diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
-    }
-
-    //////////////////////////////////////////////////////////////
-    ////////////////////////// FLAGS /////////////////////////////
-    //////////////////////////////////////////////////////////////
-
-    private static final int NONE = 0;
-    private static final int ADD_EDGE = 1;
-    private static final int ADD_NODE = 2;
-
-    private int flags = NONE;
-    private void setFlags(int flags) {
-        this.flags = flags;
-    }
-    private void addFlags(int state) {
-        this.flags |= state;
-    }
-    private void removeFlags(int state) {
-        this.flags &= (~state);
-    }
-    private int getFlags() {
-        return flags;
-    }
-    private boolean isFlag(int state) {
-        return (this.flags & state) != 0;
     }
 
     //////////////////////////////////////////////////////////////

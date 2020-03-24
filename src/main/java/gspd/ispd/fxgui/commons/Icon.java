@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.commons.ISPDType;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
@@ -7,19 +8,28 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 import javafx.util.Builder;
-import org.controlsfx.control.textfield.CustomTextField;
 
 public abstract class Icon extends Group {
 
-    public final static IconType ICON_TYPE = IconType.type("ICON_TYPE");
+    public final static ISPDType ICON_TYPE = ISPDType.type("ICON_TYPE");
+
+    ///////////////////////////////////////
+    // ID System //////////////////////////
+    ///////////////////////////////////////
+
+    private static int id = 0;
+    private void giveID() {
+        setIconID("icon" + id);
+        id++;
+    }
 
     ///////////////////////////////////////////////
     ///////////////// CONSTRUCTOR /////////////////
     ///////////////////////////////////////////////
 
     public Icon(Builder<? extends Node> nodeBuilder, boolean selected) {
+        giveID();
         selectedProperty().addListener(this::updateIcon);
         hoveredProperty().addListener(this::updateIcon);
         nodeBuilderProperty().addListener(this::builderChanged);
@@ -177,14 +187,14 @@ public abstract class Icon extends Group {
     /**
      * The icon type
      */
-    private ObjectProperty<IconType> type = new SimpleObjectProperty<>(null, "iconType", ICON_TYPE);
-    public IconType getType() {
+    private ObjectProperty<ISPDType> type = new SimpleObjectProperty<>(null, "iconType", ICON_TYPE);
+    public ISPDType getType() {
         return type.get();
     }
-    public ObjectProperty<IconType> typeProperty() {
+    public ObjectProperty<ISPDType> typeProperty() {
         return type;
     }
-    public void setType(IconType type) {
+    public void setType(ISPDType type) {
         this.type.set(type);
     }
 }

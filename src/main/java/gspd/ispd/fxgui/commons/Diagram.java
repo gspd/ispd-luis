@@ -1,5 +1,8 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.commons.ISPDType;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 
@@ -112,7 +115,7 @@ public class Diagram extends Group {
      * @param type the icon type
      * @return a list of icons (as Nodes)
      */
-    public List<Node> getIconsByType(IconType type) {
+    public List<Node> getIconsByType(ISPDType type) {
         return getIconsByTypeStream(type).collect(Collectors.toList());
     }
 
@@ -121,21 +124,33 @@ public class Diagram extends Group {
      * @param type the icon type
      * @return a stream of icons (as Nodes)
      */
-    public Stream<Node> getIconsByTypeStream(IconType type) {
+    public Stream<Node> getIconsByTypeStream(ISPDType type) {
         return getChildren()
                 .stream()
                 .filter(node -> ((Icon) node).getType().isTypeOf(type));
+    }
+
+    public Node getIconById(String id) {
+        List<Node> unaryList = getChildren()
+                .stream()
+                .filter(node -> ((Icon) node).getIconID().equals(id))
+                .collect(Collectors.toList());
+        if (unaryList.size() == 1) return unaryList.get(0);
+        return null;
     }
 
     /////////////////////////////////////
     ///////////// PROPERTIES ////////////
     /////////////////////////////////////
 
-    private String name;
+    private StringProperty name = new SimpleStringProperty(this, "name", null);
     public String getName() {
+        return name.get();
+    }
+    public StringProperty nameProperty() {
         return name;
     }
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 }

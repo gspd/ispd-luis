@@ -1,7 +1,7 @@
 package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
-import gspd.ispd.fxgui.commons.IconType;
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.editor.TaskEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.TaskShape;
@@ -14,7 +14,7 @@ import javafx.util.Builder;
 
 public class TaskIcon extends NodeIcon {
 
-    public static final IconType TASK_TYPE = IconType.type(NODE_TYPE, "TASK_TYPE");
+    public static final ISPDType TASK_TYPE = ISPDType.type(NODE_TYPE, "TASK_TYPE");
 
     /////////////////////////////////////
     ////////// CONSTRUCTOR //////////////

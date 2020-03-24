@@ -42,7 +42,7 @@ public class GenerateWorkloadEntry {
     /**
      * The number of tasks
      */
-    private IntegerProperty quantity = new SimpleIntegerProperty(this, "scheduler", 0);
+    private IntegerProperty quantity = new SimpleIntegerProperty(this, "quantity", 0);
     public int getQuantity() {
         return quantity.get();
     }
@@ -56,11 +56,25 @@ public class GenerateWorkloadEntry {
     /**
      * The workload type
      */
-    private int type;
+    private IntegerProperty type = new SimpleIntegerProperty(this, "type", 0);
     public int getType() {
+        return type.get();
+    }
+    public IntegerProperty typeProperty() {
         return type;
     }
     public void setType(int type) {
-        this.type = type;
+        this.type.set(type);
+    }
+
+    /**
+     * The workload data itself
+     */
+    private Object data;
+    public Object getData() {
+        return data;
+    }
+    public void setData(Object data) {
+        this.data = data;
     }
 }

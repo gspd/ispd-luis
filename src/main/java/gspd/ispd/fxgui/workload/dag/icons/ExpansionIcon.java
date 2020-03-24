@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.workload.dag.icons;
 
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.*;
 import gspd.ispd.fxgui.workload.dag.editor.ExpansionEditor;
 import javafx.beans.Observable;
@@ -13,7 +14,7 @@ import javafx.util.Builder;
 
 public abstract class ExpansionIcon extends NodeIcon {
 
-    public static final IconType EXPANSION_TYPE = IconType.type(NODE_TYPE, "EXPANSION_TYPE");
+    public static final ISPDType EXPANSION_TYPE = ISPDType.type(NODE_TYPE, "EXPANSION_TYPE");
 
     //////////////////////////////////////////////////
     ////////////////// CONSTRUCTOR ///////////////////

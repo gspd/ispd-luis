@@ -1,19 +1,19 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.commons.ISPDType;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Builder;
 
 public abstract class NodeIcon extends Icon {
 
-    public final static IconType NODE_TYPE = IconType.type(ICON_TYPE, "NODE_TYPE");
+    public final static ISPDType NODE_TYPE = ISPDType.type(ICON_TYPE, "NODE_TYPE");
 
     //////////////////////////////////////////////
     ///////////// CONSTRUCTOR ////////////////////

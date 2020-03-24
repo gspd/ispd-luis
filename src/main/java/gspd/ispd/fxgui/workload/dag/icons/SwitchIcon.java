@@ -1,7 +1,7 @@
 package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
-import gspd.ispd.fxgui.commons.IconType;
+import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.shapes.SwitchShape;
 import javafx.scene.paint.Color;
@@ -9,7 +9,7 @@ import javafx.util.Builder;
 
 public class SwitchIcon extends NodeIcon {
 
-    public static final IconType SWITCH_TYPE = IconType.type(NODE_TYPE, "SWITCH_TYPE");
+    public static final ISPDType SWITCH_TYPE = ISPDType.type(NODE_TYPE, "SWITCH_TYPE");
 
     ///////////////////////////////////////
     /////////// CONSTRUCTOR ///////////////
