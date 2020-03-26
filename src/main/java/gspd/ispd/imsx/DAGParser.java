@@ -18,12 +18,8 @@ public class DAGParser implements IMSXParser<DAG> {
 
     private Document document;
     public DAGParser(Document document) {
-        try {
-            this.document = document;
-            initStatic();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.document = document;
+        initStatic();
     }
 
     private static Map<ISPDType, IMSXParser<Icon>> map;
@@ -89,7 +85,7 @@ public class DAGParser implements IMSXParser<DAG> {
         Element element = document.createElement(TASK_TAG);
         element = setAttrsNodeIcon(element, (NodeIcon)icon);
         element.setAttribute(LABEL_ATTR, task.getLabel());
-        element.setAttribute(LOCK_ATTR, task.getLabel());
+        element.setAttribute(LOCK_ATTR, task.getLock());
         element.setAttribute(COMPUTING_ATTR, String.valueOf(task.getComputingSize()));
         return element;
     }

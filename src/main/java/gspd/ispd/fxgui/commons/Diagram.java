@@ -115,8 +115,8 @@ public class Diagram extends Group {
      * @param type the icon type
      * @return a list of icons (as Nodes)
      */
-    public List<Node> getIconsByType(ISPDType type) {
-        return getIconsByTypeStream(type).collect(Collectors.toList());
+    public <T extends Node> List<T> getIconsByType(ISPDType type) {
+        return (List<T>) getIconsByTypeStream(type).collect(Collectors.toList());
     }
 
     /**

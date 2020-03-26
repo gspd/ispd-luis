@@ -1,11 +1,7 @@
 package gspd.ispd.fxgui.workload;
 
 import gspd.ispd.fxgui.commons.SlidePane;
-import gspd.ispd.fxgui.workload.dag.DagEditor;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class WorkloadPane extends SlidePane {
 

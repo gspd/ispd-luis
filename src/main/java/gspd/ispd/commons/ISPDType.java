@@ -33,6 +33,14 @@ public class ISPDType {
         return name;
     }
 
+    private String fiendlyName;
+    public String getFiendlyName() {
+        return fiendlyName;
+    }
+    public void setFiendlyName(String fiendlyName) {
+        this.fiendlyName = fiendlyName;
+    }
+
     public boolean isTypeOf(ISPDType type) {
         ISPDType currentType = this;
         boolean success = false;
@@ -58,5 +66,14 @@ public class ISPDType {
     @Override
     public int hashCode() {
         return Objects.hash(parent, name);
+    }
+
+    @Override
+    public String toString() {
+        String name = getFiendlyName();
+        if (name != null && !name.equals("")) {
+            return name;
+        }
+        return super.toString();
     }
 }

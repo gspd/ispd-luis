@@ -26,6 +26,7 @@ public class SlidePane extends VBox {
         createUI();
         contentProperty().addListener((obs, o, n) -> {
             if (n != null) {
+                StackPane.setAlignment(n, Pos.CENTER);
                 contentPane.getChildren().setAll(n);
             }
         });
@@ -57,7 +58,9 @@ public class SlidePane extends VBox {
     private Pane spacing;
     private void createUI() {
         contentPane = new StackPane();
+        contentPane.setPrefSize(500, 400);
         contentPane.setAlignment(Pos.CENTER);
+        contentPane.setPadding(new Insets(10.0));
         VBox.setVgrow(contentPane, Priority.ALWAYS);
         bottomBox = new HBox();
         bottomBox.setPadding(new Insets(5));

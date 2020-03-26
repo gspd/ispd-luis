@@ -73,13 +73,4 @@ public class DAG extends Diagram {
         return false;
     }
 
-    private static final Map<String, DAG> map = new HashMap<>();
-    public static DAG getDAG(String name) {
-        return map.get(name);
-    }
-
-    @Override
-    public String toString() {
-        return "dag:" + getName();
-    }
 }
