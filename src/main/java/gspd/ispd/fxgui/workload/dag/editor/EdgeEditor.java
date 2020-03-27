@@ -6,7 +6,7 @@ import gspd.ispd.fxgui.commons.IconEditor;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class EdgeEditor extends IconEditor {
+public abstract class EdgeEditor extends IconEditor {
 
     private TextField messageInput;
     public EdgeEditor() {
@@ -20,8 +20,8 @@ public class EdgeEditor extends IconEditor {
         messageInput.textProperty().addListener((obs, o, n) -> {
             ((EdgeIcon) getIcon()).setMessageSize(Double.parseDouble(n));
         });
-        add(messageLabel, 0, 0);
-        add(messageInput, 1, 0);
+        add(messageLabel, 0, 1);
+        add(messageInput, 1, 1);
     }
 
 

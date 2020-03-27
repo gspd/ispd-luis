@@ -1,10 +1,12 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.icons.ExpansionIcon;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventTarget;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.input.*;
@@ -14,6 +16,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DiagramPane extends Pane {
 
@@ -27,29 +31,7 @@ public class DiagramPane extends Pane {
         diagramProperty().addListener(this::diagramChanged);
         // EVENTS
         // MOUSE EVENTS
-        addEventHandler(MouseEvent.DRAG_DETECTED, e -> {
-            if (e.getButton() == MouseButton.PRIMARY) {
-                EventTarget target = e.getTarget();
-                if (target == this) {
-                    // Dragging in pane
-                    getSelectionModel().startSelecting(e);
-                } else if (target instanceof Icon) {
-                    Icon icon = (Icon) target;
-                    if (!getSelectionModel().isSelected(icon)) {
-                        getSelectionModel().clearAndSelect(icon);
-                    }
-                    if (e.isControlDown()) {
-                        System.out.println("Copying/Moving the selection");
-                    } else {
-                        // Drag an unselected icon
-                        startSelectionDrag(e);
-                    }
-                } else {
-                    System.out.println("Dragging something else");
-                }
-                e.consume();
-            }
-        });
+        addEventHandler(MouseEvent.DRAG_DETECTED, this::dragDetected);
         // SETs
         setGridEnable(false);
     }
@@ -61,16 +43,44 @@ public class DiagramPane extends Pane {
         startX = event.getX();
         startY = event.getY();
         setOnMouseDragOver(e -> {
+            Point2D mousePos = new Point2D(e.getX(), e.getY());
             double dx = e.getX() - startX;
             double dy = e.getY() - startY;
             getSelectionModel().translateSelectedIcons(dx, dy);
+            getDiagram().getIconsByTypeStream(ExpansionIcon.EXPANSION_TYPE)
+                    .forEach(exp -> {
+                        ExpansionIcon expIcon = (ExpansionIcon) exp;
+                        if (exp.getBoundsInParent().contains(mousePos) && exp != e.getTarget()) {
+                            expIcon.setHovered(true);
+                        } else {
+                            expIcon.setHovered(false);
+                        }
+                    });
             startX = e.getX();
             startY = e.getY();
+            e.consume();
         });
         setOnMouseDragReleased(e -> stopSelectionDrag());
     }
 
     private void stopSelectionDrag() {
+        List<Node> hovereds = getDiagram()
+                .getIconsByTypeStream(ExpansionIcon.EXPANSION_TYPE)
+                .filter(exp -> ((ExpansionIcon)exp).isHovered())
+                .collect(Collectors.toList());
+        if (hovereds.size() > 0) {
+            hovereds.forEach(node -> ((ExpansionIcon) node).setHovered(false));
+            getSelectionModel().selectConnectedEdges();
+            getDiagram().removeAll(getSelectionModel().getSelectedIcons());
+            ExpansionIcon theExpansion = (ExpansionIcon) hovereds.get(0);
+            if (theExpansion.getDiagram() == null) {
+                DAG dag = new DAG();
+                dag.addAll(getSelectionModel().getSelectedIcons());
+                theExpansion.setDiagram(dag);
+            } else {
+                theExpansion.getDiagram().addAll(getSelectionModel().getSelectedIcons());
+            }
+        }
         setOnMouseDragOver(null);
         setOnMouseDragReleased(null);
     }
@@ -157,6 +167,30 @@ public class DiagramPane extends Pane {
         }
     }
 
+    private void dragDetected(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            EventTarget target = event.getTarget();
+            if (target == this) {
+                // Dragging in pane
+                getSelectionModel().startSelecting(event);
+            } else if (target instanceof Icon) {
+                Icon icon = (Icon) target;
+                if (!getSelectionModel().isSelected(icon)) {
+                    getSelectionModel().clearAndSelect(icon);
+                }
+                if (event.isControlDown()) {
+                    System.out.println("Copying/Moving the selection");
+                } else {
+                    // Drag an unselected icon
+                    startSelectionDrag(event);
+                }
+            } else {
+                System.out.println("Dragging something else");
+            }
+            event.consume();
+        }
+    }
+
     /////////////////////////////////
     ///////// PROPERTIES ////////////
     /////////////////////////////////
@@ -164,7 +198,7 @@ public class DiagramPane extends Pane {
     /**
      * The grid enable property
      */
-    private BooleanProperty gridEnable = new SimpleBooleanProperty(this, "gridEnable", false);
+    private BooleanProperty gridEnable = new SimpleBooleanProperty(this, "gridEnable", true);
     public boolean isGridEnable() {
         return gridEnable.get();
     }

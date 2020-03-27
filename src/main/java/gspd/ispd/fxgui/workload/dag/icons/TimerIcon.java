@@ -48,9 +48,10 @@ public class TimerIcon extends NodeIcon {
         return TIMER_EDITOR;
     }
 
+    private static final Builder<TimerIcon> TIMER_BUILDER = TimerIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return TimerIcon::new;
+        return TIMER_BUILDER;
     }
 
     @Override

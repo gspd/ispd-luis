@@ -20,7 +20,6 @@ public class IconConfigPane extends VBox {
     public IconConfigPane() {
         iconProperty().addListener(this::iconChanged);
         contentProperty().addListener(this::contentChanged);
-        titleProperty().addListener(this::titleChanged);
         createContent();
         setIcon(null);
     }
@@ -39,10 +38,8 @@ public class IconConfigPane extends VBox {
 
     private void iconChanged(ObservableValue<? extends Icon> observable, Icon oldValue, Icon newValue) {
         if (newValue == null) {
-            setTitle("No icon selected");
             setContent(null);
         } else {
-            setTitle(newValue.getType().getName());
             setContent(newValue.editor());
         }
     }
@@ -58,27 +55,9 @@ public class IconConfigPane extends VBox {
         }
     }
 
-    private void titleChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        titleLabel.setText(newValue == null ? "" : newValue);
-    }
-
     ///////////////////////////////////////
     ///////////// PROPERTIES //////////////
     ///////////////////////////////////////
-
-    /**
-     * The icon config pane title
-     */
-    private StringProperty title = new SimpleStringProperty(this, "title", "");
-    public String getTitle() {
-        return title.get();
-    }
-    public StringProperty titleProperty() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title.set(title);
-    }
 
     /**
      * The content of the configuration

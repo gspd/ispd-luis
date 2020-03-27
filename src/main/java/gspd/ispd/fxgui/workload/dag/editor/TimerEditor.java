@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.workload.dag.editor;
 
+import gspd.ispd.commons.StringConstants;
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.workload.dag.icons.TimerIcon;
@@ -8,13 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class TimerEditor extends IconEditor {
+public class TimerEditor extends NodeEditor {
 
     private TextField timeInput;
     public TimerEditor() {
-        Text title = new Text("Timer");
-        title.setFont(Font.font(16));
-        add(title, 0, 0, 2, 1);
+        setTitle(StringConstants.TIMER_TITLE);
         Label timeLabel = new Label("Time");
         timeInput = new TextField();
         timeInput.textProperty().addListener((obs, o, n) -> {
@@ -31,6 +30,7 @@ public class TimerEditor extends IconEditor {
 
     @Override
     protected void setup(Icon icon) {
+        super.setup(icon);
         TimerIcon timerIcon = (TimerIcon) icon;
         timeInput.setText(String.valueOf(timerIcon.getTime()));
     }

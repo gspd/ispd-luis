@@ -20,10 +20,22 @@ public class StringConstants {
     public static final String MIN_COMM_ATTR = "minComm";
     public static final String MAX_COMM_ATTR = "maxComm";
     public static final String DAG_ATTR = "dag";
-    // Some types
+    // IMSX Types
     public static final String DAG_TYPE = "dag";
     public static final String RANDOM_TYPE = "random";
     public static final String TRACE_TYPE = "trace";
     public static final String GENERATE_TYPE = "generate";
-
+    // Titles
+    public static final String TASK_TITLE = "Task";
+    public static final String TIMER_TITLE = "Timer";
+    public static final String SWITCH_TITLE = "Switch";
+    public static final String ACTIVATION_TITLE = "Activation";
+    public static final String SYNCHRONIZE_TITLE = "Synchronize";
+    public static final String PRECEDENCE_TITLE = "Precedence";
+    public static final String PREFIX_TILE = "Prefix";
+    public static final String FAIL_TITLE = "Fail";
+    public static final String ITERATIVE_TITLE = "Iterative Expansion";
+    public static final String PARALLEL_TITLE = "Parallel Expansion";
+    public static final String RECURSIVE_TITLE = "Recursive Expansion";
+    public static final String RECURSION_TITLE = "Recursion";
 }

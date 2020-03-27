@@ -3,7 +3,9 @@ package gspd.ispd.fxgui.workload.dag.icons;
 import gspd.ispd.fxgui.commons.EdgeIcon;
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.workload.dag.editor.FailEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.FailShape;
 import javafx.util.Builder;
 
@@ -41,8 +43,16 @@ public class FailIcon extends EdgeIcon {
     //////////// OVERRIDES //////////////////
     /////////////////////////////////////////
 
+    private static final Builder<FailIcon> FAIL_BUILDER = FailIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return FailIcon::new;
+        return FAIL_BUILDER;
+    }
+
+    private static final FailEditor FAIL_EDITOR = new FailEditor();
+    @Override
+    protected IconEditor editor() {
+        FAIL_EDITOR.setIcon(this);
+        return FAIL_EDITOR;
     }
 }

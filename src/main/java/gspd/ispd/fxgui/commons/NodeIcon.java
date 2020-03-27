@@ -59,16 +59,6 @@ public abstract class NodeIcon extends Icon {
     //////////////// OVERRIDES ////////////////////////
     ///////////////////////////////////////////////////
 
-
-    @Override
-    protected IconEditor editor() {
-        return null;
-    }
-
-    public Builder<? extends Icon> iconBuilder() {
-        return null;
-    }
-
     private Rectangle selection;
     private static final Lighting lighting;
     static {

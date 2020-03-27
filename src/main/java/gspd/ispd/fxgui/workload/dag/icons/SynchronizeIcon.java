@@ -2,7 +2,9 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.workload.dag.editor.SynchronizeEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.SynchronizeShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
@@ -37,9 +39,17 @@ public class SynchronizeIcon extends NodeIcon {
     /////////////// OVERRIDE /////////////////////
     //////////////////////////////////////////////
 
+    private static final Builder<SynchronizeIcon> SYNCHRONIZE_BUILDER = SynchronizeIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return SynchronizeIcon::new;
+        return SYNCHRONIZE_BUILDER;
+    }
+
+    private static final SynchronizeEditor SYNCHRONIZE_EDITOR = new SynchronizeEditor();
+    @Override
+    protected IconEditor editor() {
+        SYNCHRONIZE_EDITOR.setIcon(this);
+        return SYNCHRONIZE_EDITOR;
     }
 
     @Override

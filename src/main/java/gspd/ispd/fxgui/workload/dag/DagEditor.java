@@ -62,7 +62,7 @@ public class DagEditor extends VBox {
 
         diagramPane = new DiagramPane();
         VBox.setVgrow(diagramPane, Priority.ALWAYS);
-        diagramPane.setDiagram(createDAG());
+        diagramPane.setDiagram(createLIGO());
         diagramPane.gridEnableProperty().bind(gridCheckBox.selectedProperty());
         VBox rightPane = new VBox();
         rightPane.getChildren().setAll(diagramPane, new Separator(), bottomToolbar);
@@ -122,7 +122,8 @@ public class DagEditor extends VBox {
         tempEdge.setEndX(event.getX());
         tempEdge.setEndY(event.getY());
         tempEdge.setMouseTransparent(true);
-        diagramPane.getDiagram().add(tempEdge);
+        Diagram parentDiagram = (Diagram) startIcon.getParent();
+        parentDiagram.add(tempEdge);
         diagramPane.removeEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
         diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, addEdgeMouseClickedEvent);
         diagramPane.addEventHandler(MouseEvent.MOUSE_MOVED, addEdgeMouseMovedHandler);
@@ -173,7 +174,7 @@ public class DagEditor extends VBox {
                         if (newIcon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
                             EdgeIcon edge = (EdgeIcon) newIcon;
                             if (targetIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
-                                System.out.println("You clicked a node do add an edge");
+                                // Adding an edge
                                 NodeIcon startIcon = (NodeIcon) target;
                                 startAddEdge(event, edge, startIcon);
                                 event.consume();
@@ -228,8 +229,11 @@ public class DagEditor extends VBox {
                     if (targetIcon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
                         NodeIcon node = (NodeIcon) targetIcon;
                         if (node != tempEdge.getStartIcon()) {
-                            tempEdge.setEndIcon(node);
-                            stopAddEdge(true);
+                            if (node.getParent() == tempEdge.getParent()) {
+                                tempEdge.setEndIcon(node);
+                                stopAddEdge(true);
+                            }
+                            stopAddEdge(false);
                         } else {
                             System.out.println("You must select another icon");
                         }

@@ -2,7 +2,9 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.workload.dag.editor.ActivationEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.ActivationShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
@@ -37,9 +39,17 @@ public class ActivationIcon extends NodeIcon {
     /////////////// OVERRIDE //////////////////
     ///////////////////////////////////////////
 
+    private static final Builder<ActivationIcon> ACTIVATION_BUILDER = ActivationIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return ActivationIcon::new;
+        return ACTIVATION_BUILDER;
+    }
+
+    private static final ActivationEditor ACTIVATION_EDITOR = new ActivationEditor();
+    @Override
+    protected IconEditor editor() {
+        ACTIVATION_EDITOR.setIcon(this);
+        return ACTIVATION_EDITOR;
     }
 
     @Override

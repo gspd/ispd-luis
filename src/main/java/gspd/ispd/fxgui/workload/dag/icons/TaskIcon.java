@@ -45,9 +45,10 @@ public class TaskIcon extends NodeIcon {
     ///////////////// OVERRIDES ///////////////////////
     ///////////////////////////////////////////////////
 
+    private static final Builder<TaskIcon> TASK_BUILDER = TaskIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return TaskIcon::new;
+        return TASK_BUILDER;
     }
 
     @Override
@@ -63,6 +64,16 @@ public class TaskIcon extends NodeIcon {
             shape.setStroke(Color.BLACK);
             shape.setFill(Color.LIGHTYELLOW);
         }
+    }
+
+    /**
+     * The task editor
+     */
+    private static final TaskEditor TASK_EDITOR = new TaskEditor();
+    @Override
+    public TaskEditor editor() {
+        TASK_EDITOR.setIcon(this);
+        return TASK_EDITOR;
     }
 
     /////////////////////////////////////////////////////
@@ -111,13 +122,4 @@ public class TaskIcon extends NodeIcon {
         this.lock.set(lock);
     }
 
-    /**
-     * The task editor
-     */
-    private static final TaskEditor EDITOR = new TaskEditor();
-    @Override
-    public TaskEditor editor() {
-        EDITOR.setIcon(this);
-        return EDITOR;
-    }
 }

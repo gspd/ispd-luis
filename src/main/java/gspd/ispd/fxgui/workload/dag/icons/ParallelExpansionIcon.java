@@ -2,7 +2,11 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Diagram;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.Icon;
+import gspd.ispd.fxgui.commons.IconEditor;
+import gspd.ispd.fxgui.workload.dag.editor.ParallelEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.ParallelExpansionShape;
+import javafx.util.Builder;
 
 public class ParallelExpansionIcon extends ExpansionIcon {
 
@@ -39,5 +43,22 @@ public class ParallelExpansionIcon extends ExpansionIcon {
 
     public ParallelExpansionIcon() {
         this(null, false, 0.0, 0.0);
+    }
+
+    /////////////////////////////////////////
+    ///////////// OVERRIDE //////////////////
+    /////////////////////////////////////////
+
+    private static final Builder<ParallelExpansionIcon> PARALLEL_BUILDER = ParallelExpansionIcon::new;
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return PARALLEL_BUILDER;
+    }
+
+    private static final ParallelEditor PARALLEL_EDITOR = new ParallelEditor();
+    @Override
+    protected IconEditor editor() {
+        PARALLEL_EDITOR.setIcon(this);
+        return PARALLEL_EDITOR;
     }
 }

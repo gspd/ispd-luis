@@ -2,7 +2,12 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Diagram;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.Icon;
+import gspd.ispd.fxgui.commons.IconEditor;
+import gspd.ispd.fxgui.workload.dag.editor.RecursiveEditor;
+import gspd.ispd.fxgui.workload.dag.editor.SwitchEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.RecursiveExpansionShape;
+import javafx.util.Builder;
 
 public class RecursiveExpansionIcon extends ExpansionIcon {
 
@@ -41,4 +46,20 @@ public class RecursiveExpansionIcon extends ExpansionIcon {
         this(null, false, 0.0, 0.0);
     }
 
+    /////////////////////////////////////////////
+    ///////////////// OVERRIDES /////////////////
+    /////////////////////////////////////////////
+
+    private static final Builder<RecursiveExpansionIcon> RECURSIVE_BUILDER = RecursiveExpansionIcon::new;
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return RECURSIVE_BUILDER;
+    }
+
+    private static final RecursiveEditor RECURSIVE_EDITOR = new RecursiveEditor();
+    @Override
+    protected IconEditor editor() {
+        RECURSIVE_EDITOR.setIcon(this);
+        return RECURSIVE_EDITOR;
+    }
 }

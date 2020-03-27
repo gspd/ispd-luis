@@ -2,7 +2,9 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.workload.dag.editor.RecursionEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.RecursionShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
@@ -37,9 +39,17 @@ public class RecursionIcon extends NodeIcon {
     ////////////// OVERRIDE //////////////////
     //////////////////////////////////////////
 
+    private static final Builder<RecursionIcon> RECURSION_BUILDER = RecursionIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return RecursionIcon::new;
+        return RECURSION_BUILDER;
+    }
+
+    private static final RecursionEditor RECURSION_EDITOR = new RecursionEditor();
+    @Override
+    protected IconEditor editor() {
+        RECURSION_EDITOR.setIcon(this);
+        return RECURSION_EDITOR;
     }
 
     @Override

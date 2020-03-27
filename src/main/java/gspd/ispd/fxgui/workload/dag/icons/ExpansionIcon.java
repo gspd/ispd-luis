@@ -2,6 +2,7 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.*;
+import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.editor.ExpansionEditor;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -24,7 +25,7 @@ public abstract class ExpansionIcon extends NodeIcon {
         super(boxBuilder, selected, centerX, centerY);
         diagramProperty().addListener(this::contentDagChanged);
         setDiagram(diagram);
-
+        contentDagChanged(diagramProperty(), null, null);
         setType(EXPANSION_TYPE);
     }
 
@@ -35,8 +36,8 @@ public abstract class ExpansionIcon extends NodeIcon {
     private void contentDagChanged(ObservableValue<? extends Diagram> observable, Diagram oldValue, Diagram newValue) {
         OuterBox box = (OuterBox) getContent();
         box.getChildren().remove(oldValue);
-        box.getChildren().add(newValue);
         if (newValue != null) {
+            box.getChildren().add(newValue);
             if (oldValue != newValue) {
                 box.boundsInLocalProperty().addListener(this::boundsChanged);
             }
@@ -59,25 +60,25 @@ public abstract class ExpansionIcon extends NodeIcon {
     ///////////// OVERRIDES ////////////////
     ////////////////////////////////////////
 
-    private static final ExpansionEditor EXPANSION_EDITOR = new ExpansionEditor();
-    @Override
-    protected IconEditor editor() {
-        EXPANSION_EDITOR.setIcon(this);
-        return EXPANSION_EDITOR;
-    }
-
     @Override
     protected void updateIcon() {
         OuterBox box = (OuterBox) getContent();
         if (isSelected()) {
             box.setFill(Color.LIGHTBLUE);
             box.setStroke(Color.DEEPSKYBLUE);
+        } else if (isHovered()) {
+            box.setFill(Color.LIGHTGREEN);
+            box.setStroke(Color.GREEN);
         } else {
             box.setFill(Color.WHITE);
             box.setStroke(Color.BLACK);
         }
     }
 
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return null;
+    }
 
     //////////////////////////////////////////
     ////////////// PROPERTIES ////////////////
@@ -92,7 +93,7 @@ public abstract class ExpansionIcon extends NodeIcon {
     }
     public ObjectProperty<Diagram> diagramProperty() {
         if (diagram == null) {
-            diagram = new SimpleObjectProperty<>(this, "contentDag", null);
+            diagram = new SimpleObjectProperty<>(this, "diagram", null);
         }
         return diagram;
     }

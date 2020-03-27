@@ -2,7 +2,11 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Diagram;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.Icon;
+import gspd.ispd.fxgui.commons.IconEditor;
+import gspd.ispd.fxgui.workload.dag.editor.IterativeEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.IterativeExpansionShape;
+import javafx.util.Builder;
 
 public class IterativeExpansionIcon extends ExpansionIcon {
 
@@ -39,5 +43,22 @@ public class IterativeExpansionIcon extends ExpansionIcon {
 
     public IterativeExpansionIcon() {
         this(null, false, 0.0, 0.0);
+    }
+
+    ////////////////////////////////////////////
+    ///////////// OVERRIDES ////////////////////
+    ////////////////////////////////////////////
+
+    private static final Builder<IterativeExpansionIcon> ITERATIVE_BUILDER = IterativeExpansionIcon::new;
+    @Override
+    public Builder<? extends Icon> iconBuilder() {
+        return ITERATIVE_BUILDER;
+    }
+
+    private static final IterativeEditor ITERATIVE_EDITOR = new IterativeEditor();
+    @Override
+    protected IconEditor editor() {
+        ITERATIVE_EDITOR.setIcon(this);
+        return ITERATIVE_EDITOR;
     }
 }

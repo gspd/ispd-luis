@@ -2,7 +2,9 @@ package gspd.ispd.fxgui.workload.dag.icons;
 
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.commons.NodeIcon;
+import gspd.ispd.fxgui.workload.dag.editor.SwitchEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.SwitchShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
@@ -37,9 +39,17 @@ public class SwitchIcon extends NodeIcon {
     ///////////// OVERRIDE //////////////////
     /////////////////////////////////////////
 
+    private static final Builder<SwitchIcon> SWITCH_BUILDER = SwitchIcon::new;
     @Override
     public Builder<? extends Icon> iconBuilder() {
-        return SwitchIcon::new;
+        return SWITCH_BUILDER;
+    }
+
+    private static final SwitchEditor SWITCH_EDITOR = new SwitchEditor();
+    @Override
+    protected IconEditor editor() {
+        SWITCH_EDITOR.setIcon(this);
+        return SWITCH_EDITOR;
     }
 
     @Override

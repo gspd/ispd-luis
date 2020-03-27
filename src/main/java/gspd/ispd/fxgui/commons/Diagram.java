@@ -6,6 +6,7 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,22 +41,6 @@ public class Diagram extends Group {
         return true;
     }
 
-    public boolean add(Icon icon) {
-        boolean added = false;
-        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
-            added = addNode((NodeIcon) icon);
-        } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
-            added = addEdge((EdgeIcon) icon);
-        }
-        return added;
-    }
-
-    public void addAll(Icon... icons) {
-        for (Icon icon : icons) {
-            add(icon);
-        }
-    }
-
     private boolean removeEdge(EdgeIcon icon) {
         if (getChildren().remove(icon)) {
             firstNode -= 1;
@@ -87,6 +72,30 @@ public class Diagram extends Group {
         }
     }
 
+    ///////////////////////////////////////
+    ////////////// METHODS ////////////////
+    ///////////////////////////////////////
+
+    public boolean add(Icon icon) {
+        boolean added = false;
+        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+            added = addNode((NodeIcon) icon);
+        } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+            added = addEdge((EdgeIcon) icon);
+        }
+        return added;
+    }
+
+    public void addAll(Collection<Icon> icons) {
+        icons.forEach(this::add);
+    }
+
+    public void addAll(Icon... icons) {
+        for (Icon icon : icons) {
+            add(icon);
+        }
+    }
+
     public boolean remove(Icon icon) {
         if (icon == null) {
             return false;
@@ -100,15 +109,15 @@ public class Diagram extends Group {
         return removed;
     }
 
+    public void removeAll(Collection<Icon> icons) {
+        icons.forEach(this::remove);
+    }
+
     public void removeAll(Icon... icons) {
         for (Icon icon : icons) {
             remove(icon);
         }
     }
-
-    ///////////////////////////////////////
-    ////////////// METHODS ////////////////
-    ///////////////////////////////////////
 
     /**
      * Returns a list of icons in diagram of the given type
@@ -138,6 +147,10 @@ public class Diagram extends Group {
         if (unaryList.size() == 1) return unaryList.get(0);
         return null;
     }
+
+    //////////////////////////////////////
+    ///////////// HANDLERS ///////////////
+    //////////////////////////////////////
 
     /////////////////////////////////////
     ///////////// PROPERTIES ////////////

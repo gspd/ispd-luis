@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 
-public class ExpansionEditor extends IconEditor {
+public abstract class ExpansionEditor extends NodeEditor {
 
     private Spinner<Integer> numberSpinner;
     public ExpansionEditor() {
@@ -19,8 +19,8 @@ public class ExpansionEditor extends IconEditor {
         numberSpinner.valueProperty().addListener((obs, o, n) -> {
             ((ExpansionIcon) getIcon()).setNumber(n);
         });
-        add(numberLabel, 0, 0);
-        add(numberSpinner, 1, 0);
+        add(numberLabel, 0, 1);
+        add(numberSpinner, 1, 1);
     }
 
     @Override

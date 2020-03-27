@@ -1,6 +1,5 @@
 package gspd.ispd.fxgui.commons;
 
-import gspd.ispd.util.Handler;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -12,6 +11,10 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class DiagramSelectionModel {
@@ -83,15 +86,21 @@ public class DiagramSelectionModel {
         return false;
     }
 
-    public void translateSelectedIcons(double x, double y) {
-        getSelectedIcons()
+    /**
+     * Translates the selected icons
+     *
+     * @return a stream with the selected node icons
+     */
+    public Stream<Icon> translateSelectedIcons(double x, double y) {
+        Stream<Icon> icons = getSelectedIcons()
             .stream()
-            .filter(icon -> icon.getType().isTypeOf(NodeIcon.NODE_TYPE))
-            .forEach(icon -> {
-                NodeIcon ni = (NodeIcon) icon;
-                ni.setCenterX(ni.getCenterX() + x);
-                ni.setCenterY(ni.getCenterY() + y);
-            });
+            .filter(icon -> icon.getType().isTypeOf(NodeIcon.NODE_TYPE));
+        icons.forEach(icon -> {
+            NodeIcon ni = (NodeIcon) icon;
+            ni.setCenterX(ni.getCenterX() + x);
+            ni.setCenterY(ni.getCenterY() + y);
+        });
+        return icons;
     }
 
     /**
@@ -125,6 +134,26 @@ public class DiagramSelectionModel {
         // selects the nodes
         diagramPane.setOnMouseDragOver(null);
         diagramPane.setOnMouseDragReleased(null);
+    }
+
+    public void selectConnectedEdges() {
+        diagramPane.getDiagram()
+                .getIconsByTypeStream(EdgeIcon.EDGE_TYPE)
+                .filter(node -> {
+                    boolean result = false;
+                    if (!getSelectedIcons().contains(node)) {
+                        EdgeIcon edge = (EdgeIcon) node;
+                        if (getSelectedIcons().contains(edge.getStartIcon()) || getSelectedIcons().contains(edge.getEndIcon())) {
+                            result = true;
+                        }
+                    }
+                    return result;
+                })
+                .forEach(node -> {
+                    EdgeIcon edge = (EdgeIcon) node;
+                    if (!isSelected(edge))
+                    select(edge);
+                });
     }
 
     private static class SelectionRectangle extends Rectangle {

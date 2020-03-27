@@ -111,13 +111,6 @@ public abstract class EdgeIcon extends Icon {
     /////////////////// OVERRIDE ///////////////////////////
     ////////////////////////////////////////////////////////
 
-    private static final EdgeEditor EDGE_EDITOR = new EdgeEditor();
-    @Override
-    protected IconEditor editor() {
-        EDGE_EDITOR.setIcon(this);
-        return EDGE_EDITOR;
-    }
-
     @Override
     public Builder<? extends Icon> iconBuilder() {
         return null;

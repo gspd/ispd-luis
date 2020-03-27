@@ -1,24 +1,21 @@
 package gspd.ispd.fxgui.workload.dag.editor;
 
+import gspd.ispd.commons.StringConstants;
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.IconEditor;
 import gspd.ispd.fxgui.workload.dag.icons.TaskIcon;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
-public class TaskEditor extends IconEditor {
+public class TaskEditor extends NodeEditor {
 
     private TextField labelInput;
     private TextField mflopInput;
     private ComboBox<String> lockInput;
 
     public TaskEditor() {
-        Text title = new Text("Task");
-        title.setFont(Font.font(16.0));
-        add(title, 0, 0, 2, 1);
+        setTitle(StringConstants.TASK_TITLE);
         // LABEL
         Label labelLabel = new Label("Label");
         labelInput = new TextField("");
@@ -61,6 +58,7 @@ public class TaskEditor extends IconEditor {
 
     @Override
     protected void setup(Icon icon) {
+        super.setup(icon);
         TaskIcon taskIcon = (TaskIcon) icon;
         labelInput.setText(taskIcon.getLabel());
         mflopInput.setText(String.valueOf(taskIcon.getComputingSize()));

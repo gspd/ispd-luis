@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.commons;
 
+import gspd.ispd.commons.IDSystem;
 import gspd.ispd.commons.ISPDType;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
@@ -14,22 +15,13 @@ public abstract class Icon extends Group {
 
     public final static ISPDType ICON_TYPE = ISPDType.type("ICON_TYPE");
 
-    ///////////////////////////////////////
-    // ID System //////////////////////////
-    ///////////////////////////////////////
-
-    private static int id = 0;
-    private void giveID() {
-        setIconID("icon" + id);
-        id++;
-    }
-
     ///////////////////////////////////////////////
     ///////////////// CONSTRUCTOR /////////////////
     ///////////////////////////////////////////////
 
     public Icon(Builder<? extends Node> nodeBuilder, boolean selected) {
-        giveID();
+        IDSystem.getInstance().add(this);
+        setIconID("" + IDSystem.getInstance().getId(this));
         selectedProperty().addListener(this::updateIcon);
         hoveredProperty().addListener(this::updateIcon);
         nodeBuilderProperty().addListener(this::builderChanged);
