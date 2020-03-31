@@ -1,16 +1,10 @@
 package gspd.ispd.fxgui.workload;
 
-import gspd.ispd.commons.ISPDType;
-import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.DagEditor;
-import gspd.ispd.motor.workload.DAGContainer;
-import gspd.ispd.motor.workload.RandomWorkloadGenerator;
-import gspd.ispd.motor.workload.SingleSchedulerWorkloadGenerator;
+import gspd.ispd.gui.iconico.grade.DesenhoGrade;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,10 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
-import java.beans.EventHandler;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -259,6 +250,13 @@ public class GenerateWorkloadPane extends VBox {
         commuMinInput.valueProperty().addListener(this::workloadDataChanged);
         commuMaxInput.valueProperty().addListener(this::workloadDataChanged);
         dagChooser.valueProperty().addListener(this::workloadDataChanged);
+        // PROPERTIES LISTENERS
+        desenhoGradeProperty().addListener((obs, o, n) -> {
+            if (n != null) {
+                userInput.getItems().setAll(n.getUsuarios());
+                schedulerInput.getItems().setAll(n.getNosEscalonadores());
+            }
+        });
     }
 
     public List<GenerateWorkloadEntry> getEntries() {
@@ -276,4 +274,18 @@ public class GenerateWorkloadPane extends VBox {
         dagStage.showAndWait();
     }
 
+    /////////////////////////////////
+    ////////// PROPERTIES ///////////
+    /////////////////////////////////
+
+    private ObjectProperty<DesenhoGrade> desenhoGrade = new SimpleObjectProperty<>(this, "desenhoGrade", null);
+    public DesenhoGrade getDesenhoGrade() {
+        return desenhoGrade.get();
+    }
+    public ObjectProperty<DesenhoGrade> desenhoGradeProperty() {
+        return desenhoGrade;
+    }
+    public void setDesenhoGrade(DesenhoGrade areaDesenho) {
+        this.desenhoGrade.set(areaDesenho);
+    }
 }

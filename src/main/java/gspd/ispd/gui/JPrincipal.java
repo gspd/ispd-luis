@@ -15,6 +15,7 @@ import gspd.ispd.GUI;
 import gspd.ispd.arquivo.exportador.Exportador;
 import gspd.ispd.arquivo.interpretador.gridsim.InterpretadorGridSim;
 import gspd.ispd.arquivo.interpretador.simgrid.InterpretadorSimGrid;
+import gspd.ispd.fxgui.workload.WorkloadPane;
 import gspd.ispd.gui.auxiliar.Corner;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
 import gspd.ispd.gui.auxiliar.HtmlPane;
@@ -41,15 +42,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -924,15 +922,20 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
     private void jButtonTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTarefasActionPerformed
         // TODO add your handling code here:
         if (aDesenho != null) {
-            SelecionaCargas carga = new SelecionaCargas(this, true,
-                    aDesenho.getUsuarios().toArray(),
-                    aDesenho.getNosEscalonadores().toArray(),
-                    aDesenho.getCargasConfiguracao(),
-                    palavras);
-            carga.setLocationRelativeTo(this);
-            carga.setVisible(true);
-            aDesenho.setCargasConfiguracao(carga.getCargasConfiguracao());
-            aDesenho.setUsuarios(carga.getUsuarios());
+            // Opening the javaFX Worklaod Config
+            JFrame frame = new JFrame("Workload Config");
+            JFXPanel fxPanel = new JFXPanel();
+            frame.add(fxPanel);
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(this);
+            frame.setSize(400, 300);
+            Platform.runLater(() -> {
+                WorkloadPane workloadPane = new WorkloadPane();
+                workloadPane.setDesenhoGrade(aDesenho);
+                Scene scene = new Scene(workloadPane);
+                fxPanel.setScene(scene);
+            });
+            // End Opening JavaFX
             modificar();
         }
     }//GEN-LAST:event_jButtonTarefasActionPerformed

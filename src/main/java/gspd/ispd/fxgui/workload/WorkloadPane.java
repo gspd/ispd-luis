@@ -1,9 +1,13 @@
 package gspd.ispd.fxgui.workload;
 
 import gspd.ispd.fxgui.commons.SlidePane;
+import gspd.ispd.gui.iconico.grade.DesenhoGrade;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 
 public class WorkloadPane extends SlidePane {
+
 
     public WorkloadPane() {
         createUI();
@@ -19,6 +23,7 @@ public class WorkloadPane extends SlidePane {
         tracePane = new TracePane();
         traceFilePane = new TraceFilePane();
         generatePane = new GenerateWorkloadPane();
+        generatePane.desenhoGradeProperty().bind(desenhoGradeProperty());
         nextButton = new Button("Next");
         cancelButton = new Button("Cancel");
         okButton = new Button("OK");
@@ -80,5 +85,19 @@ public class WorkloadPane extends SlidePane {
             loadFirstPane();
         });
         setLeftButton(previousButton);
+    }
+
+    ///////////////////////////////////
+    /////////// PROPERTIES ////////////
+    ///////////////////////////////////
+    private ObjectProperty<DesenhoGrade> desenhoGrade = new SimpleObjectProperty<>(this, "desenhoGrade", null);
+    public DesenhoGrade getDesenhoGrade() {
+        return desenhoGrade.get();
+    }
+    public ObjectProperty<DesenhoGrade> desenhoGradeProperty() {
+        return desenhoGrade;
+    }
+    public void setDesenhoGrade(DesenhoGrade desenhoGrade) {
+        this.desenhoGrade.set(desenhoGrade);
     }
 }
