@@ -1,6 +1,7 @@
 package gspd.ispd.fxgui.commons;
 
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.fxgui.workload.dag.icons.ExpansionIcon;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Group;
@@ -21,30 +22,42 @@ public class Diagram extends Group {
     // The children list should be maintained as follows, in
     // order to be correctly rendered:
     //
-    // (begin) | decorations... | arrows ... | nodes... | (end)
+    // (begin) | decorations... | edges ... | expansions... | nodes... | (end)
     ///////////////////////////////////////////////////////////
 
-    private int firstEdge = 0;
-    private int edgesLen = 0;
+    private int edges = 0;
     private boolean addEdge(EdgeIcon icon) {
-        getChildren().add(firstEdge + edgesLen, icon);
-        edgesLen += 1;
-        firstNode += 1;
+        getChildren().add(edges, icon);
+        edges++;
         return true;
     }
 
-    private int firstNode = 0;
-    private int nodesLen = 0;
+    private int expansions = 0;
+    private boolean addExpansion(ExpansionIcon icon) {
+        getChildren().add(edges + expansions, icon);
+        expansions++;
+        return true;
+    }
+
+    private int nodes = 0;
     private boolean addNode(NodeIcon icon) {
-        getChildren().add(firstNode + nodesLen, icon);
-        nodesLen += 1;
+        getChildren().add(edges + expansions + nodes, icon);
+        nodes++;
         return true;
     }
 
     private boolean removeEdge(EdgeIcon icon) {
         if (getChildren().remove(icon)) {
-            firstNode -= 1;
-            edgesLen -= 1;
+            edges--;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean removeExpansion(ExpansionIcon icon) {
+        if (getChildren().remove(icon)) {
+            expansions--;
+            removeAdjacentEdges(icon);
             return true;
         }
         return false;
@@ -52,7 +65,7 @@ public class Diagram extends Group {
 
     private boolean removeNode(NodeIcon icon) {
         if (getChildren().remove(icon)) {
-            nodesLen -= 1;
+            nodes--;
             removeAdjacentEdges(icon);
             return true;
         }
@@ -78,7 +91,9 @@ public class Diagram extends Group {
 
     public boolean add(Icon icon) {
         boolean added = false;
-        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+        if (icon.getType().isTypeOf(ExpansionIcon.EXPANSION_TYPE)) {
+            added = addExpansion((ExpansionIcon) icon);
+        } else if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
             added = addNode((NodeIcon) icon);
         } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
             added = addEdge((EdgeIcon) icon);
@@ -101,7 +116,9 @@ public class Diagram extends Group {
             return false;
         }
         boolean removed = false;
-        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+        if (icon.getType().isTypeOf(ExpansionIcon.EXPANSION_TYPE)) {
+            removed = removeExpansion((ExpansionIcon) icon);
+        } else if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
             removed = removeNode((NodeIcon) icon);
         } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
             removed = removeEdge((EdgeIcon) icon);
@@ -148,15 +165,11 @@ public class Diagram extends Group {
         return null;
     }
 
-    //////////////////////////////////////
-    ///////////// HANDLERS ///////////////
-    //////////////////////////////////////
-
     /////////////////////////////////////
     ///////////// PROPERTIES ////////////
     /////////////////////////////////////
 
-    private StringProperty name = new SimpleStringProperty(this, "name", null);
+    private StringProperty name = new SimpleStringProperty(this, "name", "unnamed dag");
     public String getName() {
         return name.get();
     }

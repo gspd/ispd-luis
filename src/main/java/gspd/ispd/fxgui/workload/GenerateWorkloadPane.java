@@ -1,5 +1,8 @@
 package gspd.ispd.fxgui.workload;
 
+import gspd.ispd.ISPD;
+import gspd.ispd.commons.StringConstants;
+import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.DagEditor;
 import gspd.ispd.gui.iconico.grade.DesenhoGrade;
 import javafx.beans.Observable;
@@ -9,6 +12,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,6 +21,8 @@ import javafx.stage.Stage;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GenerateWorkloadPane extends VBox {
 
@@ -73,7 +80,16 @@ public class GenerateWorkloadPane extends VBox {
                 if (entry.getData().equals("<null>")) {
                     dagChooser.setValue(null);
                 } else {
-                    dagChooser.setValue(entry.getData());
+                    List<DAG> elegibleDags = getDesenhoGrade()
+                            .getDags()
+                            .stream()
+                            .filter(d -> d.getName().equals(entry.getData()))
+                            .collect(Collectors.toList());
+                    DAG dag = null;
+                    if (elegibleDags.size() > 0) {
+                        dag = elegibleDags.get(0);
+                    }
+                    dagChooser.setValue(dag.getName());
                 }
             }
         }
@@ -113,8 +129,10 @@ public class GenerateWorkloadPane extends VBox {
         arrivalTimeInput.setEditable(true);
         arrivalTimeInput.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
         arrivalTimeInput.setPrefWidth(INPUT_WIDTH);
-        addDagButton = new Button("+");
-        editDagButton = new Button("!");
+        addDagButton = new Button();
+        addDagButton.setGraphic(new ImageView(new Image(ISPD.class.getResource(StringConstants.PLUS_ICON_PATH).toExternalForm())));
+        editDagButton = new Button();
+        editDagButton.setGraphic(new ImageView(new Image(ISPD.class.getResource(StringConstants.EDIT_ICON_PATH).toExternalForm())));
         dagChooser = new ComboBox<>();
         dagChooser.setPrefWidth(INPUT_WIDTH);
         typeToggle = new ToggleGroup();
@@ -212,7 +230,18 @@ public class GenerateWorkloadPane extends VBox {
 
     private void initEvents() {
         addDagButton.setOnAction(e -> {
-            openEditor();
+            openEditor(new DAG());
+        });
+        editDagButton.disableProperty().bind(dagChooser.valueProperty().isNull());
+        editDagButton.setOnAction(e -> {
+            List<DAG> elegibleDags = getDesenhoGrade()
+                    .getDags()
+                    .stream()
+                    .filter(d -> d.getName().equals(dagChooser.getValue()))
+                    .collect(Collectors.toList());
+            if (elegibleDags.size() > 0) {
+                openEditor(elegibleDags.get(0));
+            }
         });
         table.getSelectionModel().selectedItemProperty().addListener(this::tableSelectionChanged);
         userInput.valueProperty().addListener((obs, o, n)-> {
@@ -255,6 +284,11 @@ public class GenerateWorkloadPane extends VBox {
             if (n != null) {
                 userInput.getItems().setAll(n.getUsuarios());
                 schedulerInput.getItems().setAll(n.getNosEscalonadores());
+                List<String> names = n.getDags()
+                        .stream()
+                        .flatMap(dag -> Stream.of(dag.getName()))
+                        .collect(Collectors.toList());
+                dagChooser.getItems().setAll(names);
             }
         });
     }
@@ -264,14 +298,25 @@ public class GenerateWorkloadPane extends VBox {
     }
 
     private Stage dagStage;
-    private void openEditor() {
+    private DagEditor dagEditor;
+    private void openEditor(DAG dag) {
         if (dagStage == null) {
             dagStage = new Stage();
             dagStage.initModality(Modality.WINDOW_MODAL);
         }
-        DagEditor dagEditor = new DagEditor();
-        dagStage.setScene(new Scene(dagEditor));
+        if (dagEditor == null) {
+            dagEditor = new DagEditor();
+            dagStage.setScene(new Scene(dagEditor, 800, 600));
+        }
+        dagEditor.getDiagramPane().setDiagram(dag);
+        dagEditor.getDiagramPane().getSelectionModel().clear();
         dagStage.showAndWait();
+        DAG result = dagEditor.getDAG();
+        if (result != null && !dagChooser.getItems().contains(result.getName())) {
+            getDesenhoGrade().getDags().add(result);
+            dagChooser.getItems().add(result.getName());
+            dagChooser.getSelectionModel().select(result.getName());
+        }
     }
 
     /////////////////////////////////

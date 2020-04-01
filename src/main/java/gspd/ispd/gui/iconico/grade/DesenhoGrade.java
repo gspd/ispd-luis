@@ -7,6 +7,7 @@ package gspd.ispd.gui.iconico.grade;
 import gspd.ispd.GUI;
 import gspd.ispd.ValidaValores;
 import gspd.ispd.arquivo.xml.IconicoXML;
+import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.gui.EscolherClasse;
 import gspd.ispd.gui.JPrincipal;
 import gspd.ispd.gui.iconico.AreaDesenho;
@@ -66,10 +67,6 @@ public class DesenhoGrade extends AreaDesenho {
     }
     //Objetos principais da classe
     /**
-     * Lista com os usuarios/proprietarios do modelo criado
-     */
-    private HashSet<String> usuarios;
-    /**
      * Objeto para Manipular as cargas
      */
     private GerarCarga cargasConfiguracao;
@@ -97,7 +94,6 @@ public class DesenhoGrade extends AreaDesenho {
     //Obejtos para copiar um icone
     private Vertice iconeCopiado;
     private int tipoDeVertice;
-    private HashSet<VirtualMachine> maquinasVirtuais;
 
     public DesenhoGrade(int w, int h) {
         super(true, true, true, false);
@@ -118,20 +114,13 @@ public class DesenhoGrade extends AreaDesenho {
         imprimeNosIndiretos = false;
         imprimeNosEscalonaveis = true;
         maquinasVirtuais = null;
+        dags = new HashSet<>();
         this.tipoModelo = EscolherClasse.GRID;
     }
 
     public void setPaineis(JPrincipal janelaPrincipal) {
         this.janelaPrincipal = janelaPrincipal;
         this.initTexts();
-    }
-
-    public HashSet<VirtualMachine> getMaquinasVirtuais() {
-        return maquinasVirtuais;
-    }
-
-    public void setMaquinasVirtuais(HashSet<VirtualMachine> maquinasVirtuais) {
-        this.maquinasVirtuais = maquinasVirtuais;
     }
 
     //utilizado para inserir novo valor nas Strings dos componentes
@@ -220,14 +209,6 @@ public class DesenhoGrade extends AreaDesenho {
 
     public void setEscalonaveis(boolean imprimeNosEscalonaveis) {
         this.imprimeNosEscalonaveis = imprimeNosEscalonaveis;
-    }
-
-    public HashSet<String> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(HashSet<String> usuarios) {
-        this.usuarios = usuarios;
     }
 
     public GerarCarga getCargasConfiguracao() {
@@ -867,5 +848,46 @@ public class DesenhoGrade extends AreaDesenho {
 
     public Set<Vertice> getVertices() {
         return vertices;
+    }
+
+    ///////////////////////////////////////////////////
+    ///////////// PROPERTIES //////////////////////////
+    ///////////////////////////////////////////////////
+
+    // DISCLAIMER: If what you are searching is not here and it is
+    // a property, maybe it is in the rest of the class. If you are
+    // sure it is a property indeed, then move it to here, please!
+
+    /**
+     * The set of virtual machines
+     */
+    private HashSet<VirtualMachine> maquinasVirtuais;
+    public HashSet<VirtualMachine> getMaquinasVirtuais() {
+        return maquinasVirtuais;
+    }
+    public void setMaquinasVirtuais(HashSet<VirtualMachine> maquinasVirtuais) {
+        this.maquinasVirtuais = maquinasVirtuais;
+    }
+
+    /**
+     * The set of users
+     */
+    private HashSet<String> usuarios;
+    public HashSet<String> getUsuarios() {
+        return usuarios;
+    }
+    public void setUsuarios(HashSet<String> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    /**
+     * The set of DAGs
+     */
+    private HashSet<DAG> dags;
+    public HashSet<DAG> getDags() {
+        return dags;
+    }
+    public void setDags(HashSet<DAG> dags) {
+        this.dags = dags;
     }
 }

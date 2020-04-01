@@ -38,4 +38,7 @@ public class StringConstants {
     public static final String PARALLEL_TITLE = "Parallel Expansion";
     public static final String RECURSIVE_TITLE = "Recursive Expansion";
     public static final String RECURSION_TITLE = "Recursion";
+    // Images Paths
+    public static final String PLUS_ICON_PATH = "/gspd/ispd/gui/images/plus-outline-16x16.png";
+    public static final String EDIT_ICON_PATH = "/gspd/ispd/gui/images/edit-outline-16x16.png";
 }

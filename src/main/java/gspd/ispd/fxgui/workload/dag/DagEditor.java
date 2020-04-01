@@ -39,7 +39,7 @@ public class DagEditor extends VBox {
     private void createContent() {
 
         HBox topBar = new HBox();
-        saveButton = new Button("Save");
+        saveButton = new Button("Show XML");
         dagNameField = new TextField();
         topBar.getChildren().addAll(dagNameField, saveButton);
         topBar.setSpacing(5.0);
@@ -62,7 +62,6 @@ public class DagEditor extends VBox {
 
         diagramPane = new DiagramPane();
         VBox.setVgrow(diagramPane, Priority.ALWAYS);
-        diagramPane.setDiagram(createLIGO());
         diagramPane.gridEnableProperty().bind(gridCheckBox.selectedProperty());
         VBox rightPane = new VBox();
         rightPane.getChildren().setAll(diagramPane, new Separator(), bottomToolbar);
@@ -83,23 +82,7 @@ public class DagEditor extends VBox {
             dagNameField.setText(n.getName());
         });
         saveButton.setOnAction(e -> {
-            try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder.newDocument();
-                DAGParser parser = new DAGParser(document);
-                Element dagElement = parser.parse((DAG) diagramPane.getDiagram());
-                TransformerFactory tfac = TransformerFactory.newInstance();
-                Transformer transformer = tfac.newTransformer();
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                parser.getDocument().appendChild(dagElement);
-                DOMSource source = new DOMSource(parser.getDocument());
-                StreamResult result = new StreamResult(System.out);
-                transformer.transform(source, result);
-                System.out.println("OK!");
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            showDagXML();
         });
         addEventHandler(KeyEvent.KEY_RELEASED, e -> {
             if (e.getCode() == KeyCode.DELETE) {
@@ -141,6 +124,25 @@ public class DagEditor extends VBox {
         diagramPane.removeEventHandler(MouseEvent.MOUSE_MOVED, addEdgeMouseMovedHandler);
         diagramPane.addEventHandler(MouseEvent.MOUSE_CLICKED, generalMouseClickedHandler);
         diagramPane.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, contextMenuHandler);
+    }
+
+    private void showDagXML() {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+            DAGParser parser = new DAGParser(document);
+            Element dagElement = parser.parse((DAG) diagramPane.getDiagram());
+            TransformerFactory tfac = TransformerFactory.newInstance();
+            Transformer transformer = tfac.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            parser.getDocument().appendChild(dagElement);
+            DOMSource source = new DOMSource(parser.getDocument());
+            StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 
     //////////////////////////////////////////////////////////////
@@ -238,7 +240,7 @@ public class DagEditor extends VBox {
                             System.out.println("You must select another icon");
                         }
                     } else {
-                        System.out.println("You must select a node");
+                        // remove temporary edge
                         diagramPane.getDiagram().remove(tempEdge);
                         stopAddEdge(false);
                     }
@@ -250,6 +252,19 @@ public class DagEditor extends VBox {
             }
         }
     };
+
+    //////////////////////////////////////////////////
+    ////////////// ACCESS ////////////////////////////
+    //////////////////////////////////////////////////
+
+    public DiagramPane getDiagramPane() {
+        return diagramPane;
+    }
+
+    public DAG getDAG() {
+        return (DAG) getDiagramPane().getDiagram();
+    }
+
 
     /////////////////////////////////////////////////////////////////////
     //////////////////////// TEMPORARY //////////////////////////////////
