@@ -5,6 +5,8 @@
 package gspd.ispd.arquivo.xml;
 
 import gspd.ispd.ValidaValores;
+import gspd.ispd.commons.StringConstants;
+import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.gui.EscolherClasse;
 import gspd.ispd.gui.iconico.Aresta;
 import gspd.ispd.gui.iconico.grade.Cluster;
@@ -13,6 +15,7 @@ import gspd.ispd.gui.iconico.grade.ItemGrade;
 import gspd.ispd.gui.iconico.grade.Link;
 import gspd.ispd.gui.iconico.grade.Machine;
 import gspd.ispd.gui.iconico.grade.VirtualMachine;
+import gspd.ispd.imsx.*;
 import gspd.ispd.motor.carga.CargaList;
 import gspd.ispd.motor.carga.CargaRandom;
 import gspd.ispd.motor.carga.CargaForNode;
@@ -41,9 +44,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import gspd.ispd.motor.workload.WorkloadGenerator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -957,6 +964,22 @@ public class IconicoXML {
         return maqVirtuais;
     }
 
+    public static HashSet<DAG> newDAGList(Document descricao) {
+        try {
+            HashSet<DAG> dagList = new HashSet<>();
+            NodeList dags = descricao.getElementsByTagName(StringConstants.DAG_TAG);
+            for (int i = 0; i < dags.getLength(); i++) {
+                Element dagElement = (Element) dags.item(i);
+                DAG dag = DAGLoader.getInstance().load(dagElement);
+                dagList.add(dag);
+            }
+            return dagList;
+        } catch (IMSXLoadException e) {
+            Logger.getGlobal().log(Level.SEVERE, "Not possible to load DAG List:" + e);
+        }
+        return null;
+    }
+
     public static Document[] clone(File file, int number) throws ParserConfigurationException, IOException, SAXException {
         Document[] documento = new Document[number];
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -976,6 +999,23 @@ public class IconicoXML {
         }
         //inputStream.close();
         return documento;
+    }
+
+    public static WorkloadGenerator newWorkloadGenerator(Document descricao) {
+        WorkloadGenerator result = null;
+        try {
+            NodeList list = descricao.getElementsByTagName(StringConstants.FOR_SCHEDULER_TAG);
+            if (list.getLength() == 0) {
+                list = descricao.getElementsByTagName(StringConstants.TRACE_LOAD_TAG);
+            }
+            if (list.getLength() > 0) {
+                Element element = (Element) list.item(0);
+                result = WorkloadLoader.getInstance().load(element);
+            }
+        } catch (IMSXLoadException e) {
+            Logger.getGlobal().log(Level.SEVERE, "Couldn't load workload from IMSX: " + e);
+        }
+        return result;
     }
 
     public void addUsers(Collection<String> usuarios) {
@@ -1184,6 +1224,12 @@ public class IconicoXML {
         system.appendChild(aux);
     }
 
+    public void addDAG(DAG dag) {
+        DAGParser parser = DAGParser.getInstance(getDescricao());
+        Element element = parser.parse(dag);
+        system.appendChild(element);
+    }
+
     public void setLoadRandom(Integer numeroTarefas, Integer timeToArrival,
             Integer maxComputacao, Integer averageComputacao, Integer minComputacao, Double probabilityComputacao,
             Integer maxComunicacao, Integer averageComunicacao, Integer minComunicacao, Double probabilityComunicacao) {
@@ -1274,5 +1320,10 @@ public class IconicoXML {
         characteristic.appendChild(hard_disk);
         characteristic.appendChild(cost);
         return characteristic;
+    }
+
+    public void newWorkloadGenerator(WorkloadGenerator workloadGenerator) {
+        Element workloadElement = WorkloadParser.getInstance(getDescricao()).parse(workloadGenerator);
+        system.appendChild(workloadElement);
     }
 }

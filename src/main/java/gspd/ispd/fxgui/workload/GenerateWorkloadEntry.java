@@ -7,7 +7,7 @@ public class GenerateWorkloadEntry {
     public GenerateWorkloadEntry() {
         setUser("");
         setData("0.0 0.0 0.0 0.0");
-        setType(RANDOM_TYPE);
+        setType(StringConstants.RANDOM_TYPE);
         setArrivalTime(0.0);
         setQuantity(1);
         setScheduler("");
@@ -85,8 +85,6 @@ public class GenerateWorkloadEntry {
      * The type of the workload
      */
     public static final String TYPE_PROPERTY = "type";
-    public static final String DAG_TYPE = "DAG";
-    public static final String RANDOM_TYPE = "Random";
     public String type;
     public String getType() {
         return type;

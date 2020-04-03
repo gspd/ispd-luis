@@ -1,7 +1,9 @@
 package gspd.ispd.fxgui.workload;
 
 import gspd.ispd.fxgui.commons.SlidePane;
+import gspd.ispd.gui.JPrincipal;
 import gspd.ispd.gui.iconico.grade.DesenhoGrade;
+import gspd.ispd.util.workload.WorkloadConverter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
@@ -12,6 +14,11 @@ public class WorkloadPane extends SlidePane {
     public WorkloadPane() {
         createUI();
         loadFirstPane();
+        desenhoGradeProperty().addListener((obs, o, n) -> {
+            if (n != null) {
+                WorkloadConverter.setupPane(this, n.getWorkloadGenerator());
+            }
+        });
     }
 
     private Button nextButton;
@@ -19,7 +26,7 @@ public class WorkloadPane extends SlidePane {
     private Button okButton;
     private Button previousButton;
     private void createUI() {
-        traceOrRandom = new TraceOrRandomPane();
+        traceOrRandomPane = new TraceOrRandomPane();
         tracePane = new TracePane();
         traceFilePane = new TraceFilePane();
         generatePane = new GenerateWorkloadPane();
@@ -31,13 +38,13 @@ public class WorkloadPane extends SlidePane {
         previousButton = new Button("Previous");
     }
 
-    private TraceOrRandomPane traceOrRandom;
+    private TraceOrRandomPane traceOrRandomPane;
     private void loadFirstPane() {
-        setContent(traceOrRandom);
+        setContent(traceOrRandomPane);
         nextButton.setOnAction(e -> {
-            if (traceOrRandom.getChoice() == TraceOrRandomPane.TRACE) {
+            if (traceOrRandomPane.getChoice() == TraceOrRandomPane.TRACE) {
                 loadTracePane();
-            } else if (traceOrRandom.getChoice() == TraceOrRandomPane.GENERATE) {
+            } else if (traceOrRandomPane.getChoice() == TraceOrRandomPane.GENERATE) {
                 loadGeneratePane();
             }
         });
@@ -77,14 +84,50 @@ public class WorkloadPane extends SlidePane {
     private GenerateWorkloadPane generatePane;
     private void loadGeneratePane() {
         setContent(generatePane);
+        okButton.setDisable(false);
         okButton.setOnAction(e -> {
-            System.out.println("You finished your configuration!");
+            getDesenhoGrade().setWorkloadGenerator(WorkloadConverter.toGenerator(this));
+            getjPrincipal().getWorkloadPaneFrame().setVisible(false);
         });
         setRightButton(okButton);
         previousButton.setOnAction(e -> {
             loadFirstPane();
         });
         setLeftButton(previousButton);
+    }
+
+    ///////////////////////////////////
+    /////////// ACCESSORS /////////////
+    ///////////////////////////////////
+
+    public TraceOrRandomPane getTraceOrRandomPane() {
+        return traceOrRandomPane;
+    }
+
+    public GenerateWorkloadPane getGeneratePane() {
+        return generatePane;
+    }
+
+    public TracePane getTracePane() {
+        return tracePane;
+    }
+
+    public TraceFilePane getTraceFilePane() {
+        return traceFilePane;
+    }
+
+    ///////////////////////////////////
+    /////////// EXTERNALS /////////////
+    ///////////////////////////////////
+
+    // It is needed because, as we are mixing swing and javafx, we need
+    // to be able to close swing workload frame from here
+    private JPrincipal jPrincipal;
+    public JPrincipal getjPrincipal() {
+        return jPrincipal;
+    }
+    public void setjPrincipal(JPrincipal jPrincipal) {
+        this.jPrincipal = jPrincipal;
     }
 
     ///////////////////////////////////

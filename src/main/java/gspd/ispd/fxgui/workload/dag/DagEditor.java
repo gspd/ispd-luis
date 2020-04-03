@@ -68,6 +68,8 @@ public class DagEditor extends VBox {
         HBox.setHgrow(rightPane, Priority.ALWAYS);
         mainContent.getChildren().setAll(leftSplit, rightPane);
 
+        getDiagramPane().setDiagram(createDAG());
+
         VBox.setVgrow(topBar, Priority.NEVER);
         VBox.setVgrow(mainContent, Priority.ALWAYS);
         getChildren().addAll(topBar, new Separator(), mainContent);
@@ -131,7 +133,7 @@ public class DagEditor extends VBox {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.newDocument();
-            DAGParser parser = new DAGParser(document);
+            DAGParser parser = DAGParser.getInstance(document);
             Element dagElement = parser.parse((DAG) diagramPane.getDiagram());
             TransformerFactory tfac = TransformerFactory.newInstance();
             Transformer transformer = tfac.newTransformer();

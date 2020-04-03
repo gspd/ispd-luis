@@ -5,6 +5,7 @@ import gspd.ispd.commons.StringConstants;
 import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.DagEditor;
 import gspd.ispd.gui.iconico.grade.DesenhoGrade;
+import gspd.ispd.util.workload.DAGContainer;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -35,7 +37,7 @@ public class GenerateWorkloadPane extends VBox {
         GenerateWorkloadEntry entry = table.getSelectionModel().getSelectedItem();
         Toggle selected = typeToggle.getSelectedToggle();
         if (selected == randomRadio) {
-            entry.setType(GenerateWorkloadEntry.RANDOM_TYPE);
+            entry.setType(StringConstants.RANDOM_TYPE);
             String dataString =
                     compMinInput.getValue() + " " +
                     compMaxInput.getValue() + " " +
@@ -43,7 +45,7 @@ public class GenerateWorkloadPane extends VBox {
                     commuMaxInput.getValue();
             entry.setData(dataString);
         } else if (selected == dagRadio) {
-            entry.setType(GenerateWorkloadEntry.DAG_TYPE);
+            entry.setType(StringConstants.DAG_TYPE);
             String dataString = dagChooser.getValue() == null ? "<null>" : dagChooser.getValue();
             entry.setData(dataString);
         }
@@ -68,29 +70,23 @@ public class GenerateWorkloadPane extends VBox {
             schedulerInput.getSelectionModel().select(entry.getScheduler());
             quantityInput.getValueFactory().setValue(entry.getQuantity());
             arrivalTimeInput.getValueFactory().setValue(entry.getArrivalTime());
-            if (entry.getType().equals(GenerateWorkloadEntry.RANDOM_TYPE)) {
+            if (entry.getType().equals(StringConstants.RANDOM_TYPE)) {
                 typeToggle.selectToggle(randomRadio);
                 Scanner scanner = new Scanner(entry.getData());
                 compMinInput.getValueFactory().setValue(scanner.nextDouble());
                 compMaxInput.getValueFactory().setValue(scanner.nextDouble());
                 commuMinInput.getValueFactory().setValue(scanner.nextDouble());
                 commuMaxInput.getValueFactory().setValue(scanner.nextDouble());
-            } else if (entry.getType().equals(GenerateWorkloadEntry.DAG_TYPE)) {
-                typeToggle.selectToggle(dagRadio);
+            } else if (entry.getType().equals(StringConstants.DAG_TYPE)) {
                 if (entry.getData().equals("<null>")) {
                     dagChooser.setValue(null);
                 } else {
-                    List<DAG> elegibleDags = getDesenhoGrade()
-                            .getDags()
-                            .stream()
-                            .filter(d -> d.getName().equals(entry.getData()))
-                            .collect(Collectors.toList());
-                    DAG dag = null;
-                    if (elegibleDags.size() > 0) {
-                        dag = elegibleDags.get(0);
+                    DAG dag = DAGContainer.getInstance().get(entry.getData());
+                    if (dag != null) {
+                        dagChooser.setValue(dag.getName());
                     }
-                    dagChooser.setValue(dag.getName());
                 }
+                typeToggle.selectToggle(dagRadio);
             }
         }
     }
@@ -234,13 +230,9 @@ public class GenerateWorkloadPane extends VBox {
         });
         editDagButton.disableProperty().bind(dagChooser.valueProperty().isNull());
         editDagButton.setOnAction(e -> {
-            List<DAG> elegibleDags = getDesenhoGrade()
-                    .getDags()
-                    .stream()
-                    .filter(d -> d.getName().equals(dagChooser.getValue()))
-                    .collect(Collectors.toList());
-            if (elegibleDags.size() > 0) {
-                openEditor(elegibleDags.get(0));
+            DAG dag = DAGContainer.getInstance().get(dagChooser.getValue());
+            if (dag != null) {
+                openEditor(dag);
             }
         });
         table.getSelectionModel().selectedItemProperty().addListener(this::tableSelectionChanged);
@@ -284,7 +276,8 @@ public class GenerateWorkloadPane extends VBox {
             if (n != null) {
                 userInput.getItems().setAll(n.getUsuarios());
                 schedulerInput.getItems().setAll(n.getNosEscalonadores());
-                List<String> names = n.getDags()
+                List<String> names = DAGContainer.getInstance()
+                        .getDags()
                         .stream()
                         .flatMap(dag -> Stream.of(dag.getName()))
                         .collect(Collectors.toList());
@@ -295,6 +288,14 @@ public class GenerateWorkloadPane extends VBox {
 
     public List<GenerateWorkloadEntry> getEntries() {
         return Collections.unmodifiableList(table.getItems());
+    }
+
+    public void setEntries(Collection<GenerateWorkloadEntry> entries) {
+        table.getItems().setAll(entries);
+    }
+
+    public void setEntries(GenerateWorkloadEntry... entries) {
+        setEntries(List.of(entries));
     }
 
     private Stage dagStage;
@@ -313,7 +314,7 @@ public class GenerateWorkloadPane extends VBox {
         dagStage.showAndWait();
         DAG result = dagEditor.getDAG();
         if (result != null && !dagChooser.getItems().contains(result.getName())) {
-            getDesenhoGrade().getDags().add(result);
+            DAGContainer.getInstance().put(result);
             dagChooser.getItems().add(result.getName());
             dagChooser.getSelectionModel().select(result.getName());
         }

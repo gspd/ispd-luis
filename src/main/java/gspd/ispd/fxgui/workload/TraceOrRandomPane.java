@@ -1,5 +1,8 @@
 package gspd.ispd.fxgui.workload;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.HPos;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -11,6 +14,7 @@ public class TraceOrRandomPane extends GridPane {
 
     public TraceOrRandomPane() {
         createUI();
+        initEvents();
     }
 
     private ToggleGroup toggle;
@@ -31,14 +35,34 @@ public class TraceOrRandomPane extends GridPane {
         setVgap(5);
     }
 
+    private void initEvents() {
+        toggle.selectedToggleProperty().addListener((obs, o, n) -> {
+            if (n == traceRadio) {
+                setChoice(TRACE);
+            } else {
+                setChoice(GENERATE);
+            }
+        });
+        choiceProperty().addListener((obs, o, n) -> {
+            int iN = (Integer) n;
+            if (iN == TRACE) {
+                toggle.selectToggle(traceRadio);
+            } else if (iN == GENERATE) {
+                toggle.selectToggle(generateRadio);
+            }
+        });
+    }
+
     public static final int TRACE = 1;
     public static final int GENERATE = 2;
+    private IntegerProperty choice = new SimpleIntegerProperty(this, "choice", 0);
+    public IntegerProperty choiceProperty() {
+        return choice;
+    }
     public int getChoice() {
-        if (toggle.getSelectedToggle() == traceRadio) {
-            return TRACE;
-        } else if (toggle.getSelectedToggle() == generateRadio) {
-            return GENERATE;
-        }
-        return -1;
+        return choice.get();
+    }
+    public void setChoice(int choice) {
+        this.choice.set(choice);
     }
 }

@@ -2,6 +2,9 @@ package gspd.ispd.commons;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IDSystem {
 
@@ -14,12 +17,19 @@ public class IDSystem {
     }
 
     private static IDSystem singleton;
+    private static final Semaphore singSem = new Semaphore(1);
+    private static final Semaphore criticalSem = new Semaphore(0);
     public static IDSystem getInstance() {
         if (singleton == null) {
-            synchronized (IDSystem.class) {
+            try {
+                singSem.acquire();
                 if (singleton == null) {
                     singleton = new IDSystem();
+                    criticalSem.release();
                 }
+                singSem.release();
+            } catch (InterruptedException e) {
+                Logger.getGlobal().log(Level.SEVERE, "Error creating ID System: " + e);
             }
         }
         return singleton;
@@ -27,17 +37,28 @@ public class IDSystem {
 
     public boolean add(Object obj) {
         if (obj != null) {
-            synchronized (IDSystem.class) {
+            try {
+                criticalSem.acquire();
                 if (idMap.putIfAbsent(obj, id) == null) {
                     id++;
-                    return true;
                 }
+                criticalSem.release();
+                return true;
+            } catch (InterruptedException e) {
+                Logger.getGlobal().log(Level.SEVERE, "Error while adding " + obj + " to ID System: " + e);
             }
         }
         return false;
     }
 
     public boolean remove(Object obj) {
+        try {
+            criticalSem.acquire();
+            Object o = idMap.remove(obj);
+            criticalSem.release();
+        } catch (InterruptedException e) {
+            Logger.getGlobal().log(Level.SEVERE, "Error while removing "  + obj + " from ID System: " + e);
+        }
         return idMap.remove(obj) != null;
     }
 

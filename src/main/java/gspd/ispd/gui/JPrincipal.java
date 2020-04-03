@@ -15,6 +15,7 @@ import gspd.ispd.GUI;
 import gspd.ispd.arquivo.exportador.Exportador;
 import gspd.ispd.arquivo.interpretador.gridsim.InterpretadorGridSim;
 import gspd.ispd.arquivo.interpretador.simgrid.InterpretadorSimGrid;
+import gspd.ispd.arquivo.xml.IconicoXML;
 import gspd.ispd.fxgui.workload.WorkloadPane;
 import gspd.ispd.gui.auxiliar.Corner;
 import gspd.ispd.gui.auxiliar.FiltroDeArquivos;
@@ -25,6 +26,7 @@ import gspd.ispd.gui.iconico.grade.ItemGrade;
 import gspd.ispd.gui.iconico.grade.VirtualMachine;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -69,70 +71,9 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
     private DesenhoGrade aDesenho = null; //define qual será a área de desenho
     private HashSet<VirtualMachine> maquinasVirtuais; //define o conjunto de máquinas virtuais
     private FiltroDeArquivos filtro; //define o filtro das extensões aceitas pelo iSPD
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConfigVM;
-    private javax.swing.JButton jButtonSimular;
-    private javax.swing.JButton jButtonTarefas;
-    private javax.swing.JButton jButtonUsuarios;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemConectado;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemEscalonavel;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemGrade;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemIndireto;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemRegua;
-    private javax.swing.JFileChooser jFileChooser;
-    private gspd.ispd.gui.GerenciarEscalonador jFrameGerenciador;
-    private gspd.ispd.gui.GerenciarAlocadores jFrameGerenciadorAlloc;
-    private gspd.ispd.gui.GerenciarEscalonadorCloud jFrameGerenciadorCloud;
-    private javax.swing.JMenu jMenuAjuda;
-    private javax.swing.JMenu jMenuArquivo;
-    private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JMenu jMenuEditar;
-    private javax.swing.JMenu jMenuExibir;
-    private javax.swing.JMenu jMenuExport;
-    private javax.swing.JMenu jMenuFerramentas;
-    private javax.swing.JMenu jMenuIdioma;
-    private javax.swing.JMenu jMenuImport;
-    private javax.swing.JMenuItem jMenuItemAbrir;
-    private javax.swing.JMenuItem jMenuItemAbrirResult;
-    private javax.swing.JMenuItem jMenuItemAjuda;
-    private javax.swing.JMenuItem jMenuItemCopy;
-    private javax.swing.JMenuItem jMenuItemDelete;
-    private javax.swing.JMenuItem jMenuItemEquiparar;
-    private javax.swing.JMenuItem jMenuItemFechar;
-    private javax.swing.JMenuItem jMenuItemGerar;
-    private javax.swing.JMenuItem jMenuItemGerenciar;
-    private javax.swing.JMenuItem jMenuItemGerenciarAllocation;
-    private javax.swing.JMenuItem jMenuItemGerenciarCloud;
-    private javax.swing.JMenuItem jMenuItemGridSim;
-    private javax.swing.JMenuItem jMenuItemIngles;
-    private javax.swing.JMenuItem jMenuItemNovo;
-    private javax.swing.JMenuItem jMenuItemOrganizar;
-    private javax.swing.JMenuItem jMenuItemPaste;
-    private javax.swing.JMenuItem jMenuItemPortugues;
-    private javax.swing.JMenuItem jMenuItemSair;
-    private javax.swing.JMenuItem jMenuItemSalvar;
-    private javax.swing.JMenuItem jMenuItemSalvarComo;
-    private javax.swing.JMenuItem jMenuItemSimGrid;
-    private javax.swing.JMenuItem jMenuItemSobre;
-    private javax.swing.JMenuItem jMenuItemToGridSim;
-    private javax.swing.JMenuItem jMenuItemToJPG;
-    private javax.swing.JMenuItem jMenuItemToSimGrid;
-    private javax.swing.JMenuItem jMenuItemToTXT;
-    private gspd.ispd.gui.configuracao.JPanelConfigIcon jPanelConfiguracao;
-    private gspd.ispd.gui.configuracao.JPanelSimples jPanelPropriedades;
-    private gspd.ispd.gui.configuracao.JPanelSimples jPanelSimples;
-    private javax.swing.JScrollPane jScrollPaneAreaDesenho;
-    private javax.swing.JScrollPane jScrollPaneBarraLateral;
-    private javax.swing.JScrollPane jScrollPaneBarraNotifica;
-    private javax.swing.JScrollPane jScrollPaneProperties;
-    private javax.swing.JTextArea jTextAreaNotifica;
-    private javax.swing.JToggleButton jToggleButtonCluster;
-    private javax.swing.JToggleButton jToggleButtonInternet;
-    private javax.swing.JToggleButton jToggleButtonMaquina;
-    private javax.swing.JToggleButton jToggleButtonRede;
-    private javax.swing.JToolBar jToolBar;
-    // End of variables declaration//GEN-END:variables
-
+    private JFrame workloadPaneFrame; // The frame to open the workload panel
+    private JFXPanel fxWorkloadPanel; // the Swing to JavaFX wrapper
+    private WorkloadPane workloadPane; // the JavaFX workload pane
     public int getTipoModelo() {
         return tipoModelo;
     }
@@ -172,6 +113,18 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         this.jPanelConfiguracao.addKeyListener(this);
         this.jPanelPropriedades.addKeyListener(this);
         this.maquinasVirtuais = null;
+        // FX Workload pane
+        this.workloadPaneFrame = new JFrame("Workload Config");
+        this.fxWorkloadPanel = new JFXPanel();
+        this.workloadPaneFrame.add(fxWorkloadPanel);
+        this.workloadPaneFrame.setLocationRelativeTo(this);
+        this.workloadPaneFrame.setSize(400, 300);
+        Platform.runLater(() -> {
+            workloadPane = new WorkloadPane();
+            workloadPane.setjPrincipal(this);
+            Scene scene = new Scene(workloadPane);
+            fxWorkloadPanel.setScene(scene);
+        });
     }
 
     public HashSet<VirtualMachine> getMaquinasVirtuais() {
@@ -180,6 +133,228 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
 
     public void setMaquinasVirtuais(HashSet<VirtualMachine> maquinasVirtuais) {
         this.maquinasVirtuais = maquinasVirtuais;
+    }
+
+    public void appendNotificacao(String text) {
+        jTextAreaNotifica.append(text + "\n");
+    }
+
+    /**
+     * Indica que houve alterações no modelo aberto
+     */
+    public void modificar() {
+        if (arquivoAberto == null) {
+            this.setTitle("New_Model.ims [" + palavras.getString("modified") + "] - " + palavras.getString("nomePrograma"));
+        } else {
+            this.setTitle(arquivoAberto.getName() + " [" + palavras.getString("modified") + "] - " + palavras.getString("nomePrograma"));
+        }
+        this.modificado = true;
+    }
+
+    public void salvarModificacao() {
+        if (arquivoAberto == null) {
+            this.setTitle("New_Model.ims - " + palavras.getString("nomePrograma"));
+        } else {
+            this.setTitle(arquivoAberto.getName() + " - " + palavras.getString("nomePrograma"));
+        }
+        this.modificado = false;
+    }
+
+    private int savarAlteracao() {
+        int escolha;
+        if (arquivoAberto != null) {
+            escolha = JOptionPane.showConfirmDialog(this, palavras.getString("Do you want to save changes to") + " " + arquivoAberto.getName());
+        } else {
+            escolha = JOptionPane.showConfirmDialog(this, palavras.getString("Do you want to save changes to") + " New_Model.ims");
+        }
+        if (escolha == JOptionPane.YES_OPTION) {
+            //Implementar ações para salvar conteudo
+            jMenuItemSalvarActionPerformed(null);
+            salvarModificacao();
+        }
+        return escolha;
+    }
+
+    private void abrirEdição(File arquivo) {
+        this.arquivoAberto = arquivo;
+        //Realiza leitura das opções do menu Exibir
+        aDesenho.setConectados(jCheckBoxMenuItemConectado.isSelected());
+        aDesenho.setIndiretos(jCheckBoxMenuItemIndireto.isSelected());
+        aDesenho.setEscalonaveis(jCheckBoxMenuItemEscalonavel.isSelected());
+        aDesenho.setGridOn(jCheckBoxMenuItemGrade.isSelected());
+        jCheckBoxMenuItemReguaActionPerformed(null);
+        //Tirar seleção dos botões de icones
+        jToggleButtonMaquina.setSelected(false);
+        jToggleButtonCluster.setSelected(false);
+        jToggleButtonInternet.setSelected(false);
+        jToggleButtonRede.setSelected(false);
+        setObjetosEnabled(true);
+        salvarModificacao();
+    }
+
+    private void fecharEdicao() {
+        this.setTitle(palavras.getString("nomePrograma"));
+        this.arquivoAberto = null;
+        setObjetosEnabled(false);
+        this.modificado = false;
+        //remove a regua
+        jScrollPaneAreaDesenho.setColumnHeaderView(null);
+        jScrollPaneAreaDesenho.setRowHeaderView(null);
+        jScrollPaneAreaDesenho.setCorner(JScrollPane.UPPER_LEFT_CORNER, null);
+        jScrollPaneAreaDesenho.setCorner(JScrollPane.LOWER_LEFT_CORNER, null);
+        jScrollPaneAreaDesenho.setCorner(JScrollPane.UPPER_RIGHT_CORNER, null);
+    }
+
+    //Habilitar Desabilita botões
+    private void setObjetosEnabled(boolean opcao) {
+        //Icones
+        jToggleButtonCluster.setEnabled(opcao);
+        jToggleButtonInternet.setEnabled(opcao);
+        jToggleButtonMaquina.setEnabled(opcao);
+        jToggleButtonRede.setEnabled(opcao);
+        jButtonSimular.setEnabled(opcao);
+        jButtonTarefas.setEnabled(opcao);
+        jButtonUsuarios.setEnabled(opcao);
+        jButtonConfigVM.setEnabled(opcao);
+        //Arquivo
+        jMenuItemSalvar.setEnabled(opcao);
+        jMenuItemSalvarComo.setEnabled(opcao);
+        jMenuItemFechar.setEnabled(opcao);
+        jMenuItemToJPG.setEnabled(opcao);
+        jMenuItemToTXT.setEnabled(opcao);
+        jMenuItemToSimGrid.setEnabled(opcao);
+        jMenuItemToGridSim.setEnabled(opcao);
+        //Editar
+        jMenuItemEquiparar.setEnabled(opcao);
+        jMenuItemOrganizar.setEnabled(opcao);
+        jMenuItemCopy.setEnabled(opcao);
+        jMenuItemPaste.setEnabled(opcao);
+        jMenuItemDelete.setEnabled(opcao);
+        //Exibir
+        jCheckBoxMenuItemConectado.setEnabled(opcao);
+        jCheckBoxMenuItemIndireto.setEnabled(opcao);
+        jCheckBoxMenuItemEscalonavel.setEnabled(opcao);
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent evt) {
+        if (aDesenho != null) {
+            if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+                aDesenho.botaoIconeActionPerformed(null);
+            }
+            if (evt.getModifiers() == InputEvent.CTRL_MASK && evt.getKeyCode() == KeyEvent.VK_C) {
+                aDesenho.botaoVerticeActionPerformed(null);
+            }
+            if (evt.getModifiers() == InputEvent.CTRL_MASK && evt.getKeyCode() == KeyEvent.VK_V) {
+                aDesenho.botaoPainelActionPerformed(null);
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    public void setSelectedIcon(ItemGrade icon, String Texto) {
+        if (icon != null) {
+            if (icon instanceof gspd.ispd.gui.iconico.grade.Machine || icon instanceof gspd.ispd.gui.iconico.grade.Cluster) {
+                this.jPanelConfiguracao.setIcone(icon, aDesenho.getUsuarios(), tipoModelo);
+            } else {
+                this.jPanelConfiguracao.setIcone(icon);
+            }
+            jScrollPaneBarraLateral.setViewportView(jPanelConfiguracao);
+            this.jPanelPropriedades.setjLabelTexto(Texto);
+        } else {
+            jScrollPaneBarraLateral.setViewportView(jPanelSimples);
+            jPanelPropriedades.setjLabelTexto("");
+        }
+    }
+
+    //////////////////////////////////////////////
+    //////////////// ACCESSORS ///////////////////
+    //////////////////////////////////////////////
+
+    public JPanelConfigIcon getjPanelConfiguracao() {
+        return jPanelConfiguracao;
+    }
+
+    public JFrame getWorkloadPaneFrame() {
+        return workloadPaneFrame;
+    }
+
+    private void initTexts() {
+        jScrollPaneBarraLateral.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Settings")));
+        jScrollPaneProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Properties")));
+        jScrollPaneBarraNotifica.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Notifications")));
+
+        jToggleButtonMaquina.setToolTipText(palavras.getString("Selects machine icon for add to the model"));
+        jToggleButtonRede.setToolTipText(palavras.getString("Selects network icon for add to the model"));
+        jToggleButtonCluster.setToolTipText(palavras.getString("Selects cluster icon for add to the model"));
+        jToggleButtonInternet.setToolTipText(palavras.getString("Selects internet icon for add to the model"));
+        jButtonTarefas.setToolTipText(palavras.getString("Selects insertion model of tasks")); // NOI18N
+        jButtonUsuarios.setToolTipText(palavras.getString("Add and remove users to the model"));
+        jButtonSimular.setText(palavras.getString("Simulate")); // NOI18N
+        jButtonSimular.setToolTipText(palavras.getString("Starts the simulation"));
+
+        jMenuArquivo.setText(palavras.getString("File")); // NOI18N
+        jMenuItemNovo.setText(palavras.getString("New")); // NOI18N
+        jMenuItemNovo.setToolTipText(palavras.getString("Starts a new model")); // NOI18N
+        jMenuItemAbrir.setText(palavras.getString("Open")); // NOI18N
+        jMenuItemAbrir.setToolTipText(palavras.getString("Opens an existing model")); // NOI18N
+        jMenuItemSalvar.setText(palavras.getString("Save")); // NOI18N
+        jMenuItemSalvar.setToolTipText(palavras.getString("Save the open model")); // NOI18N
+        jMenuImport.setText(palavras.getString("Import")); // NOI18N
+        jMenuItemSimGrid.setText(palavras.getString("SimGrid model")); // NOI18N
+        jMenuItemSimGrid.setToolTipText(palavras.getString("Open model from the specification files of Simgrid")); // NOI18N
+        jMenuExport.setText(palavras.getString("Export")); // NOI18N
+        jMenuItemToJPG.setText(palavras.getString("to JPG")); // NOI18N
+        jMenuItemToJPG.setToolTipText(palavras.getString("Creates a jpg file with the model image")); // NOI18N
+        jMenuItemToTXT.setText(palavras.getString("to TXT")); // NOI18N
+        jMenuItemToTXT.setToolTipText(palavras.getString("Creates a file in plain text with the model data according to the grammar of the iconic model")); // NOI18N
+        jMenuIdioma.setText(palavras.getString("Language")); // NOI18N
+        jMenuItemIngles.setText(palavras.getString("English")); // NOI18N
+        jMenuItemPortugues.setText(palavras.getString("Portuguese")); // NOI18N
+        jMenuItemFechar.setText(palavras.getString("Close")); // NOI18N
+        jMenuItemFechar.setToolTipText(palavras.getString("Closes the currently open model")); // NOI18N
+        jMenuItemSair.setText(palavras.getString("Exit")); // NOI18N
+        jMenuItemSair.setToolTipText(palavras.getString("Closes the program")); // NOI18N
+
+        jMenuEditar.setText(palavras.getString("Edit")); // NOI18N
+        jMenuItemCopy.setText(palavras.getString("Copy")); // NOI18N
+        jMenuItemPaste.setText(palavras.getString("Paste")); // NOI18N
+        jMenuItemDelete.setText(palavras.getString("Delete")); // NOI18N
+        jMenuItemEquiparar.setText(palavras.getString("Match network settings")); // NOI18N
+        jMenuItemEquiparar.setToolTipText(palavras.getString("Matches the settings of icons of networks according to a selected icon")); // NOI18N
+
+        jMenuExibir.setText(palavras.getString("View")); // NOI18N
+        jCheckBoxMenuItemConectado.setText(palavras.getString("Show Connected Nodes")); // NOI18N
+        jCheckBoxMenuItemConectado.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes connected for the selected icon")); // NOI18N
+        jCheckBoxMenuItemIndireto.setText(palavras.getString("Show Indirectly Connected Nodes")); // NOI18N
+        jCheckBoxMenuItemIndireto.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes connected through the internet icon, to the icon selected")); // NOI18N
+        jCheckBoxMenuItemEscalonavel.setText(palavras.getString("Show Schedulable Nodes")); // NOI18N
+        jCheckBoxMenuItemEscalonavel.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes schedulable for the selected icon")); // NOI18N
+        jCheckBoxMenuItemGrade.setText(palavras.getString("Drawing grid")); // NOI18N
+        jCheckBoxMenuItemGrade.setToolTipText(palavras.getString("Displays grid in the drawing area")); // NOI18N
+        jCheckBoxMenuItemRegua.setText(palavras.getString("Drawing rule")); // NOI18N
+        jCheckBoxMenuItemRegua.setToolTipText(palavras.getString("Displays rule in the drawing area")); // NOI18N
+
+        jMenuFerramentas.setText(palavras.getString("Tools")); // NOI18N
+        jMenuItemGerenciar.setText(palavras.getString("Manage Schedulers")); // NOI18N
+        jMenuItemGerar.setText(palavras.getString("Generate Scheduler")); // NOI18N
+
+        jMenuAjuda.setText(palavras.getString("Help"));
+        jMenuItemAjuda.setText(palavras.getString("Help"));
+        jMenuItemAjuda.setToolTipText(palavras.getString("Help"));
+        jMenuItemSobre.setText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
+        jMenuItemSobre.setToolTipText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
+
+        jPanelSimples.setjLabelTexto(palavras.getString("No icon selected."));
+        jPanelConfiguracao.setPalavras(palavras);
     }
 
     /**
@@ -836,7 +1011,8 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                 + "                Rafael Stabile \n"
                 + "                Danilo Costa Marim Segura\n"
                 + "                Arthur Jorge\n"
-                + "                João Antonio Magri Rodrigues";
+                + "                João Antonio Magri Rodrigues\n"
+                + "                Luís Vinícius Omar Baldissera";
         JOptionPane.showOptionDialog(this, sobre, palavras.getString("About") + " \"" + palavras.getString("nomePrograma") + "\"", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icone, null, null);
     }//GEN-LAST:event_jMenuItemSobreActionPerformed
 
@@ -919,23 +1095,11 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         }
     }//GEN-LAST:event_jToggleButtonInternetActionPerformed
 
-    private void jButtonTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTarefasActionPerformed
+    private void jButtonTarefasActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButtonTarefasActionPerformed
         // TODO add your handling code here:
         if (aDesenho != null) {
-            // Opening the javaFX Worklaod Config
-            JFrame frame = new JFrame("Workload Config");
-            JFXPanel fxPanel = new JFXPanel();
-            frame.add(fxPanel);
-            frame.setVisible(true);
-            frame.setLocationRelativeTo(this);
-            frame.setSize(400, 300);
-            Platform.runLater(() -> {
-                WorkloadPane workloadPane = new WorkloadPane();
-                workloadPane.setDesenhoGrade(aDesenho);
-                Scene scene = new Scene(workloadPane);
-                fxPanel.setScene(scene);
-            });
-            // End Opening JavaFX
+            workloadPane.setDesenhoGrade(aDesenho);
+            workloadPaneFrame.setVisible(true);
             modificar();
         }
     }//GEN-LAST:event_jButtonTarefasActionPerformed
@@ -1008,7 +1172,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                     try {
                         if (file.getName().endsWith(".imsx")) {
                             //Realizar leitura do arquivoo xml...
-                            Document descricao = gspd.ispd.arquivo.xml.IconicoXML.ler(file);
+                            Document descricao = IconicoXML.ler(file);
                             //Carregar na aDesenho
                             aDesenho = new DesenhoGrade(1500, 1500);
                             aDesenho.setGrade(descricao);
@@ -1026,7 +1190,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                                     break;
                             }
 
-                        } else {
+                        } else {    // Almost DEPRECIATED (only work  with .ims)
                             //Realiza leitura do arquivo da outra versão
                             FileInputStream arquivo = new FileInputStream(file);
                             ObjectInputStream objectInput = new ObjectInputStream(arquivo);
@@ -1078,7 +1242,7 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         } else if (aDesenho != null /*&& modificado*/) {
             //Implementar ações para salvar conteudo
             Document docxml = aDesenho.getGrade();
-            gspd.ispd.arquivo.xml.IconicoXML.escrever(docxml, arquivoAberto);
+            IconicoXML.escrever(docxml, arquivoAberto);
             appendNotificacao(palavras.getString("model saved"));
             salvarModificacao();
         }
@@ -1581,218 +1745,67 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuFerramentasActionPerformed
 
-
-    public JPanelConfigIcon getjPanelConfiguracao() {
-        return jPanelConfiguracao;
-    }
-
-    private void initTexts() {
-        jScrollPaneBarraLateral.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Settings")));
-        jScrollPaneProperties.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Properties")));
-        jScrollPaneBarraNotifica.setBorder(javax.swing.BorderFactory.createTitledBorder(palavras.getString("Notifications")));
-
-        jToggleButtonMaquina.setToolTipText(palavras.getString("Selects machine icon for add to the model"));
-        jToggleButtonRede.setToolTipText(palavras.getString("Selects network icon for add to the model"));
-        jToggleButtonCluster.setToolTipText(palavras.getString("Selects cluster icon for add to the model"));
-        jToggleButtonInternet.setToolTipText(palavras.getString("Selects internet icon for add to the model"));
-        jButtonTarefas.setToolTipText(palavras.getString("Selects insertion model of tasks")); // NOI18N
-        jButtonUsuarios.setToolTipText(palavras.getString("Add and remove users to the model"));
-        jButtonSimular.setText(palavras.getString("Simulate")); // NOI18N
-        jButtonSimular.setToolTipText(palavras.getString("Starts the simulation"));
-
-        jMenuArquivo.setText(palavras.getString("File")); // NOI18N
-        jMenuItemNovo.setText(palavras.getString("New")); // NOI18N
-        jMenuItemNovo.setToolTipText(palavras.getString("Starts a new model")); // NOI18N
-        jMenuItemAbrir.setText(palavras.getString("Open")); // NOI18N
-        jMenuItemAbrir.setToolTipText(palavras.getString("Opens an existing model")); // NOI18N
-        jMenuItemSalvar.setText(palavras.getString("Save")); // NOI18N
-        jMenuItemSalvar.setToolTipText(palavras.getString("Save the open model")); // NOI18N
-        jMenuImport.setText(palavras.getString("Import")); // NOI18N
-        jMenuItemSimGrid.setText(palavras.getString("SimGrid model")); // NOI18N
-        jMenuItemSimGrid.setToolTipText(palavras.getString("Open model from the specification files of Simgrid")); // NOI18N
-        jMenuExport.setText(palavras.getString("Export")); // NOI18N
-        jMenuItemToJPG.setText(palavras.getString("to JPG")); // NOI18N
-        jMenuItemToJPG.setToolTipText(palavras.getString("Creates a jpg file with the model image")); // NOI18N
-        jMenuItemToTXT.setText(palavras.getString("to TXT")); // NOI18N
-        jMenuItemToTXT.setToolTipText(palavras.getString("Creates a file in plain text with the model data according to the grammar of the iconic model")); // NOI18N
-        jMenuIdioma.setText(palavras.getString("Language")); // NOI18N
-        jMenuItemIngles.setText(palavras.getString("English")); // NOI18N
-        jMenuItemPortugues.setText(palavras.getString("Portuguese")); // NOI18N
-        jMenuItemFechar.setText(palavras.getString("Close")); // NOI18N
-        jMenuItemFechar.setToolTipText(palavras.getString("Closes the currently open model")); // NOI18N
-        jMenuItemSair.setText(palavras.getString("Exit")); // NOI18N
-        jMenuItemSair.setToolTipText(palavras.getString("Closes the program")); // NOI18N
-
-        jMenuEditar.setText(palavras.getString("Edit")); // NOI18N
-        jMenuItemCopy.setText(palavras.getString("Copy")); // NOI18N
-        jMenuItemPaste.setText(palavras.getString("Paste")); // NOI18N
-        jMenuItemDelete.setText(palavras.getString("Delete")); // NOI18N
-        jMenuItemEquiparar.setText(palavras.getString("Match network settings")); // NOI18N
-        jMenuItemEquiparar.setToolTipText(palavras.getString("Matches the settings of icons of networks according to a selected icon")); // NOI18N
-
-        jMenuExibir.setText(palavras.getString("View")); // NOI18N
-        jCheckBoxMenuItemConectado.setText(palavras.getString("Show Connected Nodes")); // NOI18N
-        jCheckBoxMenuItemConectado.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes connected for the selected icon")); // NOI18N
-        jCheckBoxMenuItemIndireto.setText(palavras.getString("Show Indirectly Connected Nodes")); // NOI18N
-        jCheckBoxMenuItemIndireto.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes connected through the internet icon, to the icon selected")); // NOI18N
-        jCheckBoxMenuItemEscalonavel.setText(palavras.getString("Show Schedulable Nodes")); // NOI18N
-        jCheckBoxMenuItemEscalonavel.setToolTipText(palavras.getString("Displays in the settings area, the list of nodes schedulable for the selected icon")); // NOI18N
-        jCheckBoxMenuItemGrade.setText(palavras.getString("Drawing grid")); // NOI18N
-        jCheckBoxMenuItemGrade.setToolTipText(palavras.getString("Displays grid in the drawing area")); // NOI18N
-        jCheckBoxMenuItemRegua.setText(palavras.getString("Drawing rule")); // NOI18N
-        jCheckBoxMenuItemRegua.setToolTipText(palavras.getString("Displays rule in the drawing area")); // NOI18N
-
-        jMenuFerramentas.setText(palavras.getString("Tools")); // NOI18N
-        jMenuItemGerenciar.setText(palavras.getString("Manage Schedulers")); // NOI18N
-        jMenuItemGerar.setText(palavras.getString("Generate Scheduler")); // NOI18N
-
-        jMenuAjuda.setText(palavras.getString("Help"));
-        jMenuItemAjuda.setText(palavras.getString("Help"));
-        jMenuItemAjuda.setToolTipText(palavras.getString("Help"));
-        jMenuItemSobre.setText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
-        jMenuItemSobre.setToolTipText(palavras.getString("About") + " " + palavras.getString("nomePrograma"));
-
-        jPanelSimples.setjLabelTexto(palavras.getString("No icon selected."));
-        jPanelConfiguracao.setPalavras(palavras);
-    }
-
-    public void appendNotificacao(String text) {
-        jTextAreaNotifica.append(text + "\n");
-    }
-
-    /**
-     * Indica que houve alterações no modelo aberto
-     */
-    public void modificar() {
-        if (arquivoAberto == null) {
-            this.setTitle("New_Model.ims [" + palavras.getString("modified") + "] - " + palavras.getString("nomePrograma"));
-        } else {
-            this.setTitle(arquivoAberto.getName() + " [" + palavras.getString("modified") + "] - " + palavras.getString("nomePrograma"));
-        }
-        this.modificado = true;
-    }
-
-    public void salvarModificacao() {
-        if (arquivoAberto == null) {
-            this.setTitle("New_Model.ims - " + palavras.getString("nomePrograma"));
-        } else {
-            this.setTitle(arquivoAberto.getName() + " - " + palavras.getString("nomePrograma"));
-        }
-        this.modificado = false;
-    }
-
-    private int savarAlteracao() {
-        int escolha;
-        if (arquivoAberto != null) {
-            escolha = JOptionPane.showConfirmDialog(this, palavras.getString("Do you want to save changes to") + " " + arquivoAberto.getName());
-        } else {
-            escolha = JOptionPane.showConfirmDialog(this, palavras.getString("Do you want to save changes to") + " New_Model.ims");
-        }
-        if (escolha == JOptionPane.YES_OPTION) {
-            //Implementar ações para salvar conteudo
-            jMenuItemSalvarActionPerformed(null);
-            salvarModificacao();
-        }
-        return escolha;
-    }
-
-    private void abrirEdição(File arquivo) {
-        this.arquivoAberto = arquivo;
-        //Realiza leitura das opções do menu Exibir
-        aDesenho.setConectados(jCheckBoxMenuItemConectado.isSelected());
-        aDesenho.setIndiretos(jCheckBoxMenuItemIndireto.isSelected());
-        aDesenho.setEscalonaveis(jCheckBoxMenuItemEscalonavel.isSelected());
-        aDesenho.setGridOn(jCheckBoxMenuItemGrade.isSelected());
-        jCheckBoxMenuItemReguaActionPerformed(null);
-        //Tirar seleção dos botões de icones
-        jToggleButtonMaquina.setSelected(false);
-        jToggleButtonCluster.setSelected(false);
-        jToggleButtonInternet.setSelected(false);
-        jToggleButtonRede.setSelected(false);
-        setObjetosEnabled(true);
-        salvarModificacao();
-    }
-
-    private void fecharEdicao() {
-        this.setTitle(palavras.getString("nomePrograma"));
-        this.arquivoAberto = null;
-        setObjetosEnabled(false);
-        this.modificado = false;
-        //remove a regua
-        jScrollPaneAreaDesenho.setColumnHeaderView(null);
-        jScrollPaneAreaDesenho.setRowHeaderView(null);
-        jScrollPaneAreaDesenho.setCorner(JScrollPane.UPPER_LEFT_CORNER, null);
-        jScrollPaneAreaDesenho.setCorner(JScrollPane.LOWER_LEFT_CORNER, null);
-        jScrollPaneAreaDesenho.setCorner(JScrollPane.UPPER_RIGHT_CORNER, null);
-    }
-
-    //Habilitar Desabilita botões
-    private void setObjetosEnabled(boolean opcao) {
-        //Icones
-        jToggleButtonCluster.setEnabled(opcao);
-        jToggleButtonInternet.setEnabled(opcao);
-        jToggleButtonMaquina.setEnabled(opcao);
-        jToggleButtonRede.setEnabled(opcao);
-        jButtonSimular.setEnabled(opcao);
-        jButtonTarefas.setEnabled(opcao);
-        jButtonUsuarios.setEnabled(opcao);
-        jButtonConfigVM.setEnabled(opcao);
-        //Arquivo
-        jMenuItemSalvar.setEnabled(opcao);
-        jMenuItemSalvarComo.setEnabled(opcao);
-        jMenuItemFechar.setEnabled(opcao);
-        jMenuItemToJPG.setEnabled(opcao);
-        jMenuItemToTXT.setEnabled(opcao);
-        jMenuItemToSimGrid.setEnabled(opcao);
-        jMenuItemToGridSim.setEnabled(opcao);
-        //Editar
-        jMenuItemEquiparar.setEnabled(opcao);
-        jMenuItemOrganizar.setEnabled(opcao);
-        jMenuItemCopy.setEnabled(opcao);
-        jMenuItemPaste.setEnabled(opcao);
-        jMenuItemDelete.setEnabled(opcao);
-        //Exibir
-        jCheckBoxMenuItemConectado.setEnabled(opcao);
-        jCheckBoxMenuItemIndireto.setEnabled(opcao);
-        jCheckBoxMenuItemEscalonavel.setEnabled(opcao);
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent evt) {
-        if (aDesenho != null) {
-            if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-                aDesenho.botaoIconeActionPerformed(null);
-            }
-            if (evt.getModifiers() == InputEvent.CTRL_MASK && evt.getKeyCode() == KeyEvent.VK_C) {
-                aDesenho.botaoVerticeActionPerformed(null);
-            }
-            if (evt.getModifiers() == InputEvent.CTRL_MASK && evt.getKeyCode() == KeyEvent.VK_V) {
-                aDesenho.botaoPainelActionPerformed(null);
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    public void setSelectedIcon(ItemGrade icon, String Texto) {
-        if (icon != null) {
-            if (icon instanceof gspd.ispd.gui.iconico.grade.Machine || icon instanceof gspd.ispd.gui.iconico.grade.Cluster) {
-                this.jPanelConfiguracao.setIcone(icon, aDesenho.getUsuarios(), tipoModelo);
-            } else {
-                this.jPanelConfiguracao.setIcone(icon);
-            }
-            jScrollPaneBarraLateral.setViewportView(jPanelConfiguracao);
-            this.jPanelPropriedades.setjLabelTexto(Texto);
-        } else {
-            jScrollPaneBarraLateral.setViewportView(jPanelSimples);
-            jPanelPropriedades.setjLabelTexto("");
-        }
-    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonConfigVM;
+    private javax.swing.JButton jButtonSimular;
+    private javax.swing.JButton jButtonTarefas;
+    private javax.swing.JButton jButtonUsuarios;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemConectado;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemEscalonavel;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemGrade;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemIndireto;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemRegua;
+    private javax.swing.JFileChooser jFileChooser;
+    private gspd.ispd.gui.GerenciarEscalonador jFrameGerenciador;
+    private gspd.ispd.gui.GerenciarAlocadores jFrameGerenciadorAlloc;
+    private gspd.ispd.gui.GerenciarEscalonadorCloud jFrameGerenciadorCloud;
+    private javax.swing.JMenu jMenuAjuda;
+    private javax.swing.JMenu jMenuArquivo;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenu jMenuEditar;
+    private javax.swing.JMenu jMenuExibir;
+    private javax.swing.JMenu jMenuExport;
+    private javax.swing.JMenu jMenuFerramentas;
+    private javax.swing.JMenu jMenuIdioma;
+    private javax.swing.JMenu jMenuImport;
+    private javax.swing.JMenuItem jMenuItemAbrir;
+    private javax.swing.JMenuItem jMenuItemAbrirResult;
+    private javax.swing.JMenuItem jMenuItemAjuda;
+    private javax.swing.JMenuItem jMenuItemCopy;
+    private javax.swing.JMenuItem jMenuItemDelete;
+    private javax.swing.JMenuItem jMenuItemEquiparar;
+    private javax.swing.JMenuItem jMenuItemFechar;
+    private javax.swing.JMenuItem jMenuItemGerar;
+    private javax.swing.JMenuItem jMenuItemGerenciar;
+    private javax.swing.JMenuItem jMenuItemGerenciarAllocation;
+    private javax.swing.JMenuItem jMenuItemGerenciarCloud;
+    private javax.swing.JMenuItem jMenuItemGridSim;
+    private javax.swing.JMenuItem jMenuItemIngles;
+    private javax.swing.JMenuItem jMenuItemNovo;
+    private javax.swing.JMenuItem jMenuItemOrganizar;
+    private javax.swing.JMenuItem jMenuItemPaste;
+    private javax.swing.JMenuItem jMenuItemPortugues;
+    private javax.swing.JMenuItem jMenuItemSair;
+    private javax.swing.JMenuItem jMenuItemSalvar;
+    private javax.swing.JMenuItem jMenuItemSalvarComo;
+    private javax.swing.JMenuItem jMenuItemSimGrid;
+    private javax.swing.JMenuItem jMenuItemSobre;
+    private javax.swing.JMenuItem jMenuItemToGridSim;
+    private javax.swing.JMenuItem jMenuItemToJPG;
+    private javax.swing.JMenuItem jMenuItemToSimGrid;
+    private javax.swing.JMenuItem jMenuItemToTXT;
+    private gspd.ispd.gui.configuracao.JPanelConfigIcon jPanelConfiguracao;
+    private gspd.ispd.gui.configuracao.JPanelSimples jPanelPropriedades;
+    private gspd.ispd.gui.configuracao.JPanelSimples jPanelSimples;
+    private javax.swing.JScrollPane jScrollPaneAreaDesenho;
+    private javax.swing.JScrollPane jScrollPaneBarraLateral;
+    private javax.swing.JScrollPane jScrollPaneBarraNotifica;
+    private javax.swing.JScrollPane jScrollPaneProperties;
+    private javax.swing.JTextArea jTextAreaNotifica;
+    private javax.swing.JToggleButton jToggleButtonCluster;
+    private javax.swing.JToggleButton jToggleButtonInternet;
+    private javax.swing.JToggleButton jToggleButtonMaquina;
+    private javax.swing.JToggleButton jToggleButtonRede;
+    private javax.swing.JToolBar jToolBar;
+    // End of variables declaration//GEN-END:variables
 }

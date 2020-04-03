@@ -6,12 +6,12 @@ and open the template in the editor.
 
 <!--
     TODO define vocabulary identification data
-    PUBLIC ID  : -//vendor//vocabulary//EN
+    PUBLIC ID  : -//vdestor//vocabulary//EN
     SYSTEM ID  : http://server/path/__NAME__
 -->
 
 <!-- TODO define your own vocabulary/syntax. Example follows:  -->
-<!ELEMENT system (owner*,(machine|link|cluster|internet|virtualMac)*,load?,file_system?)>
+<!ELEMENT system (owner*,(machine|link|cluster|internet|virtualMac|dag)*,load?,file_system?, (for_scheduler|trace_load)?)>
 <!ATTLIST system version CDATA #REQUIRED>
 
 <!ELEMENT owner EMPTY>
@@ -33,7 +33,7 @@ and open the template in the editor.
 <!ATTLIST master scheduler CDATA "---">
 
 <!ELEMENT machine (master?,position,icon_id,characteristic?)>
-<!ATTLIST machine id ID #REQUIRED>
+<!ATTLIST machine id ID #REQUIRED >
 <!ATTLIST machine power CDATA "0.0">
 <!ATTLIST machine load CDATA "0.0">
 <!ATTLIST machine owner CDATA "user1">
@@ -92,13 +92,7 @@ and open the template in the editor.
 <!ATTLIST virtualMac disk_alloc CDATA "0.0">
 <!ATTLIST virtualMac op_system CDATA "0.0" >
 
-<!-- <!ELEMENT load (trace|random|node+|dag+)> -->
 <!ELEMENT load (trace|random|node+)>
-
-<!ELEMENT trace EMPTY>
-<!ATTLIST trace file_path CDATA #REQUIRED>
-<!ATTLIST trace tasks CDATA "0">
-<!ATTLIST trace format CDATA "iSPD">
 
 <!ELEMENT random (size,size)>
 <!ATTLIST random owner CDATA "user1">
@@ -117,7 +111,19 @@ and open the template in the editor.
 <!ATTLIST size average CDATA "0">
 <!ATTLIST size minimum CDATA "0">
 <!ATTLIST size probability CDATA "0.0">
-<!--
+
+<!ELEMENT file_system (file+)>
+
+<!ELEMENT file (slave*)>
+<!ATTLIST file id CDATA #REQUIRED>
+<!ATTLIST file size CDATA #REQUIRED>
+
+<!ELEMENT trace EMPTY>
+<!ATTLIST trace file_path CDATA #REQUIRED>
+<!ATTLIST trace tasks CDATA "0">
+<!ATTLIST trace format CDATA "iSPD">
+
+<!-- Old DAG definition
 <!ELEMENT dag EMPTY>
 <!ATTLIST dag application CDATA "app0">
 <!ATTLIST dag owner CDATA "user1">
@@ -126,12 +132,101 @@ and open the template in the editor.
 <!ATTLIST dag file_path CDATA #REQUIRED>
 -->
 
-<!-- DAG -->
+<!-- DAG Iconic Definition -->
+<!ELEMENT dag (task|sync|act|recur|timer|switch|precedence|prefix|fail|recursive|iterative|parallel)* >
+<!ATTLIST dag name CDATA #IMPLIED >
 
+<!ELEMENT task EMPTY >
+<!ATTLIST task id CDATA #REQUIRED >
+<!ATTLIST task x CDATA "0.0" >
+<!ATTLIST task y CDATA "0.0" >
+<!ATTLIST task computing CDATA "0.0" >
+<!ATTLIST task label CDATA "" >
+<!ATTLIST task lock CDATA #IMPLIED >
+
+<!ELEMENT sync EMPTY >
+<!ATTLIST sync id CDATA #REQUIRED >
+<!ATTLIST sync x CDATA "0.0" >
+<!ATTLIST sync y CDATA "0.0" >
+
+<!ELEMENT act EMPTY >
+<!ATTLIST act id CDATA #REQUIRED >
+<!ATTLIST act x CDATA "0.0" >
+<!ATTLIST act y CDATA "0.0" >
+
+<!ELEMENT recur EMPTY >
+<!ATTLIST recur id CDATA #REQUIRED >
+<!ATTLIST recur x CDATA "0.0" >
+<!ATTLIST recur y CDATA "0.0" >
+
+<!ELEMENT timer EMPTY >
+<!ATTLIST timer id CDATA #REQUIRED >
+<!ATTLIST timer x CDATA "0.0" >
+<!ATTLIST timer y CDATA "0.0" >
+<!ATTLIST timer time CDATA "0.0" >
+
+<!ELEMENT switch EMPTY >
+<!ATTLIST switch id CDATA #REQUIRED >
+<!ATTLIST switch x CDATA "0.0" >
+<!ATTLIST switch y CDATA "0.0" >
+
+<!ELEMENT precedence EMPTY >
+<!ATTLIST precedence id CDATA #REQUIRED >
+<!ATTLIST precedence src CDATA #REQUIRED >
+<!ATTLIST precedence dest CDATA #REQUIRED >
+<!ATTLIST precedence message CDATA "0.0" >
+
+<!ELEMENT prefix EMPTY >
+<!ATTLIST prefix id CDATA #REQUIRED >
+<!ATTLIST prefix src CDATA #REQUIRED >
+<!ATTLIST prefix dest CDATA #REQUIRED >
+<!ATTLIST prefix message CDATA "0.0" >
+
+<!ELEMENT fail EMPTY >
+<!ATTLIST fail id CDATA #REQUIRED >
+<!ATTLIST fail src CDATA #REQUIRED >
+<!ATTLIST fail dest CDATA #REQUIRED >
+<!ATTLIST fail message CDATA "0.0" >
+
+<!ELEMENT recursive ((dag)|(task|sync|act|recur|timer|switch|precedence|prefix|fail|recursive|iterative|parallel)*) >
+<!ATTLIST recursive id CDATA #REQUIRED >
+<!ATTLIST recursive x CDATA "0.0" >
+<!ATTLIST recursive y CDATA "0.0" >
+<!ATTLIST recursive number CDATA "0" >
+
+<!ELEMENT iterative ((dag)|(task|sync|act|recur|timer|switch|precedence|prefix|fail|recursive|iterative|parallel)*) >
+<!ATTLIST iterative id CDATA #REQUIRED >
+<!ATTLIST iterative x CDATA "0.0" >
+<!ATTLIST iterative y CDATA "0.0" >
+<!ATTLIST iterative number CDATA "0" >
+
+<!ELEMENT parallel ((dag)|(task|sync|act|recur|timer|switch|precedence|prefix|fail|recursive|iterative|parallel)*) >
+<!ATTLIST parallel id CDATA #REQUIRED >
+<!ATTLIST parallel x CDATA "0.0" >
+<!ATTLIST parallel y CDATA "0.0" >
+<!ATTLIST parallel number CDATA "0" >
 <!-- END DAG -->
 
-<!ELEMENT file_system (file+)>
+<!-- Workload definitions -->
+<!ELEMENT for_scheduler (random_load|dag_load)* >
 
-<!ELEMENT file (slave*)>
-<!ATTLIST file id CDATA #REQUIRED>
-<!ATTLIST file size CDATA #REQUIRED>
+<!ELEMENT random_load EMPTY >
+<!ATTLIST random_load user CDATA #IMPLIED >
+<!ATTLIST random_load scheduler CDATA #IMPLIED >
+<!ATTLIST random_load quantity CDATA "1" >
+<!ATTLIST random_load arrival CDATA "0.0" >
+<!ATTLIST random_load minComp CDATA "0.0" >
+<!ATTLIST random_load maxComp CDATA "0.0" >
+<!ATTLIST random_load minComm CDATA "0.0" >
+<!ATTLIST random_load maxComm CDATA "0.0" >
+
+<!ELEMENT dag_load EMPTY >
+<!ATTLIST dag_load user CDATA #IMPLIED >
+<!ATTLIST dag_load scheduler CDATA #IMPLIED >
+<!ATTLIST dag_load quantity CDATA "1" >
+<!ATTLIST dag_load arrival CDATA "0.0" >
+<!ATTLIST dag_load dag CDATA #REQUIRED >
+
+<!ELEMENT trace_load EMPTY >
+<!ATTLIST trace_load file CDATA #REQUIRED >
+<!-- END Workload -->

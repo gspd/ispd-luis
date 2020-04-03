@@ -37,6 +37,10 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
+import gspd.ispd.motor.workload.WorkloadGenerator;
+import gspd.ispd.util.workload.DAGContainer;
+import gspd.ispd.util.workload.WorkloadConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -114,7 +118,6 @@ public class DesenhoGrade extends AreaDesenho {
         imprimeNosIndiretos = false;
         imprimeNosEscalonaveis = true;
         maquinasVirtuais = null;
-        dags = new HashSet<>();
         this.tipoModelo = EscolherClasse.GRID;
     }
 
@@ -513,7 +516,10 @@ public class DesenhoGrade extends AreaDesenho {
                         I.getMemoriaAlocada(),I.getDiscoAlocado(),I.getOS());
             }
         }
-        
+        // adiciona os dags
+        for (DAG dag : DAGContainer.getInstance().getDags()) {
+            xml.addDAG(dag);
+        }
         //configurar carga
         if (cargasConfiguracao != null) {
             if (cargasConfiguracao instanceof CargaRandom) {
@@ -532,6 +538,10 @@ public class DesenhoGrade extends AreaDesenho {
                 CargaTrace trace = (CargaTrace) cargasConfiguracao;
                 xml.setLoadTrace(trace.getFile().toString(), trace.getNumberTasks().toString(), trace.getTraceType().toString());
             }
+        }
+        // configurar workload
+        if (getWorkloadGenerator() != null) {
+            xml.newWorkloadGenerator(getWorkloadGenerator());
         }
         return xml.getDescricao();
     }
@@ -793,7 +803,10 @@ public class DesenhoGrade extends AreaDesenho {
     public void setGrade(Document descricao) {
         //Realiza leitura dos usuários/proprietários do modelo
         this.usuarios = IconicoXML.newSetUsers(descricao);
+        // Carrega as máquinas virtuais do modelo
         this.maquinasVirtuais = IconicoXML.newListVirtualMachines(descricao);
+        // Carrega os DAGs do modelo
+        DAGContainer.getInstance().setAll(IconicoXML.newDAGList(descricao));
         Element aux = (Element) descricao.getElementsByTagName("system").item(0);
         String versao = aux.getAttribute("version");
         if(versao.contentEquals("2.1"))
@@ -806,6 +819,8 @@ public class DesenhoGrade extends AreaDesenho {
         IconicoXML.newGrade(descricao, vertices, arestas);
         //Realiza leitura da configuração de carga do modelo
         this.cargasConfiguracao = IconicoXML.newGerarCarga(descricao);
+        // Loads the workload
+        setWorkloadGenerator(IconicoXML.newWorkloadGenerator(descricao));
         //Atuasliza número de vertices e arestas
         for (Icone icone : arestas) {
             Link link = (Link) icone;
@@ -881,13 +896,13 @@ public class DesenhoGrade extends AreaDesenho {
     }
 
     /**
-     * The set of DAGs
+     * The workload
      */
-    private HashSet<DAG> dags;
-    public HashSet<DAG> getDags() {
-        return dags;
+    private WorkloadGenerator workloadGenerator;
+    public WorkloadGenerator getWorkloadGenerator() {
+        return workloadGenerator;
     }
-    public void setDags(HashSet<DAG> dags) {
-        this.dags = dags;
+    public void setWorkloadGenerator(WorkloadGenerator workloadGenerator) {
+        this.workloadGenerator = workloadGenerator;
     }
 }
