@@ -1,6 +1,7 @@
 package gspd.ispd.fxgui.workload.dag;
 
 import gspd.ispd.fxgui.commons.*;
+import gspd.ispd.fxgui.workload.dag.icons.SwitchIcon;
 import javafx.scene.Node;
 
 import java.util.HashMap;
@@ -13,11 +14,20 @@ public class DAG extends Diagram {
     @Override
     public boolean add(Icon icon) {
         boolean added = false;
-        if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
-            added = super.add(icon);
-        } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
-            if (allowed((EdgeIcon) icon)) {
+        synchronized (this) {
+            if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
                 added = super.add(icon);
+            } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+                EdgeIcon edge = (EdgeIcon) icon;
+                if (allowed(edge)) {
+                    added = super.add(icon);
+                    if (edge.getStartIcon().getType().isTypeOf(SwitchIcon.SWITCH_TYPE)) {
+                        SwitchIcon sw = (SwitchIcon) edge.getStartIcon();
+                        if (!sw.getDistributionMap().containsKey(edge)) {
+                            sw.putEdge(edge, 0.0);
+                        }
+                    }
+                }
             }
         }
         return added;
@@ -35,6 +45,20 @@ public class DAG extends Diagram {
             }
         }
         return allow;
+    }
+
+    @Override
+    synchronized public boolean remove(Icon icon) {
+        boolean removed = super.remove(icon);
+        if (removed && icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+            EdgeIcon edge = (EdgeIcon) icon;
+            NodeIcon node = edge.getStartIcon();
+            if (node != null && node.getType().isTypeOf(SwitchIcon.SWITCH_TYPE)) {
+                SwitchIcon sw = (SwitchIcon) node;
+                sw.removeEdge(edge);
+            }
+        }
+        return removed;
     }
 
     private static final int WHITE = 0;

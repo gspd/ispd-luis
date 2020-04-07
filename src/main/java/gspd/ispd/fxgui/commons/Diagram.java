@@ -91,12 +91,14 @@ public class Diagram extends Group {
 
     public boolean add(Icon icon) {
         boolean added = false;
-        if (icon.getType().isTypeOf(ExpansionIcon.EXPANSION_TYPE)) {
-            added = addExpansion((ExpansionIcon) icon);
-        } else if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
-            added = addNode((NodeIcon) icon);
-        } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
-            added = addEdge((EdgeIcon) icon);
+        synchronized (this) {
+            if (icon.getType().isTypeOf(ExpansionIcon.EXPANSION_TYPE)) {
+                added = addExpansion((ExpansionIcon) icon);
+            } else if (icon.getType().isTypeOf(NodeIcon.NODE_TYPE)) {
+                added = addNode((NodeIcon) icon);
+            } else if (icon.getType().isTypeOf(EdgeIcon.EDGE_TYPE)) {
+                added = addEdge((EdgeIcon) icon);
+            }
         }
         return added;
     }
@@ -111,7 +113,7 @@ public class Diagram extends Group {
         }
     }
 
-    public boolean remove(Icon icon) {
+    synchronized public boolean remove(Icon icon) {
         if (icon == null) {
             return false;
         }

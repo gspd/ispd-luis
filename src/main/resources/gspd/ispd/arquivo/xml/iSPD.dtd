@@ -165,10 +165,14 @@ and open the template in the editor.
 <!ATTLIST timer y CDATA "0.0" >
 <!ATTLIST timer time CDATA "0.0" >
 
-<!ELEMENT switch EMPTY >
+<!ELEMENT switch (flow)* >
 <!ATTLIST switch id CDATA #REQUIRED >
 <!ATTLIST switch x CDATA "0.0" >
 <!ATTLIST switch y CDATA "0.0" >
+
+<!ELEMENT flow EMPTY >
+<!ATTLIST flow edge CDATA #REQUIRED >
+<!ATTLIST flow prob CDATA "0.0" >
 
 <!ELEMENT precedence EMPTY >
 <!ATTLIST precedence id CDATA #REQUIRED >

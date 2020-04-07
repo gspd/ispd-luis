@@ -6,13 +6,16 @@ import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.fxgui.commons.NodeIcon;
 import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.fxgui.workload.dag.icons.*;
+import gspd.ispd.util.structures.SureHashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +24,7 @@ public class DAGLoader implements IMSXLoader<DAG> {
     private Map<String, Icon> idTransform;
     private Map<String, IMSXLoader<? extends Icon>> iconLoaders;
     private DAGLoader() {
-        idTransform = new HashMap<>();
+        idTransform = new SureHashMap<>();
         iconLoaders = new HashMap<>();
         iconLoaders.put(StringConstants.TASK_TAG, this::loadTask);
         iconLoaders.put(StringConstants.TIMER_TAG, this::loadTimer);
@@ -107,6 +110,18 @@ public class DAGLoader implements IMSXLoader<DAG> {
         }
         SwitchIcon icon = new SwitchIcon();
         setupNodeIcon(element, icon);
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) node;
+                if (e.getTagName().equals(StringConstants.FLOW_TAG)) {
+                    EdgeIcon edge = (EdgeIcon) idTransform.get(e.getAttribute(StringConstants.EDGE_ATTR));
+                    double prob = Double.parseDouble(e.getAttribute(StringConstants.PROB_ATTR));
+                    icon.putEdge(edge, prob);
+                }
+            }
+        }
         return icon;
     }
 
@@ -199,6 +214,8 @@ public class DAGLoader implements IMSXLoader<DAG> {
         return createDAGFrom(element);
     }
 
+    // TODO: Way to define correctly the number of thread pool
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
     private DAG createDAGFrom(Element element) throws IMSXLoadException {
         DAG dag = new DAG();
         element.normalize();
@@ -206,12 +223,20 @@ public class DAGLoader implements IMSXLoader<DAG> {
             dag.setName(element.getAttribute(StringConstants.NAME_ATTR));
         }
         NodeList nodeList = element.getChildNodes();
+        List<Future<Icon>> futureList = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+            final Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element e = (Element) node;
-                Icon icon = loadIcon(e);
-                dag.add(icon);
+                Future<Icon> future = executor.submit(() -> loadIcon(e));
+                futureList.add(future);
+            }
+        }
+        for (Future<Icon> future : futureList) {
+            try {
+                dag.add(future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
         }
         return dag;

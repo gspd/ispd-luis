@@ -16,6 +16,7 @@ public class TimerEditor extends NodeEditor {
         setTitle(StringConstants.TIMER_TITLE);
         Label timeLabel = new Label("Time");
         timeInput = new TextField();
+        timeInput.setPrefWidth(INPUT_WIDTH);
         timeInput.textProperty().addListener((obs, o, n) -> {
             if (!n.matches("\\d*(\\.\\d*)?")) {
                 timeInput.setText(n.replaceAll("[^.\\d]", ""));

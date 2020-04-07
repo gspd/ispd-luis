@@ -19,6 +19,7 @@ public class TaskEditor extends NodeEditor {
         // LABEL
         Label labelLabel = new Label("Label");
         labelInput = new TextField("");
+        labelInput.setPrefWidth(INPUT_WIDTH);
         labelInput.textProperty().addListener((obs, n, v) -> {
             ((TaskIcon)getIcon()).setLabel(labelInput.getText());
         });
@@ -27,6 +28,7 @@ public class TaskEditor extends NodeEditor {
         // MFLOP
         Label mflopLabel = new Label("MFLOP");
         mflopInput = new TextField();
+        mflopInput.setPrefWidth(INPUT_WIDTH);
         mflopInput.textProperty().addListener((obs, o, n) -> {
             if (!n.matches("\\d*(\\.\\d*)?")) {
                 mflopInput.setText(n.replaceAll("[^.\\d]", ""));
@@ -40,6 +42,7 @@ public class TaskEditor extends NodeEditor {
         // LOCK
         Label lockLabel = new Label("Lock");
         lockInput = new ComboBox<>();
+        lockInput.setPrefWidth(INPUT_WIDTH);
         lockInput.setEditable(true);
         lockInput.valueProperty().addListener((obs, o, n) -> {
             if (n == null || n.equals("")) {
@@ -51,10 +54,6 @@ public class TaskEditor extends NodeEditor {
         add(lockLabel, 0, 3);
         add(lockInput, 1, 3);
     }
-
-    //////////////////////////////////////////////
-    //////////////// PROPERTIES //////////////////
-    //////////////////////////////////////////////
 
     @Override
     protected void setup(Icon icon) {

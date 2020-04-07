@@ -1,6 +1,7 @@
 package gspd.ispd.imsx;
 
 import com.jcabi.log.Logger;
+import gspd.ispd.commons.IDSystem;
 import gspd.ispd.commons.StringConstants;
 import gspd.ispd.fxgui.commons.EdgeIcon;
 import gspd.ispd.fxgui.commons.Icon;
@@ -147,6 +148,12 @@ public class DAGParser implements IMSXParser<DAG> {
         SwitchIcon swi = (SwitchIcon) icon;
         Element element = document.createElement(StringConstants.SWITCH_TAG);
         element = setAttrsNodeIcon(element, swi);
+        for (Map.Entry<EdgeIcon, Double> entry : swi.getDistributionMap().entrySet()) {
+            Element flow = document.createElement(StringConstants.FLOW_TAG);
+            flow.setAttribute(StringConstants.EDGE_ATTR, entry.getKey().getIconID());
+            flow.setAttribute(StringConstants.PROB_ATTR, String.valueOf(entry.getValue()));
+            element.appendChild(flow);
+        }
         return element;
     }
 

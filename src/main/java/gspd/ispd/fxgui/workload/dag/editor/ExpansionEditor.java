@@ -13,6 +13,7 @@ public abstract class ExpansionEditor extends NodeEditor {
     public ExpansionEditor() {
         Label numberLabel = new Label("Number");
         numberSpinner = new Spinner<>();
+        numberSpinner.setPrefWidth(INPUT_WIDTH);
         numberSpinner.setEditable(true);
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, 1);
         numberSpinner.setValueFactory(valueFactory);

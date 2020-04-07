@@ -6,6 +6,7 @@ import gspd.ispd.fxgui.workload.TraceOrRandomPane;
 import gspd.ispd.fxgui.workload.WorkloadPane;
 import gspd.ispd.fxgui.workload.dag.DAG;
 import gspd.ispd.motor.workload.*;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class WorkloadConverter {
                     randomW.setMinComputation(scanner.nextDouble());
                     randomW.setMaxComputation(scanner.nextDouble());
                     randomW.setMinCommunication(scanner.nextDouble());
-                    randomW.setMinCommunication(scanner.nextDouble());
+                    randomW.setMaxCommunication(scanner.nextDouble());
                 } else if (entry.getType().equals(StringConstants.DAG_TYPE)) {
                     sw = new DAGWorkloadGenerator();
                     DAGWorkloadGenerator dagW = (DAGWorkloadGenerator) sw;
@@ -90,6 +91,7 @@ public class WorkloadConverter {
                     entries.add(entry);
                 }
                 pane.getGeneratePane().setEntries(entries);
+                Platform.runLater(pane::loadGeneratePane);
             }
         }
     }

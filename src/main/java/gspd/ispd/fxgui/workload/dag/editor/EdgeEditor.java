@@ -12,6 +12,7 @@ public abstract class EdgeEditor extends IconEditor {
     public EdgeEditor() {
         Label messageLabel = new Label("Message");
         messageInput = new TextField();
+        messageInput.setPrefWidth(INPUT_WIDTH);
         messageInput.textProperty().addListener((obs, o, n) -> {
             if (!n.matches("\\d*(\\.\\d*)?")) {
                 messageInput.setText(n.replaceAll("[^.\\d]", ""));

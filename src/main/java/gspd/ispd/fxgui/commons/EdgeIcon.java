@@ -121,6 +121,8 @@ public abstract class EdgeIcon extends Icon {
         EdgeShape edge = (EdgeShape) getContent();
         if (isSelected()) {
             edge.setFill(Color.BLUE);
+        } else if (isHovered()) {
+            edge.setFill(Color.GREEN);
         } else {
             edge.setFill(Color.BLACK);
         }

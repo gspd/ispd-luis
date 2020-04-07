@@ -1,5 +1,6 @@
 package gspd.ispd.fxgui.workload.dag.icons;
 
+import gspd.ispd.fxgui.commons.EdgeIcon;
 import gspd.ispd.fxgui.commons.Icon;
 import gspd.ispd.commons.ISPDType;
 import gspd.ispd.fxgui.commons.IconEditor;
@@ -8,6 +9,9 @@ import gspd.ispd.fxgui.workload.dag.editor.SwitchEditor;
 import gspd.ispd.fxgui.workload.dag.shapes.SwitchShape;
 import javafx.scene.paint.Color;
 import javafx.util.Builder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SwitchIcon extends NodeIcon {
 
@@ -19,6 +23,7 @@ public class SwitchIcon extends NodeIcon {
 
     public SwitchIcon(boolean selected, double centerX, double centerY) {
         super(SwitchShape::new, selected, centerX, centerY);
+        distributionMap = new HashMap<>();
 
         setType(SWITCH_TYPE);
     }
@@ -62,5 +67,20 @@ public class SwitchIcon extends NodeIcon {
             shape.setFill(Color.BLACK);
             shape.setStroke(Color.BLACK);
         }
+    }
+
+    //////////////////////////////////////
+    //////////// PROPERTIES //////////////
+    //////////////////////////////////////
+
+    private Map<EdgeIcon, Double> distributionMap;
+    public Map<EdgeIcon, Double> getDistributionMap() {
+        return distributionMap;
+    }
+    public void removeEdge(EdgeIcon edge) {
+        distributionMap.remove(edge);
+    }
+    public void putEdge(EdgeIcon edge, double prob) {
+        distributionMap.put(edge, prob);
     }
 }

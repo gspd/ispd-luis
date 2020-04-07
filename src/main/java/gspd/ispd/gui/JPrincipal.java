@@ -47,6 +47,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 
+import gspd.ispd.util.workload.WorkloadConverter;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -1189,7 +1190,15 @@ public class JPrincipal extends javax.swing.JFrame implements KeyListener {
                                     jButtonConfigVM.setVisible(false);
                                     break;
                             }
-
+                            // Plataform RUN LATER is needed once JavaFX thread may not
+                            // be initialized yet
+                            Platform.runLater(() -> {
+                                workloadPane = new WorkloadPane();
+                                workloadPane.setjPrincipal(this);
+                                WorkloadConverter.setupPane(workloadPane, aDesenho.getWorkloadGenerator());
+                                Scene scene = new Scene(workloadPane);
+                                fxWorkloadPanel.setScene(scene);
+                            });
                         } else {    // Almost DEPRECIATED (only work  with .ims)
                             //Realiza leitura do arquivo da outra versão
                             FileInputStream arquivo = new FileInputStream(file);

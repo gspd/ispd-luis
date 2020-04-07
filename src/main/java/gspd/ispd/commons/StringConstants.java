@@ -4,11 +4,11 @@ public class StringConstants {
 
     // IMSX Tags
     public static final String ENTRY_TAG = "entry";
-    public static final String WORKLOAD_TAG = "workload";
     public static final String USER_ATTR = "user";
     public static final String RANDOM_LOAD_TAG = "random_load";
     public static final String DAG_LOAD_TAG = "dag_load";
     public static final String TRACE_LOAD_TAG = "trace_load";
+    public static final String FLOW_TAG = "flow";
     public static final String DAG_TAG = "dag";
     public static final String TASK_TAG = "task";
     public static final String PRECEDENCE_TAG = "precedence";
@@ -38,6 +38,8 @@ public class StringConstants {
     public static final String NAME_ATTR = "name";
     public static final String LABEL_ATTR = "label";
     public static final String LOCK_ATTR = "lock";
+    public static final String EDGE_ATTR = "edge";
+    public static final String PROB_ATTR = "prob";
     public static final String COMPUTING_ATTR = "computing";
     public static final String DAG_ATTR = "dag";
     public static final String MESSAGE_ATTR = "message";
@@ -61,9 +63,9 @@ public class StringConstants {
     public static final String PRECEDENCE_TITLE = "Precedence";
     public static final String PREFIX_TILE = "Prefix";
     public static final String FAIL_TITLE = "Fail";
-    public static final String ITERATIVE_TITLE = "Iterative Expansion";
-    public static final String PARALLEL_TITLE = "Parallel Expansion";
-    public static final String RECURSIVE_TITLE = "Recursive Expansion";
+    public static final String ITERATIVE_TITLE = "Iterative\nExpansion";
+    public static final String PARALLEL_TITLE = "Parallel\nExpansion";
+    public static final String RECURSIVE_TITLE = "Recursive\nExpansion";
     public static final String RECURSION_TITLE = "Recursion";
     // Images Paths
     public static final String PLUS_ICON_PATH = "/gspd/ispd/gui/images/plus-outline-16x16.png";

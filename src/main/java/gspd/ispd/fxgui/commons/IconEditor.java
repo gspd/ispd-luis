@@ -15,6 +15,16 @@ import javafx.scene.text.Text;
 
 public abstract class IconEditor extends GridPane {
 
+    /////////////////////////////////
+    /////////// CONSTANTS ///////////
+    /////////////////////////////////
+
+    protected final static double INPUT_WIDTH = 100.0;
+
+    /////////////////////////////////
+    /////////// CONSTRUCTOR /////////
+    /////////////////////////////////
+
     private Text titleText;
     public IconEditor() {
         iconProperty().addListener(this::iconChanged);
@@ -43,6 +53,14 @@ public abstract class IconEditor extends GridPane {
     }
 
     protected abstract void setup(Icon icon);
+
+    /////////////////////////////////////////
+    ////////////// ACCESSORS ////////////////
+    /////////////////////////////////////////
+
+    public Text getTitleText() {
+        return titleText;
+    }
 
     /////////////////////////////////////////
     ///////////// PROPERTIES ////////////////

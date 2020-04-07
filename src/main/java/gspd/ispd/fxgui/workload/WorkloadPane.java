@@ -39,7 +39,7 @@ public class WorkloadPane extends SlidePane {
     }
 
     private TraceOrRandomPane traceOrRandomPane;
-    private void loadFirstPane() {
+    public void loadFirstPane() {
         setContent(traceOrRandomPane);
         nextButton.setOnAction(e -> {
             if (traceOrRandomPane.getChoice() == TraceOrRandomPane.TRACE) {
@@ -53,7 +53,7 @@ public class WorkloadPane extends SlidePane {
     }
 
     private TracePane tracePane;
-    private void loadTracePane() {
+    public void loadTracePane() {
         setContent(tracePane);
         nextButton.setOnAction(e -> {
             if (tracePane.getChoice() >= 0) {
@@ -68,7 +68,7 @@ public class WorkloadPane extends SlidePane {
     }
 
     private TraceFilePane traceFilePane;
-    private void loadTraceFile() {
+    public void loadTraceFile() {
         setContent(traceFilePane);
         okButton.setOnAction(e -> {
             System.out.println("You finished the configuration!");
@@ -82,7 +82,7 @@ public class WorkloadPane extends SlidePane {
     }
 
     private GenerateWorkloadPane generatePane;
-    private void loadGeneratePane() {
+    public void loadGeneratePane() {
         setContent(generatePane);
         okButton.setDisable(false);
         okButton.setOnAction(e -> {
