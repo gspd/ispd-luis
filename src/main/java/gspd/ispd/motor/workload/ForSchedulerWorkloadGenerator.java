@@ -1,5 +1,6 @@
 package gspd.ispd.motor.workload;
 
+import gspd.ispd.commons.IDSystem;
 import gspd.ispd.commons.ISPDType;
 import gspd.ispd.motor.filas.Tarefa;
 
@@ -26,7 +27,10 @@ public class ForSchedulerWorkloadGenerator extends WorkloadGenerator {
     @Override
     public List<Tarefa> generateTaskList() {
         List<Tarefa> taskList = new ArrayList<>();
+        setIdSystem(new IDSystem());
         for (WorkloadGenerator generator : getGenerators()) {
+            generator.setQueueNetwork(getQueueNetwork());
+            generator.setIdSystem(getIdSystem());
             taskList.addAll(generator.generateTaskList());
         }
         return taskList;

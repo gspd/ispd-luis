@@ -131,22 +131,12 @@ public class SimulacaoSequencialCloud extends Simulation {
         getJanela().println("OK (future events)", Color.green);
     }
 
-    private static PrintStream testEventStream;
     @Override
     public void addEventoFuturo(EventoFuturo ev) {
         eventos.offer(ev);
         if (isVerbose()) {
             getJanela().println("[Simulation] added future event " + ev, Color.orange);
         }
-        if (testEventStream == null) {
-            try {
-                testEventStream = new PrintStream("trackSimu.csv");
-                testEventStream.println("Tempo,Cliente,CentroServico,Tipo");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        testEventStream.println(ev.getTempoOcorrencia() + "," + ev.getCliente() + "," + ev.getServidor() + "," + ev.getTipo());
     }
 
     @Override

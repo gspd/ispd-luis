@@ -20,8 +20,8 @@ public abstract class Icon extends Group {
     ///////////////////////////////////////////////
 
     public Icon(Builder<? extends Node> nodeBuilder, boolean selected) {
-        IDSystem.getInstance().add(this);
-        setIconID("" + IDSystem.getInstance().getId(this));
+        IDSystem.getDefaultInstance().add(this);
+        setIconID("" + IDSystem.getDefaultInstance().getId(this));
         selectedProperty().addListener(this::updateIcon);
         hoveredProperty().addListener(this::updateIcon);
         nodeBuilderProperty().addListener(this::builderChanged);

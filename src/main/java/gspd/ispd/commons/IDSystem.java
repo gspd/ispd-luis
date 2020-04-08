@@ -11,21 +11,21 @@ public class IDSystem {
     private int id;
     private Map<Object, Integer> idMap;
 
-    private IDSystem() {
+    public IDSystem() {
         id = 0;
         idMap = new HashMap<>();
+        this.criticalSem = new Semaphore(1);
     }
 
     private static IDSystem singleton;
     private static final Semaphore singSem = new Semaphore(1);
-    private static final Semaphore criticalSem = new Semaphore(0);
-    public static IDSystem getInstance() {
+    private Semaphore criticalSem;
+    public static IDSystem getDefaultInstance() {
         if (singleton == null) {
             try {
                 singSem.acquire();
                 if (singleton == null) {
                     singleton = new IDSystem();
-                    criticalSem.release();
                 }
                 singSem.release();
             } catch (InterruptedException e) {
@@ -68,5 +68,9 @@ public class IDSystem {
             return -1;
         }
         return id;
+    }
+
+    public int size() {
+        return idMap.size();
     }
 }

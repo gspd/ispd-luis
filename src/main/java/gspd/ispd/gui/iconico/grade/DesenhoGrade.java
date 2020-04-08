@@ -39,8 +39,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import gspd.ispd.motor.workload.WorkloadGenerator;
+import gspd.ispd.motor.workload.WorkloadGeneratorAdapter;
 import gspd.ispd.util.workload.DAGContainer;
-import gspd.ispd.util.workload.WorkloadConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -215,7 +215,8 @@ public class DesenhoGrade extends AreaDesenho {
     }
 
     public GerarCarga getCargasConfiguracao() {
-        return cargasConfiguracao;
+        // return cargasConfiguracao;
+        return new WorkloadGeneratorAdapter(getWorkloadGenerator());
     }
 
     public void setCargasConfiguracao(GerarCarga cargasConfiguracao) {
@@ -820,7 +821,7 @@ public class DesenhoGrade extends AreaDesenho {
         //Realiza leitura da configuração de carga do modelo
         this.cargasConfiguracao = IconicoXML.newGerarCarga(descricao);
         // Loads the workload
-        setWorkloadGenerator(IconicoXML.newWorkloadGenerator(descricao));
+        setWorkloadGenerator(IconicoXML.getWorkloadGenerator(descricao));
         //Atuasliza número de vertices e arestas
         for (Icone icone : arestas) {
             Link link = (Link) icone;

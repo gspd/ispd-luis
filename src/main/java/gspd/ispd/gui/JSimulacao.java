@@ -15,6 +15,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
+
+import gspd.ispd.motor.workload.WorkloadGenerator;
 import org.w3c.dom.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -31,12 +33,6 @@ import javax.swing.text.StyleConstants;
  */
 public class JSimulacao extends javax.swing.JDialog implements Runnable {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCancelar;
-    private javax.swing.JProgressBar jProgressBar;
-    private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JTextPane jTextPaneNotificacao;
-    // End of variables declaration//GEN-END:variables
     private SimpleAttributeSet configuraCor = new SimpleAttributeSet();// configura a cor do texto que é exibido no painel de notificações
     private Thread threadSim;// thread principal que realiza a simulação
     private RedeDeFilas redeDeFilas;// rede de filas (caso de GRID)
@@ -110,6 +106,135 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
         this.tipoModelo = tipoModelo;
     }
 
+    public void setRedeDeFilas(RedeDeFilas redeDeFilas) {
+        this.redeDeFilas = redeDeFilas;
+    }
+
+    public void setTarefas(List<Tarefa> tarefas) {
+        this.tarefas = tarefas;
+    }
+
+    public List<Tarefa> getTarefas() {
+        return tarefas;
+    }
+
+    public void iniciarSimulacao() {
+        threadSim = new Thread(this);
+        threadSim.start();
+    }
+
+    public void setMaxProgresso(int n) {
+        jProgressBar.setMaximum(n);
+    }
+
+    public void setProgresso(int n) {
+        this.porcentagem = n;
+        jProgressBar.setValue(n);
+    }
+
+    public void incProgresso(double n) {
+        this.porcentagem += n;
+        int value = (int) porcentagem;
+        jProgressBar.setValue(value);
+    }
+
+    // execução principal que é realizada pela 'threadSim'
+    @Override
+    public void run() {
+        progrSim.println("Simulation Initiated.");
+        try {
+            //0%
+            //Verifica se foi construido modelo na area de desenho
+            progrSim.validarInicioSimulacao(modelo);//[5%] --> 5%
+            //Constrói e verifica modelos icônicos e simuláveis
+            progrSim.analisarModelos(modeloTexto);//[20%] --> 25%
+            //criar grade
+            progrSim.print("Mounting network queue.");
+            progrSim.print(" -> ");
+            if (tipoModelo == EscolherClasse.GRID) {
+                this.redeDeFilas = IconicoXML.newRedeDeFilas(modelo);
+                incProgresso(10);//[10%] --> 35%
+                progrSim.println("OK", Color.green);
+                //criar tarefas
+                progrSim.print("Creating tasks.");
+                progrSim.print(" -> ");
+                // this.tarefas = IconicoXML.newGerarCarga(modelo).toTarefaList(redeDeFilas);
+                this.tarefas = IconicoXML.getWorkloadGenerator(modelo).generateTaskList();
+                incProgresso(10);//[10%] --> 45%
+                progrSim.println("OK", Color.green);
+                //Verifica recursos do modelo e define roteamento
+                Simulation sim = new SequentialSimulation(progrSim, redeDeFilas, tarefas);//[10%] --> 55 %
+                //Realiza asimulação
+                progrSim.println("Simulating.");
+                //recebe instante de tempo em milissegundos ao iniciar a simulação
+                double t1 = System.currentTimeMillis();
+
+                sim.simular();//[30%] --> 85%
+
+                //Recebe instnte de tempo em milissegundos ao fim da execução da simulação
+                double t2 = System.currentTimeMillis();
+                //Calcula tempo de simulação em segundos
+                double tempototal = (t2 - t1) / 1000;
+                //Obter Resultados
+                Metricas metrica = sim.getMetricas();
+                //[5%] --> 90%
+                //Apresentar resultados
+                progrSim.print("Showing results.");
+                progrSim.print(" -> ");
+                JResultados janelaResultados = new JResultados(null, metrica, redeDeFilas, tarefas);
+                incProgresso(10);//[10%] --> 100%
+                progrSim.println("OK", Color.green);
+                progrSim.println("Simulation Execution Time = " + tempototal + "seconds");
+                janelaResultados.setLocationRelativeTo(this);
+                janelaResultados.setVisible(true);
+
+            } else if (tipoModelo == EscolherClasse.IAAS) {
+                this.redeDeFilasCloud = IconicoXML.newRedeDeFilasCloud(modelo);
+                incProgresso(10);//[10%] --> 35%
+                progrSim.println("OK", Color.green);
+                //criar tarefas
+                progrSim.print("Creating tasks.");
+                progrSim.print(" -> ");
+                // this.tarefas = IconicoXML.newGerarCarga(modelo).toTarefaList(redeDeFilasCloud);
+                WorkloadGenerator generator = IconicoXML.getWorkloadGenerator(modelo);
+                generator.setQueueNetwork(redeDeFilasCloud);
+                this.tarefas = generator.generateTaskList();
+                incProgresso(10);//[10%] --> 45%
+                progrSim.println("OK", Color.green);
+                //Verifica recursos do modelo e define roteamento
+                Simulation sim = new SimulacaoSequencialCloud(progrSim, redeDeFilasCloud, tarefas);//[10%] --> 55 %
+                //Realiza asimulação
+                progrSim.println("Simulating.");
+                //recebe instante de tempo em milissegundos ao iniciar a simulação
+                double t1 = System.currentTimeMillis();
+
+                sim.simular();//[30%] --> 85%
+
+                //Recebe instnte de tempo em milissegundos ao fim da execução da simulação
+                double t2 = System.currentTimeMillis();
+                //Calcula tempo de simulação em segundos
+                double tempototal = (t2 - t1) / 1000;
+                //Obter Resultados
+                Metricas metrica = sim.getMetricasCloud();
+                //[5%] --> 90%
+                //Apresentar resultados
+                progrSim.print("Showing results.");
+                progrSim.print(" -> ");
+                JResultadosCloud janelaResultados = new JResultadosCloud(null, metrica, redeDeFilasCloud, tarefas);
+                incProgresso(10);//[10%] --> 100%
+                progrSim.println("OK", Color.green);
+                progrSim.println("Simulation Execution Time = " + tempototal + "seconds");
+                janelaResultados.setLocationRelativeTo(this);
+                janelaResultados.setVisible(true);
+            }
+        } catch (IllegalArgumentException erro) {
+
+            Logger.getLogger(JSimulacao.class.getName()).log(Level.SEVERE, null, erro);
+            progrSim.println(erro.getMessage(), Color.red);
+            progrSim.print("Simulation Aborted", Color.red);
+            progrSim.println("!", Color.red);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -176,129 +301,10 @@ public class JSimulacao extends javax.swing.JDialog implements Runnable {
         this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
-    public void setRedeDeFilas(RedeDeFilas redeDeFilas) {
-        this.redeDeFilas = redeDeFilas;
-    }
-
-    public void setTarefas(List<Tarefa> tarefas) {
-        this.tarefas = tarefas;
-    }
-
-    public List<Tarefa> getTarefas() {
-        return tarefas;
-    }
-
-    public void iniciarSimulacao() {
-        threadSim = new Thread(this);
-        threadSim.start();
-    }
-
-    public void setMaxProgresso(int n) {
-        jProgressBar.setMaximum(n);
-    }
-
-    public void setProgresso(int n) {
-        this.porcentagem = n;
-        jProgressBar.setValue(n);
-    }
-
-    public void incProgresso(double n) {
-        this.porcentagem += n;
-        int value = (int) porcentagem;
-        jProgressBar.setValue(value);
-    }
-
-    // execução principal que é realizada pela 'threadSim'
-    @Override
-    public void run() {
-        progrSim.println("Simulation Initiated.");
-        try {
-            //0%
-            //Verifica se foi construido modelo na area de desenho
-            progrSim.validarInicioSimulacao(modelo);//[5%] --> 5%
-            //Constrói e verifica modelos icônicos e simuláveis
-            progrSim.analisarModelos(modeloTexto);//[20%] --> 25%
-            //criar grade
-            progrSim.print("Mounting network queue.");
-            progrSim.print(" -> ");
-            if (tipoModelo == EscolherClasse.GRID) {
-                this.redeDeFilas = IconicoXML.newRedeDeFilas(modelo);
-                incProgresso(10);//[10%] --> 35%
-                progrSim.println("OK", Color.green);
-                //criar tarefas
-                progrSim.print("Creating tasks.");
-                progrSim.print(" -> ");
-                this.tarefas = IconicoXML.newGerarCarga(modelo).toTarefaList(redeDeFilas);
-                incProgresso(10);//[10%] --> 45%
-                progrSim.println("OK", Color.green);
-                //Verifica recursos do modelo e define roteamento
-                Simulation sim = new SequentialSimulation(progrSim, redeDeFilas, tarefas);//[10%] --> 55 %
-                //Realiza asimulação
-                progrSim.println("Simulating.");
-                //recebe instante de tempo em milissegundos ao iniciar a simulação
-                double t1 = System.currentTimeMillis();
-
-                sim.simular();//[30%] --> 85%
-
-                //Recebe instnte de tempo em milissegundos ao fim da execução da simulação
-                double t2 = System.currentTimeMillis();
-                //Calcula tempo de simulação em segundos
-                double tempototal = (t2 - t1) / 1000;
-                //Obter Resultados
-                Metricas metrica = sim.getMetricas();
-                //[5%] --> 90%
-                //Apresentar resultados
-                progrSim.print("Showing results.");
-                progrSim.print(" -> ");
-                JResultados janelaResultados = new JResultados(null, metrica, redeDeFilas, tarefas);
-                incProgresso(10);//[10%] --> 100%
-                progrSim.println("OK", Color.green);
-                progrSim.println("Simulation Execution Time = " + tempototal + "seconds");
-                janelaResultados.setLocationRelativeTo(this);
-                janelaResultados.setVisible(true);
-
-            } else if (tipoModelo == EscolherClasse.IAAS) {
-                this.redeDeFilasCloud = IconicoXML.newRedeDeFilasCloud(modelo);
-                incProgresso(10);//[10%] --> 35%
-                progrSim.println("OK", Color.green);
-                //criar tarefas
-                progrSim.print("Creating tasks.");
-                progrSim.print(" -> ");
-                this.tarefas = IconicoXML.newGerarCarga(modelo).toTarefaList(redeDeFilasCloud);
-                incProgresso(10);//[10%] --> 45%
-                progrSim.println("OK", Color.green);
-                //Verifica recursos do modelo e define roteamento
-                Simulation sim = new SimulacaoSequencialCloud(progrSim, redeDeFilasCloud, tarefas);//[10%] --> 55 %
-                //Realiza asimulação
-                progrSim.println("Simulating.");
-                //recebe instante de tempo em milissegundos ao iniciar a simulação
-                double t1 = System.currentTimeMillis();
-
-                sim.simular();//[30%] --> 85%
-
-                //Recebe instnte de tempo em milissegundos ao fim da execução da simulação
-                double t2 = System.currentTimeMillis();
-                //Calcula tempo de simulação em segundos
-                double tempototal = (t2 - t1) / 1000;
-                //Obter Resultados
-                Metricas metrica = sim.getMetricasCloud();
-                //[5%] --> 90%
-                //Apresentar resultados
-                progrSim.print("Showing results.");
-                progrSim.print(" -> ");
-                JResultadosCloud janelaResultados = new JResultadosCloud(null, metrica, redeDeFilasCloud, tarefas);
-                incProgresso(10);//[10%] --> 100%
-                progrSim.println("OK", Color.green);
-                progrSim.println("Simulation Execution Time = " + tempototal + "seconds");
-                janelaResultados.setLocationRelativeTo(this);
-                janelaResultados.setVisible(true);
-            }
-        } catch (IllegalArgumentException erro) {
-
-            Logger.getLogger(JSimulacao.class.getName()).log(Level.SEVERE, null, erro);
-            progrSim.println(erro.getMessage(), Color.red);
-            progrSim.print("Simulation Aborted", Color.red);
-            progrSim.println("!", Color.red);
-        }
-    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JProgressBar jProgressBar;
+    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JTextPane jTextPaneNotificacao;
+    // End of variables declaration//GEN-END:variables
 }

@@ -2,11 +2,14 @@ package gspd.ispd.motor.workload;
 
 import gspd.ispd.commons.ISPDType;
 import gspd.ispd.motor.filas.Tarefa;
+import gspd.ispd.motor.filas.servidores.CS_Processamento;
+import gspd.ispd.motor.filas.servidores.CentroServico;
 import gspd.ispd.util.distribution.Distribution;
 import gspd.ispd.util.distribution.DistributionBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RandomWorkloadGenerator extends SingleSchedulerWorkloadGenerator {
 
@@ -29,13 +32,29 @@ public class RandomWorkloadGenerator extends SingleSchedulerWorkloadGenerator {
         List<Tarefa> taskList = new ArrayList<>();
         Distribution computationDist = DistributionBuilder.uniform(getMinComputation(), getMaxComputation()).build();
         Distribution communicationDist = DistributionBuilder.uniform(getMinCommunication(), getMaxCommunication()).build();
-        int i;
-        for (i = 0; i < getQuantity(); i++) {
-            Tarefa task = null; // gera tarefa
-            // configura tarefa utilizando as distribuições
+        Distribution arrivalDist = DistributionBuilder.exponential(getArrivalTime()).build();
+        SingleTaskBuilder builder = new SingleTaskBuilder();
+        builder.setOwner(getUser());
+        List<CS_Processamento> masters = getQueueNetwork()
+                .getMestres()
+                .stream()
+                .filter(cs -> cs.getId().equals(getScheduler()))
+                .collect(Collectors.toList());
+        if (masters.size() > 0) {
+            builder.setSource(masters.get(0));
+        }
+        builder.setApplication("randomApp");
+        builder.setReceiveFile(0.0009765625); // Don't know why this value ??
+        for (int i = 0; i < getQuantity(); i++) {
+            builder.setProcessingSize(computationDist.random());
+            builder.setSendFile(communicationDist.random());
+            builder.setCreationTime(arrivalDist.random());
+            builder.setId(getIdSystem().size());
+            Tarefa task = builder.build();
+            getIdSystem().add(task);
             taskList.add(task);
         }
-        return null;
+        return taskList;
     }
 
     @Override

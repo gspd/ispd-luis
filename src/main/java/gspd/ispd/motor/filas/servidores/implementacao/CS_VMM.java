@@ -628,7 +628,7 @@ public class CS_VMM extends CS_Processamento implements VMM, MestreCloud, Mensag
             }
             // como a alocação da VM foi confirmada, então é necessário executar o escalonamento das tarefas
             // que ficaram esperando
-            executarEscalonamento();
+            // executarEscalonamento();
         } else {//passar adiante, encontrando antes o caminho intermediário para poder escalonar tarefas desse VMM tbm para a vm hierarquica
             System.out.println(this.getId() + ": VMM intermediário, definindo caminho intermediário para " + auxVM.getId());
             if (this.escalonador.getEscravos().contains(auxVM)) {

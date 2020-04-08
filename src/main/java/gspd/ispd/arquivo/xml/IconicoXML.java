@@ -51,6 +51,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import gspd.ispd.motor.workload.WorkloadGenerator;
+import gspd.ispd.motor.workload.WorkloadGeneratorAdapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -121,20 +122,24 @@ public class IconicoXML {
      * Verifica se modelo está completo
      */
     public static void validarModelo(Document documento) throws IllegalArgumentException {
-        org.w3c.dom.NodeList owner = documento.getElementsByTagName("owner");
-        org.w3c.dom.NodeList maquinas = documento.getElementsByTagName("machine");
-        org.w3c.dom.NodeList clusters = documento.getElementsByTagName("cluster");
-        org.w3c.dom.NodeList internet = documento.getElementsByTagName("internet");
-        org.w3c.dom.NodeList links = documento.getElementsByTagName("link");
-        org.w3c.dom.NodeList vms = documento.getElementsByTagName("vitualMac");
-        org.w3c.dom.NodeList cargas = documento.getElementsByTagName("load");
+        NodeList owner = documento.getElementsByTagName("owner");
+        NodeList maquinas = documento.getElementsByTagName("machine");
+        NodeList clusters = documento.getElementsByTagName("cluster");
+        NodeList internet = documento.getElementsByTagName("internet");
+        NodeList links = documento.getElementsByTagName("link");
+        NodeList vms = documento.getElementsByTagName("vitualMac");
+        NodeList cargas = documento.getElementsByTagName("load");
+        NodeList workloads = documento.getElementsByTagName(StringConstants.FOR_SCHEDULER_TAG);
+        if (workloads.getLength() == 0) {
+            workloads = documento.getElementsByTagName(StringConstants.TRACE_LOAD_TAG);
+        }
         if (owner.getLength() == 0) {
             throw new IllegalArgumentException("The model has no users.");
         }
         if (maquinas.getLength() == 0 && clusters.getLength() == 0) {
             throw new IllegalArgumentException("The model has no icons.");
         }
-        if (cargas.getLength() == 0) {
+        if (cargas.getLength() == 0 && workloads.getLength() == 0) {
             throw new IllegalArgumentException("One or more  workloads have not been configured.");
         }
         boolean achou = false;
@@ -751,6 +756,11 @@ public class IconicoXML {
         return cargasConfiguracao;
     }
 
+    public static GerarCarga newWorkloadGeneratorAdapter(Document document) {
+        WorkloadGenerator generator = getWorkloadGenerator(document);
+        return new WorkloadGeneratorAdapter(generator);
+    }
+
     private static void setCaracteristicas(ItemGrade item, NodeList elementsByTagName) {
         Machine maq = null;
         Cluster clust = null;
@@ -1001,7 +1011,7 @@ public class IconicoXML {
         return documento;
     }
 
-    public static WorkloadGenerator newWorkloadGenerator(Document descricao) {
+    public static WorkloadGenerator getWorkloadGenerator(Document descricao) {
         WorkloadGenerator result = null;
         try {
             NodeList list = descricao.getElementsByTagName(StringConstants.FOR_SCHEDULER_TAG);

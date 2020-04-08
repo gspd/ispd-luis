@@ -1,6 +1,8 @@
 package gspd.ispd.motor.workload;
 
+import gspd.ispd.commons.IDSystem;
 import gspd.ispd.commons.ISPDType;
+import gspd.ispd.motor.filas.RedeDeFilas;
 import gspd.ispd.motor.filas.Tarefa;
 
 import java.util.List;
@@ -62,5 +64,27 @@ public abstract class WorkloadGenerator {
     }
     public void setString(String string) {
         this.string = string;
+    }
+
+    /**
+     * The queue network that refers to this workload, if any
+     */
+    private RedeDeFilas queueNetwork;
+    public RedeDeFilas getQueueNetwork() {
+        return queueNetwork;
+    }
+    public void setQueueNetwork(RedeDeFilas queueNetwork) {
+        this.queueNetwork = queueNetwork;
+    }
+
+    /**
+     * The id System
+     */
+    private IDSystem idSystem;
+    public IDSystem getIdSystem() {
+        return idSystem;
+    }
+    public void setIdSystem(IDSystem idSystem) {
+        this.idSystem = idSystem;
     }
 }
